@@ -1,4 +1,5 @@
 import { Box, Button, FormControl, TextField } from "@mui/material";
+import axios from "axios";
 import { useState } from "react";
 
 const Login = () => {
@@ -10,9 +11,10 @@ const Login = () => {
 
     console.log(values)
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log("submit")
+        
+        await axios.post("http://localhost:5000/api/users/login",{email:values.email,password:values.password}).then(res=>console.log(res.data))
       };
 
   return (
