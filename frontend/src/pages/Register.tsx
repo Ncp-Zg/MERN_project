@@ -2,24 +2,43 @@ import { Button, FormControl, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { registerUser } from "../redux/ActionCreators/AuthActionCreators";
+
+export interface IState {
+  values:{
+      name:string
+      password:string
+      email:string
+      confirmpassword:string
+  }
+}
 
 const Register = () => {
-  const [values, setValues] = useState({
+  const dispatch = useDispatch();
+  const [values, setValues] = useState<IState["values"]>({
     name: "",
     email: "",
     password: "",
+    confirmpassword:""
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await axios
+
+    if(values.password === values.confirmpassword){
+
+      await axios
       .post("http://localhost:5000/api/users/register", {
         email: values.email,
         password: values.password,
         name: values.name,
       })
-      .then((res) => console.log(res.data));
+      .then((res) => dispatch(registerUser({name:res.data.name,email:res.data.email,isAdmin:res.data.isAdmin})));
   };
+    }
+
+    
 
   return (
     <Box
@@ -62,6 +81,7 @@ const Register = () => {
               onChange={(e)=>setValues({...values,name:e.target.value})}
             />
             <TextField
+            type="email"
               id="outlined-basic"
               label="Email"
               variant="outlined"
@@ -82,6 +102,7 @@ const Register = () => {
               label="Confirm Password"
               variant="outlined"
               sx={{ marginBottom: "20px" }}
+              onChange={(e)=>setValues({...values,confirmpassword:e.target.value})}
             />
             <Button variant="contained" color="success" type="submit">
               REGISTER
