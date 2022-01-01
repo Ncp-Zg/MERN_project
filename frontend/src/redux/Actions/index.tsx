@@ -12,11 +12,6 @@ interface set_User {
 
 interface register_User {
     type: ActionTypes.SIGN_IN_USER,
-    payload:{
-        email:string,
-        name:string,
-        isAdmin:boolean
-    }
 }
 
 export type Action = set_User | register_User

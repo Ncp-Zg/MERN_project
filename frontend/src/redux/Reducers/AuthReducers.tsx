@@ -14,7 +14,7 @@ const authReducer = (state=initialState,Action:Action)=>{
         case ActionTypes.LOGGED_IN_USER:
             return state = {user:Action.payload}
         case ActionTypes.SIGN_IN_USER:
-            return state = {user:Action.payload}
+            return state
         default:
             return state;
     }

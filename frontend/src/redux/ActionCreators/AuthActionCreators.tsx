@@ -21,6 +21,9 @@ export const loginUser = (data:auth) => (dispatch: Dispatch<Action>) =>{
 export const registerUser = (data:auth) => (dispatch: Dispatch<Action>) =>{
     dispatch({
         type:ActionTypes.SIGN_IN_USER,
+    })
+    dispatch({
+        type:ActionTypes.LOGGED_IN_USER,
         payload:{
             email:data.email,
             name:data.name,
