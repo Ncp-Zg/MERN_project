@@ -14,6 +14,7 @@ export const loginUser = (data:auth) => (dispatch: Dispatch<Action>) =>{
             isAdmin:data.isAdmin
         }
     })
+    localStorage.setItem("user",JSON.stringify(data))
 
     console.log(data)
 }
@@ -30,6 +31,7 @@ export const registerUser = (data:auth) => (dispatch: Dispatch<Action>) =>{
             isAdmin:data.isAdmin
         }
     })
+    localStorage.setItem("user",JSON.stringify(data))
 
     console.log(data)
 }

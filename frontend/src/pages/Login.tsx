@@ -24,8 +24,6 @@ const Login = () => {
     isAdmin: false,
   });
 
-  console.log(values);
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
