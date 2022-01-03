@@ -23,6 +23,7 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../redux/Reducers/rootReducer';
+import AddProduct from '../pages/AdminPanel/AddProduct';
 
 const drawerWidth = 240;
 
@@ -96,6 +97,11 @@ console.log(user)
     navigate(`/${text.toLowerCase()}`)
   };
 
+  const changeRouteAdmin = (text:any) => {
+    setValue(text);
+    navigate(`admin/${text.toLowerCase().replace(" ","")}`)
+  };
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -145,9 +151,10 @@ console.log(user)
           ))}
         </List>
         <Divider />
+        
         {user?.isAdmin ? <List>
-          {['Admin Panel', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
+          <ListItem>Admin Panel</ListItem>{['Add Product', 'Remove Product', 'My Products'].map((text, index) => (
+            <ListItem button key={text} onClick={()=>changeRouteAdmin(text)}>
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
@@ -165,6 +172,7 @@ console.log(user)
         <Route path="/home" element={<Home />}/>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/admin/addproduct" element={<AddProduct />} />
       </Routes>
         
       </Main>
