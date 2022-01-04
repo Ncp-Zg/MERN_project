@@ -44,12 +44,12 @@ const AddProduct = () => {
             
             </form>
             <div style={{display:"flex",marginTop:"20px",alignSelf:"center"}}>
-              <Button variant="contained" disabled={page == 0}
+              <Button variant="contained" disabled={page === 0}
             onClick={() => {
               setPage((currPage) => currPage - 1);
             }}
            sx={{marginRight:"10px"}}>Previous</Button>
-              <Button variant="contained" onClick={() => {
+              <Button variant="contained" color={page === FormTitles.length - 1 ? "success" : "primary"} onClick={() => {
               if (page === FormTitles.length - 1) {
                 alert("FORM SUBMITTED");
                 console.log(formData);

@@ -11,30 +11,47 @@ export interface form {
   }
 
 const Step1 : FunctionComponent<form> = (props) => {
+
+  
   
     const {formdata,setFormData} = props;
 
-    const [image, setImage] = useState<File | null>();
-    const [preview, setPreview] = useState<string | null>();
+    const [image, setImage] = useState<Array<any>>([]);
+    const [preview, setPreview] = useState<Array<any>>([]);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-    const [category, setCategory] = useState('');
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setCategory(event.target.value);
       setFormData({...formdata,category:event.target.value})
     };
 
-
+console.log(image)
   
-    useEffect(() => {
-      if (image) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setPreview(reader.result as string);
-        };
-        reader.readAsDataURL(image);
-      } 
-    }, [image]);
+    // useEffect(() => {
+    //   if (image) {
+    //     const reader = new FileReader();
+    //     reader.onloadend = () => {
+    //       setPreview(reader.result as string);
+    //     };
+    //     reader.readAsDataURL(image);
+    //   } 
+    // }, [image]);
+  
+useEffect(()=>{
+  if(image !== []){image.map((img)=>{
+  const reader = new FileReader();
+  reader.readAsDataURL(img);
+  reader.onloadend =() => {
+    setPreview([...preview,(reader.result as string)]);
+  };
+        
+})}
+},[image.length])    
+
+
+console.log(image)
+       
+      
+    
 
     const categories = [
         {
@@ -57,19 +74,26 @@ const Step1 : FunctionComponent<form> = (props) => {
 
     return (
         <div style={{display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
-            {preview ? (
-          <img
-            src={preview}
-            style={{ objectFit: "cover",width:"50%", borderRadius:"10px", marginBottom:"10px"}}
+          {preview.length !== 0 ? 
+            <div style={{display:"flex",flexWrap:"wrap",justifyContent:"center",width:"50%",border:"solid",borderColor:"lightgray",borderRadius:"10px"}}>
+              {
+          preview.map((pre,index)=>{
+            return(<img key={index}
+          
+            src={pre}
+            style={{ objectFit: "cover",width:"100px", borderRadius:"10px", marginBottom:"10px",marginTop:"10px"}}
             onClick={() => {
-              setPreview(null);
-              setImage(null)
+              setPreview([]);
+              setImage([])
             }}
-          />
-        ) : (
-          <IconButton
+          />)
+            
+          })}
+          
+          </div> : null}
+        <IconButton
           color="primary" x-large
-          sx={{marginBottom:"20px",width:"200px",height:"200px",borderRadius:"100%",backgroundColor:"lightgray"}}
+          
             onClick={(event) => {
               event.preventDefault();
               fileInputRef.current?.click();
@@ -77,19 +101,21 @@ const Step1 : FunctionComponent<form> = (props) => {
           >
             <PhotoCamera fontSize='large'/>
           </IconButton>
-        )}
         <input
+          multiple
           type="file"
           style={{ display: "none" }}
           ref={fileInputRef}
           accept="image/*"
           onChange={(event:any) => {
             const file = event.target.files[0];
-            if (file && file.type.substr(0, 5) === "image") {
-              setImage(file);
-            } else {
-              setImage(null);
+            console.log(file)
+            if(file.size < 200000){
+              setImage([...image,file])
+            }else{
+              alert("please be sure your pic less than 200kb")
             }
+            
           }}
         />
         
