@@ -25,32 +25,15 @@ const Step1 : FunctionComponent<form> = (props) => {
     };
 
 console.log(image)
-  
-    // useEffect(() => {
-    //   if (image) {
-    //     const reader = new FileReader();
-    //     reader.onloadend = () => {
-    //       setPreview(reader.result as string);
-    //     };
-    //     reader.readAsDataURL(image);
-    //   } 
-    // }, [image]);
-  
-useEffect(()=>{
-  if(image !== []){image.map((img)=>{
-  const reader = new FileReader();
-  reader.readAsDataURL(img);
-  reader.onloadend =() => {
-    setPreview([...preview,(reader.result as string)]);
-  };
-        
-})}
-},[image.length])    
+console.log(image.length)
 
+  
+    useEffect(() => {
+      console.log("render")
 
-console.log(image)
-       
-      
+    }, [preview.length]);
+  
+      console.log(preview,preview.length)
     
 
     const categories = [
@@ -74,25 +57,38 @@ console.log(image)
 
     return (
         <div style={{display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
-          {preview.length !== 0 ? 
+          
             <div style={{display:"flex",flexWrap:"wrap",justifyContent:"center",width:"50%",border:"solid",borderColor:"lightgray",borderRadius:"10px"}}>
-              {
+              {preview.length !== 0 ? 
           preview.map((pre,index)=>{
             return(<img key={index}
           
             src={pre}
+            alt=""
             style={{ objectFit: "cover",width:"100px", borderRadius:"10px", marginBottom:"10px",marginTop:"10px"}}
             onClick={() => {
-              setPreview([]);
-              setImage([])
+              if(image.length===1){
+                setPreview([])
+              }else{
+               console.log(index)
+               preview.splice(index,1)
+               image.splice(index,1)
+                setImage([...image])
+                setPreview([...preview])
+
+                console.log(image,preview)
+              
+                
+              }
+                
+            
             }}
           />)
             
-          })}
-          
-          </div> : null}
+          }) : <h3>Add Picture</h3>}
+          </div>
         <IconButton
-          color="primary" x-large
+          color="primary"
           
             onClick={(event) => {
               event.preventDefault();
@@ -108,12 +104,22 @@ console.log(image)
           ref={fileInputRef}
           accept="image/*"
           onChange={(event:any) => {
+
             const file = event.target.files[0];
-            console.log(file)
-            if(file.size < 200000){
+            if(file.size < 200000 && image.length < 5){
               setImage([...image,file])
-            }else{
+              
+              const reader = new FileReader();
+              reader.readAsDataURL(file);
+              reader.onloadend =() => {
+                setPreview([...preview,(reader.result as string)]);
+              };
+                    
+            
+            }else if(file.size > 200000){
               alert("please be sure your pic less than 200kb")
+            }else if(image.length >= 5){
+              alert("you have reached maximum capacity")
             }
             
           }}
