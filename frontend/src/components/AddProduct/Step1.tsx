@@ -17,7 +17,7 @@ const Step1 : FunctionComponent<form> = (props) => {
     const {formdata,setFormData} = props;
 
     const [image, setImage] = useState<Array<any>>([]);
-    const [preview, setPreview] = useState<Array<any>>([]);
+    const [preview, setPreview] = useState<Array<any>>((JSON.parse(localStorage.getItem("previewData") || '[]')));
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +25,8 @@ const Step1 : FunctionComponent<form> = (props) => {
     };
 
 console.log(image)
-console.log(image.length)
+console.log(JSON.parse(localStorage.getItem("previewData") || '{}'))
+
 
   
     useEffect(() => {
@@ -60,26 +61,26 @@ console.log(image.length)
           
             <div style={{display:"flex",flexWrap:"wrap",justifyContent:"center",width:"50%",border:"solid",borderColor:"lightgray",borderRadius:"10px"}}>
               {preview.length !== 0 ? 
-          preview.map((pre,index)=>{
+          preview?.map((pre:any,index:number)=>{
             return(<img key={index}
           
             src={pre}
             alt=""
             style={{ objectFit: "cover",width:"100px", borderRadius:"10px", marginBottom:"10px",marginTop:"10px"}}
             onClick={() => {
-              if(image.length===1){
-                setPreview([])
-              }else{
+              
                console.log(index)
                preview.splice(index,1)
                image.splice(index,1)
+               const storage: Array<any> = JSON.parse(localStorage.getItem("previewData") || '{}')
+               storage.splice(index,1)
+               localStorage.setItem("previewData",JSON.stringify([...storage]))
                 setImage([...image])
                 setPreview([...preview])
 
                 console.log(image,preview)
               
-                
-              }
+              
                 
             
             }}
@@ -113,6 +114,7 @@ console.log(image.length)
               reader.readAsDataURL(file);
               reader.onloadend =() => {
                 setPreview([...preview,(reader.result as string)]);
+                localStorage.setItem("previewData",JSON.stringify([...preview,(reader.result as string)]))
               };
                     
             
