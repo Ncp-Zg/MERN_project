@@ -1,5 +1,6 @@
 
 import { Button } from '@mui/material'
+import axios from 'axios';
 import { useState} from 'react'
 import Step1 from '../../components/AddProduct/Step1';
 import Step2 from '../../components/AddProduct/Step2';
@@ -57,9 +58,19 @@ const AddProduct = () => {
               setPage((currPage) => currPage - 1);
             }}
            sx={{marginRight:"10px"}}>Previous</Button>
-              <Button variant="contained" color={page === FormTitles.length - 1 ? "success" : "primary"} onClick={() => {
+              <Button variant="contained" color={page === FormTitles.length - 1 ? "success" : "primary"} onClick={async (e) => {
               if (page === FormTitles.length - 1) {
-                alert("FORM SUBMITTED");
+                e.preventDefault();
+                await axios.post("http://localhost:5000/api/products/add",
+                {
+                  category:formData.category,
+                  price:formData.cost,
+                  desc:formData.description,
+                  seller:formData.seller,
+                  stock:formData.stock,
+                  title:formData.title
+                }).then(res=>console.log(res.data))
+                // alert("FORM SUBMITTED");
                 console.log(formData);
               } else {
                 setPage((currPage) => currPage + 1);

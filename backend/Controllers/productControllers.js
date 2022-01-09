@@ -14,12 +14,12 @@ const getProducts = asyncHandler(async(req,res)=>{
 
 const addProduct = asyncHandler(async(req,res)=>{
 
-    const {title,price,stock,seller,img} = req.body
+    const {title,price,stock,seller,desc,category} = req.body
 
-    if(title && price && stock && seller && img && category && desc){
+    if(title && price && stock && seller &&  category && desc){
 
         const product = await Product.create({
-            title,price,stock,seller,img,category,desc
+            title,price,stock,seller,category,desc
         })
 
 
@@ -29,7 +29,6 @@ const addProduct = asyncHandler(async(req,res)=>{
             price:product.price,
             stock:product.stock,
             seller:product.seller,
-            img:product.img,
             category:product.category,
             desc:product.desc
         })
