@@ -12,8 +12,16 @@ const AddProduct = () => {
 
     const [page, setPage] = useState(0);
     const [formData, setFormData] = useState({
-      category: "",
-      description: "",
+      
+        category:"",
+        description:"",
+        stock:"",
+        cost:"",
+        title:"",
+        seller:"",
+        img:[]
+  
+      
       
     });
 

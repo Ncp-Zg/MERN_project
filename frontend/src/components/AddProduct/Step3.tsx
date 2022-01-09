@@ -21,7 +21,26 @@ const Step3 : FunctionComponent<form> = (props) => {
           placeholder=""
           multiline
           variant="filled"
+          sx={{ width: "50%",marginBottom:"5px" }}
+          onChange={(e)=>setFormData({...formdata,stock:e.target.value.toString()})}
+        />
+        <TextField
+          id="filled-textarea"
+          label="Seller"
+          placeholder=""
+          multiline
+          variant="filled"
+          sx={{ width: "50%",marginBottom:"5px" }}
+          onChange={(e)=>setFormData({...formdata,seller:e.target.value})}
+        />
+        <TextField
+          id="filled-textarea"
+          label="Cost"
+          placeholder=""
+          multiline
+          variant="filled"
           sx={{ width: "50%" }}
+          onChange={(e)=>setFormData({...formdata,cost:e.target.value.toString()})}
         />
       
     </div>

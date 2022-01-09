@@ -19,6 +19,15 @@ const Step2: FunctionComponent<form> = (props) => {
       }}
     >
       <TextField
+          id="filled-textarea"
+          label="Title"
+          placeholder=""
+          multiline
+          variant="filled"
+          sx={{ width: "50%",marginBottom:"5px" }}
+          onChange={(e)=>setFormData({...formdata,title:e.target.value})}
+        />
+      <TextField
         id="filled-multiline-static"
         label="Description"
         multiline
@@ -27,6 +36,7 @@ const Step2: FunctionComponent<form> = (props) => {
         variant="filled"
         sx={{ width: "50%" }}
         onChange={handleChange}
+        
       />
     </div>
   );

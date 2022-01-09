@@ -4,8 +4,14 @@ import React, { Dispatch, FunctionComponent, SetStateAction, useEffect, useRef, 
 
 export interface form {
     formdata: {
-      category:string;
+      category:string
       description:string
+      stock:string
+      cost:string
+      title:string
+      seller:string
+      img:Array<any>
+
     };
     setFormData: Dispatch<SetStateAction<any>>
   }
@@ -31,6 +37,7 @@ console.log(JSON.parse(localStorage.getItem("previewData") || '{}'))
   
     useEffect(() => {
       console.log("render")
+      setFormData({...formdata,img:preview})
 
     }, [preview.length]);
   

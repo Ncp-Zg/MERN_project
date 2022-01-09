@@ -14,12 +14,12 @@ const getProducts = asyncHandler(async(req,res)=>{
 
 const addProduct = asyncHandler(async(req,res)=>{
 
-    const {title,price,stock,seller} = req.body
+    const {title,price,stock,seller,img} = req.body
 
-    if(title && price && stock && seller){
+    if(title && price && stock && seller && img && category && desc){
 
         const product = await Product.create({
-            title,price,stock,seller
+            title,price,stock,seller,img,category,desc
         })
 
 
@@ -28,7 +28,10 @@ const addProduct = asyncHandler(async(req,res)=>{
             title:product.title,
             price:product.price,
             stock:product.stock,
-            seller:product.seller
+            seller:product.seller,
+            img:product.img,
+            category:product.category,
+            desc:product.desc
         })
     }else{
         throw new Error("missing information")
