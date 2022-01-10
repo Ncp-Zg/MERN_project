@@ -70,7 +70,8 @@ const AddProduct = () => {
                   stock:formData.stock,
                   title:formData.title,
                   img:formData.img
-                }).then(res=>console.log(res.data))
+                }).then(res=>{console.log(res.data);
+                    localStorage.removeItem("previewData")})
                 // alert("FORM SUBMITTED");
                 console.log(formData);
               } else {

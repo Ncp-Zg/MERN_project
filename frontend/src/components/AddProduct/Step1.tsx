@@ -87,9 +87,9 @@ const Step1: FunctionComponent<form> = (props) => {
       setDelLoading(false)}).catch(()=>setDelLoading(false))
   };
 
+
   useEffect(() => {
     console.log("render");
-
   }, [preview.length]);
 
   // console.log(preview, preview.length);

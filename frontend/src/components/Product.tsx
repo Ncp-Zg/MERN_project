@@ -1,29 +1,39 @@
-import React, { FunctionComponent } from 'react'
-import { Item } from '../type'
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-
+import React, { FunctionComponent, useState } from "react";
+import { Item } from "../type";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import "./Product.css"
 
 interface IItemProps {
-    item: Item
+  item: Item;
 }
 
-const Product : FunctionComponent<IItemProps> = (props) => {
+const Product: FunctionComponent<IItemProps> = (props) => {
 
-    const {item} = props
-    return (
-        <Card sx={{ maxWidth: 345, margin: "10px" }}>
-      <CardMedia
-        sx={{objectFit: "contain"}}
-        component="img"
-        height="250"
-        image={item.img[0]}
-        alt="green iguana"
-      />
+  const [index,setIndex] = useState<any>(0)
+  const { item } = props;
+  return (
+    <Card sx={{ maxWidth: 345, margin: "10px" }}>
+      <div className="slideshow-container">
+        <CardMedia
+          sx={{ objectFit: "contain" }}
+          component="img"
+          height="250"
+          image={item.img[index]}
+          alt="green iguana"
+        />
+        <a className="prev" onClick={()=>setIndex(index-1)}>
+          &#10094;
+        </a>
+        <a className="next" onClick={(i)=>setIndex(index+1)} >
+          &#10095;
+        </a>
+      </div>
+
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {item.title}
@@ -38,7 +48,7 @@ const Product : FunctionComponent<IItemProps> = (props) => {
         <Button size="small">Details</Button>
       </CardActions>
     </Card>
-    )
-}
+  );
+};
 
-export default Product
+export default Product;
