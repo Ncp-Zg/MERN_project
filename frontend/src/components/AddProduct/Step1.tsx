@@ -1,5 +1,6 @@
 import { PhotoCamera } from '@mui/icons-material';
 import { IconButton, MenuItem, TextField } from '@mui/material';
+import axios from 'axios';
 import React, { Dispatch, FunctionComponent, SetStateAction, useEffect, useRef, useState } from 'react'
 
 export interface form {
@@ -18,10 +19,12 @@ export interface form {
 
 const Step1 : FunctionComponent<form> = (props) => {
 
+  console.log(process.env.REACT_APP_CLOUD_NAME)
   
   
     const {formdata,setFormData} = props;
 
+    const [delete_token, setDelete_token] = useState<Array<any>>([]);
     const [image, setImage] = useState<Array<any>>([]);
     const [preview, setPreview] = useState<Array<any>>((JSON.parse(localStorage.getItem("previewData") || '[]')));
     const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -30,8 +33,42 @@ const Step1 : FunctionComponent<form> = (props) => {
       setFormData({...formdata,category:event.target.value})
     };
 
-console.log(image)
-console.log(JSON.parse(localStorage.getItem("previewData") || '{}'))
+console.log(delete_token)
+// console.log(JSON.parse(localStorage.getItem("previewData") || '{}'))
+
+    const uploadPic = (pic:any) => {
+      console.log(pic,process.env.REACT_APP_CLOUD_NAME)
+      if (pic.type === "image/jpeg" || pic.type === "image/png") {
+        
+          const data = new FormData();
+          data.append("file", pic);
+          data.append("upload_preset", "MERN_stack");
+          data.append("cloud_name", `${process.env.REACT_APP_CLOUD_NAME}`);
+          fetch(
+            `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/image/upload`,
+            {
+              method: "post",
+              body: data,
+            }
+          )
+            .then((res) => res.json())
+            .then((data) => {
+              setDelete_token([...delete_token,data.delete_token]);
+            })
+            .catch((err) => {
+              console.log(err);
+            });};
+    }
+
+    const deleteCloud = (i:number)=>{
+      console.log(delete_token[i])
+      axios.post(
+        "https://api.cloudinary.com/v1_1/dl0na75ef/delete_by_token",
+        {
+          "token":`${delete_token[i]}`
+        }
+      ).then(res=>console.log(res))
+    }
 
 
   
@@ -84,6 +121,7 @@ console.log(JSON.parse(localStorage.getItem("previewData") || '{}'))
                localStorage.setItem("previewData",JSON.stringify([...storage]))
                 setImage([...image])
                 setPreview([...preview])
+                deleteCloud(index);
 
                 console.log(image,preview)
               
@@ -112,8 +150,9 @@ console.log(JSON.parse(localStorage.getItem("previewData") || '{}'))
           ref={fileInputRef}
           accept="image/*"
           onChange={(event:any) => {
-
+            
             const file = event.target.files[0];
+            uploadPic(file);
             if(file.size < 200000 && image.length < 5){
               setImage([...image,file])
               
