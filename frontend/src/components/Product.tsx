@@ -21,7 +21,7 @@ const Product : FunctionComponent<IItemProps> = (props) => {
         sx={{objectFit: "contain"}}
         component="img"
         height="250"
-        image={item.imgURL}
+        image={item.img[0]}
         alt="green iguana"
       />
       <CardContent>

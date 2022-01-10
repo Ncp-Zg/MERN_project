@@ -22,7 +22,7 @@ const Home = () => {
       }}
     >
       {data?.map((item) => (
-        <Product item={item} key={item.id} />
+        <Product item={item} key={item._id} />
       ))}
     </div>
   );

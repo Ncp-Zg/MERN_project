@@ -64,11 +64,12 @@ const AddProduct = () => {
                 await axios.post("http://localhost:5000/api/products/add",
                 {
                   category:formData.category,
-                  price:formData.cost,
+                  cost:formData.cost,
                   desc:formData.description,
                   seller:formData.seller,
                   stock:formData.stock,
-                  title:formData.title
+                  title:formData.title,
+                  img:formData.img
                 }).then(res=>console.log(res.data))
                 // alert("FORM SUBMITTED");
                 console.log(formData);

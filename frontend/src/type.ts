@@ -1,8 +1,11 @@
 
     export interface Item {
-        id: number;
+        _id: number;
         title: string;
-        imgURL: string;
-        price: string;
-        inStock: boolean;
+        img: Array<string>;
+        cost: string;
+        stock: Number;
+        category: String;
+        desc:String;
+        seller:String;
     }

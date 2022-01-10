@@ -4,33 +4,34 @@ const Product = require("../Modals/productModal");
 
 const getProducts = asyncHandler(async(req,res)=>{
 
-    // const products = await Product.find({})
+    const products = await Product.find({})
 
         res.status(201).json({
             success:true,
-            data:data
+            data:products
         })
 })
 
 const addProduct = asyncHandler(async(req,res)=>{
 
-    const {title,price,stock,seller,desc,category} = req.body
+    const {title,cost,stock,seller,desc,category,img} = req.body
 
-    if(title && price && stock && seller &&  category && desc){
+    if(title && cost && stock && seller &&  category && desc && img){
 
         const product = await Product.create({
-            title,price,stock,seller,category,desc
+            title,cost,stock,seller,category,desc,img
         })
 
 
         res.status(201).json({
             _id:product._id,
             title:product.title,
-            price:product.price,
+            cost:product.cost,
             stock:product.stock,
             seller:product.seller,
             category:product.category,
-            desc:product.desc
+            desc:product.desc,
+            img:product.img
         })
     }else{
         throw new Error("missing information")
