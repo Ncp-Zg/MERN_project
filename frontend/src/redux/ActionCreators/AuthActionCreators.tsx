@@ -22,7 +22,7 @@ export const loginUser = (data:auth) => (dispatch: Dispatch<Action>) =>{
 
 export const registerUser = (data:auth) => (dispatch: Dispatch<Action>) =>{
     dispatch({
-        type:ActionTypes.SIGN_IN_USER,
+        type:ActionTypes.SIGN_UP_USER,
     })
     dispatch({
         type:ActionTypes.LOGGED_IN_USER,
@@ -36,4 +36,12 @@ export const registerUser = (data:auth) => (dispatch: Dispatch<Action>) =>{
     localStorage.setItem("user",JSON.stringify(data))
 
     console.log(data)
+}
+
+export const logoutUser = () => (dispatch: Dispatch<Action>) =>{
+    dispatch({
+        type:ActionTypes.LOG_OUT_USER,
+    })
+
+    localStorage.removeItem("user");
 }

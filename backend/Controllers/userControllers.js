@@ -63,10 +63,28 @@ const getUser = asyncHandler(async(req,res)=>{
 })
 
 
+const logoutUser = asyncHandler(async (req,res)=>{
+        
+    return res
+.status(200)
+.cookie({
+  httpOnly: true,
+  expires: new Date(Date.now()),
+  secure: false,
+})
+.json({
+  success: true,
+  message: "Logout successful",
+});
+    
+});
+
+
 
 
 module.exports={
     registerUser,
     authUser,
-    getUser
+    getUser,
+    logoutUser
 }

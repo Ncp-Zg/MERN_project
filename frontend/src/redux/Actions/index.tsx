@@ -12,7 +12,11 @@ interface set_User {
 }
 
 interface register_User {
-    type: ActionTypes.SIGN_IN_USER,
+    type: ActionTypes.SIGN_UP_USER,
 }
 
-export type Action = set_User | register_User
+interface logout_user {
+    type: ActionTypes.LOG_OUT_USER
+}
+
+export type Action = set_User | register_User | logout_user

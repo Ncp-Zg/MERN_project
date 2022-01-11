@@ -21,11 +21,13 @@ import Home from '../pages/Home';
 import {BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '../redux/Reducers/rootReducer';
 import AddProduct from '../pages/AdminPanel/AddProduct';
 import MyProducts from '../pages/AdminPanel/MyProducts';
 import Profile from '../pages/Profile';
+import { Button } from '@mui/material';
+import { logoutUser } from '../redux/ActionCreators/AuthActionCreators';
 
 const drawerWidth = 240;
 
@@ -79,8 +81,11 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export default function PersistentDrawerLeft() {
+
+
+
 const {user} = useSelector((state: IRootState)=>({user:state.auth.user }));
-console.log(user)
+const dispatch = useDispatch()
   const theme = useTheme();
   const navigate= useNavigate()
   const [open, setOpen] = React.useState(false);
@@ -104,11 +109,18 @@ console.log(user)
     navigate(`admin/${text.toLowerCase().replace(" ","")}`)
   };
 
+const handleClick = ()=>{
+    //logout
+
+    dispatch(logoutUser());
+}
+
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar>
+        <Toolbar sx={user.token? {display:"flex",justifyContent:"space-between"} : null}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -121,6 +133,10 @@ console.log(user)
           <Typography variant="h6" noWrap component="div">
             {value}
           </Typography>
+          {
+            user.token ? <Button variant="contained" color='error' sx={{justifySelf:"end"}} onClick={handleClick}>Logout</Button> : null
+          }
+          
         </Toolbar>
       </AppBar>
       <Drawer
@@ -136,7 +152,8 @@ console.log(user)
         anchor="left"
         open={open}
       >
-        <DrawerHeader>
+        <DrawerHeader sx={{display:"flex",justifyContent:"space-between"}}>
+          {user? <h3>{user.name}</h3> : null}
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
