@@ -34,7 +34,7 @@ const Register = () => {
         password: values.password,
         name: values.name,
       })
-      .then((res) => dispatch(registerUser({name:res.data.name,email:res.data.email,isAdmin:res.data.isAdmin})));
+      .then((res) => dispatch(registerUser({name:res.data.name,email:res.data.email,isAdmin:res.data.isAdmin,token:res.data.token})));
   };
     }
 

@@ -51,8 +51,22 @@ const authUser = asyncHandler(async(req,res)=>{
     }
 })
 
+const getUser = asyncHandler(async(req,res)=>{
+
+    res.json({
+        success: true,
+        data: {
+          id: req.user.id,
+          name: req.user.name,
+        },
+      });
+})
+
+
+
 
 module.exports={
     registerUser,
-    authUser
+    authUser,
+    getUser
 }

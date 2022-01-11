@@ -20,16 +20,29 @@ const Product: FunctionComponent<IItemProps> = (props) => {
     <Card sx={{ maxWidth: 345, margin: "10px" }}>
       <div className="slideshow-container">
         <CardMedia
+          className="fade"
           sx={{ objectFit: "contain" }}
           component="img"
           height="250"
           image={item.img[index]}
           alt="green iguana"
         />
-        <a className="prev" onClick={()=>setIndex(index-1)}>
+        <a className="prev" onClick={()=>{
+          if(index === 0){
+            setIndex(item.img.length -1)}
+          else{
+            setIndex(index-1)
+          }
+          }}>
           &#10094;
         </a>
-        <a className="next" onClick={(i)=>setIndex(index+1)} >
+        <a className="next" onClick={()=>{
+          if(index === item.img.length-1){
+            setIndex(0);
+          }else{
+            setIndex(index+1)
+          }
+        }} >
           &#10095;
         </a>
       </div>

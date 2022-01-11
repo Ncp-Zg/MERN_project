@@ -24,6 +24,8 @@ import Register from '../pages/Register';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../redux/Reducers/rootReducer';
 import AddProduct from '../pages/AdminPanel/AddProduct';
+import MyProducts from '../pages/AdminPanel/MyProducts';
+import Profile from '../pages/Profile';
 
 const drawerWidth = 240;
 
@@ -141,7 +143,7 @@ console.log(user)
         </DrawerHeader>
         <Divider />
         <List>
-          {['Home', 'Login', 'Register', 'Drafts'].map((text, index) => (
+          {['Home', 'Login', 'Register', 'Profile'].map((text, index) => (
             <ListItem button key={text} onClick={()=>changeRoute(text)}>
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
@@ -172,7 +174,9 @@ console.log(user)
         <Route path="/home" element={<Home />}/>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/admin/addproduct" element={<AddProduct />} />
+        <Route path="/admin/myproducts" element={<MyProducts />} />
       </Routes>
         
       </Main>

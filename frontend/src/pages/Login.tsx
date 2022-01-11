@@ -1,28 +1,28 @@
-import { Box, Button, FormControl, TextField } from "@mui/material";
+import { Box, Button,TextField } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../redux/ActionCreators/AuthActionCreators";
+import { IRootState } from "../redux/Reducers/rootReducer";
 
 export interface auth {
   name: string;
   email: string;
   isAdmin: boolean;
+  token:string;
 }
 
 const Login = () => {
   const dispatch = useDispatch();
+
+  const {user}= useSelector((state:IRootState)=>state.auth)
+  console.log(user)
 
   const [values, setValues] = useState({
     email: "",
     password: "",
   });
 
-  const [auth, setAuth] = useState({
-    name: "",
-    email: "",
-    isAdmin: false,
-  });
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -33,12 +33,12 @@ const Login = () => {
         password: values.password,
       })
       .then((res) => {
-        setAuth(res.data);
         dispatch(
           loginUser({
             name: res.data.name,
             email: res.data.email,
             isAdmin: res.data.isAdmin,
+            token:res.data.token
           })
         );
       });

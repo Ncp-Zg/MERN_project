@@ -5,7 +5,8 @@ const initialState = {
     user:{
         email:"",
         name:"",
-        isAdmin:false
+        isAdmin:false,
+        token:"",
     }
 }
 

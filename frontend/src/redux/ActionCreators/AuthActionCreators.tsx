@@ -11,7 +11,8 @@ export const loginUser = (data:auth) => (dispatch: Dispatch<Action>) =>{
         payload:{
             email:data.email,
             name:data.name,
-            isAdmin:data.isAdmin
+            isAdmin:data.isAdmin,
+            token:data.token
         }
     })
     localStorage.setItem("user",JSON.stringify(data))
@@ -28,7 +29,8 @@ export const registerUser = (data:auth) => (dispatch: Dispatch<Action>) =>{
         payload:{
             email:data.email,
             name:data.name,
-            isAdmin:data.isAdmin
+            isAdmin:data.isAdmin,
+            token:data.token
         }
     })
     localStorage.setItem("user",JSON.stringify(data))

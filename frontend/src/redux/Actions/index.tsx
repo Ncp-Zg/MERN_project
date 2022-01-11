@@ -6,7 +6,8 @@ interface set_User {
     payload:{
         email:string,
         name:string,
-        isAdmin:boolean
+        isAdmin:boolean,
+        token:string
     }
 }
 

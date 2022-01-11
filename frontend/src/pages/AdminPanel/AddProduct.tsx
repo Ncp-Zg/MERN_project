@@ -1,15 +1,42 @@
 
 import { Button } from '@mui/material'
 import axios from 'axios';
-import { useState} from 'react'
+import { useEffect, useState} from 'react'
+import { useSelector } from 'react-redux';
 import Step1 from '../../components/AddProduct/Step1';
 import Step2 from '../../components/AddProduct/Step2';
 import Step3 from '../../components/AddProduct/Step3';
+import { IRootState } from '../../redux/Reducers/rootReducer';
 
 
 
 const AddProduct = () => {
 
+  const[auth,setAuth]=useState<boolean>(false)
+  const {user}= useSelector((state:IRootState)=>state.auth)
+
+  const getProfile= async()=>{console.log("user.token",user.token)
+      if(user.token!== ""){
+         
+      await axios.get("http://localhost:5000/api/users/profile",{
+          headers:{
+              "Content-Type":"application/json",
+              Authorization:`Bearer ${user?.token}`,
+          }
+      }).then(res=>{
+          if(res.data.success){
+              setAuth(true)
+          }else{
+              setAuth(false)
+          }
+      }) 
+      }
+      
+  }
+
+  useEffect(()=>{
+      getProfile();
+  },[user])
 
     const [page, setPage] = useState(0);
     const [formData, setFormData] = useState({
@@ -47,6 +74,9 @@ const AddProduct = () => {
 
     return (
         <div style={{display:"flex",flexDirection:"column"}}>
+
+          {
+            auth ? (<>
             <form style={{display:"flex",justifyContent:"center",flexDirection:"column",alignItems:"center"}}>
             <h3>{FormTitles[page]}</h3>
             <div style={{width:"100%"}}>{PageDisplay()}</div>
@@ -78,7 +108,11 @@ const AddProduct = () => {
                 setPage((currPage) => currPage + 1);
               }
             }} sx={{}}>{page === FormTitles.length - 1 ? "Submit" : "Next"}</Button>
-            </div>
+            </div></>):(
+              <h3>need authorization, token failed</h3>
+            )
+          }
+            
         </div>
     )
 }
