@@ -28,6 +28,7 @@ import MyProducts from '../pages/AdminPanel/MyProducts';
 import Profile from '../pages/Profile';
 import { Button } from '@mui/material';
 import { logoutUser } from '../redux/ActionCreators/AuthActionCreators';
+import axios from 'axios';
 
 const drawerWidth = 240;
 
@@ -109,10 +110,17 @@ const dispatch = useDispatch()
     navigate(`admin/${text.toLowerCase().replace(" ","")}`)
   };
 
-const handleClick = ()=>{
+const handleClick = async()=>{
     //logout
 
     dispatch(logoutUser());
+    await axios.get("http://localhost:5000/api/users/logout",
+    {
+      headers:{
+        "Content-Type":"application/json",
+        Authorization:`Bearer ${user.token}`,
+      }
+    }).then(res=>console.log(res.data))
 }
 
 
