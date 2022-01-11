@@ -32,9 +32,6 @@ const Step1: FunctionComponent<form> = (props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [delete_token, setDelete_token] = useState<Array<any>>([]);
   const [image, setImage] = useState<Array<any>>([]);
-  const [preview, setPreview] = useState<Array<any>>(
-    JSON.parse(localStorage.getItem("previewData") || "[]")
-  );
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,13 +84,6 @@ const Step1: FunctionComponent<form> = (props) => {
       setDelLoading(false)}).catch(()=>setDelLoading(false))
   };
 
-
-  useEffect(() => {
-    console.log("render");
-  }, [preview.length]);
-
-  // console.log(preview, preview.length);
-
   const categories = [
     {
       value: "Electronic",
@@ -133,8 +123,8 @@ const Step1: FunctionComponent<form> = (props) => {
           borderRadius: "10px",
         }}
       >
-        {!delLoading ? preview.length !== 0 ? (
-          preview?.map((pre: any, index: number) => {
+        {!delLoading ? formdata.img.length !== 0 ? (
+          formdata.img?.map((pre: any, index: number) => {
             return (
               <img
                 key={index}
@@ -149,21 +139,10 @@ const Step1: FunctionComponent<form> = (props) => {
                 }}
                 onClick={() => {
                   console.log(index);
-                  preview.splice(index, 1);
                   image.splice(index, 1);
-                  const storage: Array<any> = JSON.parse(
-                    localStorage.getItem("previewData") || "{}"
-                  );
-                  storage.splice(index, 1);
-                  localStorage.setItem(
-                    "previewData",
-                    JSON.stringify([...storage])
-                  );
                   setImage([...image]);
-                  setPreview([...preview]);
-                  deleteCloud(index);
 
-                  console.log(image, preview);
+                  deleteCloud(index);
                 }}
               />
             );
@@ -190,19 +169,11 @@ const Step1: FunctionComponent<form> = (props) => {
         accept="image/*"
         onChange={(event: any) => {
           const file = event.target.files[0];
-          uploadPic(file);
+          
           if (file.size < 200000 && image.length < 5) {
             setImage([...image, file]);
-
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onloadend = () => {
-              setPreview([...preview, reader.result as string]);
-              localStorage.setItem(
-                "previewData",
-                JSON.stringify([...preview, reader.result as string])
-              );
-            };
+            uploadPic(file);
+            
           } else if (file.size > 200000) {
             alert("please be sure your pic less than 200kb");
           } else if (image.length >= 5) {
