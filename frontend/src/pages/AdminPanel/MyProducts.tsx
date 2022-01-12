@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { IRootState } from '../../redux/Reducers/rootReducer'
 
@@ -26,6 +26,10 @@ const MyProducts = () => {
         }
         
     }
+
+    useEffect(()=>{
+        getProfile();
+    },[user])
     return (
         <div>
             {auth ? 

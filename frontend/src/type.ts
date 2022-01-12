@@ -4,8 +4,8 @@
         title: string;
         img: Array<string>;
         cost: string;
-        stock: Number;
-        category: String;
-        desc:String;
-        seller:String;
+        stock: number;
+        category: string;
+        desc:string;
+        seller:string;
     }

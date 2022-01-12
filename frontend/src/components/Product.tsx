@@ -21,11 +21,11 @@ const Product: FunctionComponent<IItemProps> = (props) => {
       <div className="slideshow-container">
         <CardMedia
           className="fade"
-          sx={{ objectFit: "contain" }}
+          sx={{ objectFit: "contain", maxWidth:"320px" }}
           component="img"
           height="250"
           image={item.img[index]}
-          alt="green iguana"
+          alt={item.title}
         />
         <a className="prev" onClick={()=>{
           if(index === 0){
@@ -51,9 +51,11 @@ const Product: FunctionComponent<IItemProps> = (props) => {
         <Typography gutterBottom variant="h5" component="div">
           {item.title}
         </Typography>
+        <Typography gutterBottom variant="h5" component="div">
+          {item.category}
+        </Typography>
         <Typography variant="body2" color="text.secondary">
-          Lizards are a widespread group of squamate reptiles, with over 6,000
-          species, ranging across all continents except Antarctica
+          {item.desc}
         </Typography>
       </CardContent>
       <CardActions>
