@@ -1,8 +1,11 @@
 import { CardMedia, Grid, Paper, styled } from "@mui/material";
-import React from "react";
-import { useSelector } from "react-redux";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { setProducts } from "../redux/ActionCreators/ProductActionCreators";
 import { IRootState } from "../redux/Reducers/rootReducer";
+import "./ProductDetails.css"
 
 const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body2,
@@ -12,6 +15,8 @@ const Item = styled(Paper)(({ theme }) => ({
   }));
 
 const ProductDetails = () => {
+    const [index,setIndex] = useState<any>(0)
+    const dispatch = useDispatch();
   const { id } = useParams();
   const { product } = useSelector((state: IRootState) => ({
     product: state.product.product,
@@ -20,21 +25,55 @@ const ProductDetails = () => {
   const filteredState = product.filter((item) => item._id.toString() === id);
   console.log(filteredState);
 
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/products")
+      .then((res) => {
+        dispatch(setProducts(res.data.data))
+      });
+  }, []);
+
   return (
     <div>
       <Grid container spacing={2}>
-        <Grid item xs={8}>
-          <Item>
+        <Grid item xs={6}>
+          <Item className="slideshow-container">
               <CardMedia
+                className="fade"
                 sx={{ objectFit: "cover" }}
                 component="img"
-                height="350"
-                src={filteredState[0].img[0]}
+                height="450"
+                src={filteredState[0]?.img[index]}
               />
+              <a className="prev" onClick={()=>{
+          if(index === 0){
+            setIndex(filteredState[0].img.length -1)}
+          else{
+            setIndex(index-1)
+          }
+          }}>
+          &#10094;
+        </a>
+        <a className="next" onClick={()=>{
+          if(index === filteredState[0].img.length-1){
+            setIndex(0);
+          }else{
+            setIndex(index+1)
+          }
+        }} >
+          &#10095;
+        </a>
           </Item>
         </Grid>
-        <Grid item xs={4}>
-          <Item>xs=4</Item>
+        <Grid item xs={6} >
+          <Item style={{height:"80vh"}}>
+              <h3>{filteredState[0]?.title}</h3>
+          
+              <h6>{filteredState[0]?.category}</h6>
+          
+              <p>{filteredState[0]?.desc}</p>
+              <p>₺{filteredState[0]?.cost}</p>
+          </Item>
         </Grid>
       </Grid>
       

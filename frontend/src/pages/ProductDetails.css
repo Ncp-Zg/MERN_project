@@ -1,14 +1,14 @@
-.slideshow-container1 {
+.slideshow-container {
     max-width: 1000px;
     position: relative;
     margin: auto;
   }
 
   /* Next & previous buttons */
-.prev1, .next1 {
+.prev, .next {
     cursor: pointer;
     position: absolute;
-    top: 50%;
+    top: 45%;
     width: auto;
     padding: 16px;
     margin-top: -22px;
@@ -21,13 +21,20 @@
   }
   
   /* Position the "next button" to the right */
-  .next1 {
+  .next {
     right: 0;
     border-radius: 3px 0 0 3px;
+    font-size: x-large;
+  }
+  .prev {
+    left: 0;
+    border-radius: 3px 0 0 3px;
+    font-size: x-large;
   }
   
   /* On hover, add a black background color with a little bit see-through */
-  .prev1:hover, .next1:hover {
-    background-color: gray;
+  .prev:hover, .next:hover {
+    background-color: transparent;
+    color: red;
   }
   

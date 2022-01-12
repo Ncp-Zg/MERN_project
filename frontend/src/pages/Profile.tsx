@@ -9,7 +9,7 @@ const Profile = () => {
     const[auth,setAuth]=useState<boolean>(false)
     const {user}= useSelector((state:IRootState)=>state.auth)
 
-    const getProfile= async()=>{console.log("user.token",user.token)
+    const getProfile= async()=>{
         if(user.token!== ""){
            
         await axios.get("http://localhost:5000/api/users/profile",{

@@ -30,8 +30,10 @@ import { Button } from '@mui/material';
 import { logoutUser } from '../redux/ActionCreators/AuthActionCreators';
 import axios from 'axios';
 import ProductDetails from '../pages/ProductDetails';
+import { AddBusiness, AppRegistrationOutlined, HomeMax, ListAltOutlined, LoginOutlined, RemoveCircleOutline, VerifiedUserOutlined } from '@mui/icons-material';
 
 const drawerWidth = 240;
+
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
@@ -129,7 +131,7 @@ const handleClick = async()=>{
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar sx={user.token? {display:"flex",justifyContent:"space-between"} : null}>
+        <Toolbar sx={user.token? {display:"flex",justifyContent:"space-between",backgroundColor:"#D9534F",color:"#FFEEAD"} : {backgroundColor:"#F57B51",color:"#F6EEDF"}} >
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -172,7 +174,7 @@ const handleClick = async()=>{
           {['Home', 'Login', 'Register', 'Profile'].map((text, index) => (
             <ListItem button key={text} onClick={()=>changeRoute(text)}>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                {index === 0 ? <HomeMax /> : index === 1 ? <LoginOutlined /> : index === 2 ? <AppRegistrationOutlined/> : <VerifiedUserOutlined/> }
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
@@ -184,7 +186,7 @@ const handleClick = async()=>{
           <ListItem>Admin Panel</ListItem>{['Add Product', 'Remove Product', 'My Products'].map((text, index) => (
             <ListItem button key={text} onClick={()=>changeRouteAdmin(text)}>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                {index === 0 ? <AddBusiness /> : index === 1 ? <RemoveCircleOutline/> : <ListAltOutlined/>}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
