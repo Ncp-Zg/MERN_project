@@ -7,6 +7,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import "./Product.css"
+import { useNavigate } from "react-router-dom";
 
 interface IItemProps {
   item: Item;
@@ -14,6 +15,7 @@ interface IItemProps {
 
 const Product: FunctionComponent<IItemProps> = (props) => {
 
+  const navigate = useNavigate();
   const [index,setIndex] = useState<any>(0)
   const { item } = props;
   return (
@@ -60,7 +62,7 @@ const Product: FunctionComponent<IItemProps> = (props) => {
       </CardContent>
       <CardActions>
         <Button size="small">Add to Cart</Button>
-        <Button size="small">Details</Button>
+        <Button size="small" onClick={()=>navigate(`/details/${item._id}`)}>Details</Button>
       </CardActions>
     </Card>
   );

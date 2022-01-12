@@ -29,6 +29,7 @@ import Profile from '../pages/Profile';
 import { Button } from '@mui/material';
 import { logoutUser } from '../redux/ActionCreators/AuthActionCreators';
 import axios from 'axios';
+import ProductDetails from '../pages/ProductDetails';
 
 const drawerWidth = 240;
 
@@ -202,6 +203,7 @@ const handleClick = async()=>{
         <Route path="/profile" element={<Profile />} />
         <Route path="/admin/addproduct" element={<AddProduct />} />
         <Route path="/admin/myproducts" element={<MyProducts />} />
+        <Route path="/details/:id" element={<ProductDetails />} />
       </Routes>
         
       </Main>

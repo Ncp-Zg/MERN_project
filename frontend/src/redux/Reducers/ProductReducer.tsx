@@ -14,7 +14,7 @@ const initialState = {
     }]
 }
 
-const postReducer = (state=initialState,Action:Action)=>{
+const productReducer = (state=initialState,Action:Action)=>{
     switch (Action.type) {
         case ActionTypes.SET_ALL_PRODUCTS:
             return state={product:Action.payload};
@@ -23,4 +23,4 @@ const postReducer = (state=initialState,Action:Action)=>{
     }
 }
 
-export default postReducer
+export default productReducer
