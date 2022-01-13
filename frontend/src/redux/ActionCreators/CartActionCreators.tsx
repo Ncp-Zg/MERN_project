@@ -5,20 +5,10 @@ import { ActionTypes } from "../ActionTypes";
 
 
 
-
-
-export const setProducts = (data:Item[])=>(dispatch: Dispatch<Action>) => {
-        dispatch({
-            type:ActionTypes.SET_ALL_PRODUCTS,
-            payload:data
-        })
-}
-
 export const addToCart = (data:Item[])=>(dispatch: Dispatch<Action>) => {
         dispatch({
             type:ActionTypes.ADD_TO_CART,
             payload:data
         })
 }
-
 

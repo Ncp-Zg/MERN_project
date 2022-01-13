@@ -8,6 +8,8 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import "./Product.css"
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../redux/ActionCreators/ProductActionCreators";
 
 interface IItemProps {
   item: Item;
@@ -18,6 +20,15 @@ const Product: FunctionComponent<IItemProps> = (props) => {
   const navigate = useNavigate();
   const [index,setIndex] = useState<any>(0)
   const { item } = props;
+  const dispatch = useDispatch();
+
+
+  const handleClick = () => {
+    console.log("click",item._id)
+    dispatch(addToCart([item]))
+
+  }
+
   return (
     <Card sx={{ maxWidth: 320, margin: "10px" }}>
       <div className="slideshow-container1">
@@ -61,7 +72,7 @@ const Product: FunctionComponent<IItemProps> = (props) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Add to Cart</Button>
+        <Button size="small" onClick={handleClick}>Add to Cart</Button>
         <Button size="small" onClick={()=>navigate(`/details/${item._id}`)}>Details</Button>
       </CardActions>
     </Card>

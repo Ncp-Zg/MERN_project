@@ -33,4 +33,18 @@ interface set_all_products {
     }[]
 }
 
-export type Action = set_User | register_User | logout_user | set_all_products;
+interface add_to_cart {
+    type: ActionTypes.ADD_TO_CART,
+    payload:{
+        _id: number;
+        title: string;
+        img: Array<string>;
+        cost: string;
+        stock: number;
+        category: string;
+        desc:string;
+        seller:string;
+    }[]
+}
+
+export type Action = set_User | register_User | logout_user | set_all_products | add_to_cart;
