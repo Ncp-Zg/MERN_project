@@ -19,7 +19,7 @@ const Product: FunctionComponent<IItemProps> = (props) => {
   const [index,setIndex] = useState<any>(0)
   const { item } = props;
   return (
-    <Card sx={{ maxWidth: 345, margin: "10px" }}>
+    <Card sx={{ maxWidth: 320, margin: "10px" }}>
       <div className="slideshow-container1">
         <CardMedia
           className="fade"
@@ -57,7 +57,7 @@ const Product: FunctionComponent<IItemProps> = (props) => {
           {item.category}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {item.desc}
+          {item.desc.slice(0,50)}...
         </Typography>
       </CardContent>
       <CardActions>

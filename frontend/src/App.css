@@ -50,3 +50,7 @@ body::-webkit-scrollbar-thumb {
   background-color: #FFAD60;
   /* outline: 1px solid slategrey; */
 }
+
+.css-3v9zut{
+  min-height: 40px !important;
+}

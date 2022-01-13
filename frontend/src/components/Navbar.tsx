@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
+import { styled, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -31,6 +31,7 @@ import { logoutUser } from '../redux/ActionCreators/AuthActionCreators';
 import axios from 'axios';
 import ProductDetails from '../pages/ProductDetails';
 import { AddBusiness, AppRegistrationOutlined, HomeMax, ListAltOutlined, LoginOutlined, RemoveCircleOutline, VerifiedUserOutlined } from '@mui/icons-material';
+import { createTheme,ThemeProvider } from '@mui/system';
 
 const drawerWidth = 240;
 
@@ -75,12 +76,14 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
+
 const DrawerHeader = styled('div')(({ theme }) => ({
+  [theme.breakpoints.up("sm")]:{minHeight:"40px"},
   display: 'flex',
   alignItems: 'center',
   padding: theme.spacing(0, 1),
   // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
+  // ...theme.mixins.toolbar,
   justifyContent: 'flex-end',
 }));
 
@@ -131,7 +134,7 @@ const handleClick = async()=>{
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar sx={user.token? {display:"flex",justifyContent:"space-between",backgroundColor:"#D9534F",color:"#FFEEAD"} : {backgroundColor:"#F57B51",color:"#F6EEDF"}} >
+        <Toolbar variant="regular" sx={user.token? {display:"flex",justifyContent:"space-between",backgroundColor:"#D9534F",color:"#FFEEAD"} : {backgroundColor:"#F57B51",color:"#F6EEDF"}} >
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -163,8 +166,9 @@ const handleClick = async()=>{
         anchor="left"
         open={open}
       >
+      
         <DrawerHeader sx={{display:"flex",justifyContent:"space-between"}}>
-          {user? <h3>{user.name}</h3> : null}
+          {user? <h3 style={{margin:"0px"}}>{user.name}</h3> : null}
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>

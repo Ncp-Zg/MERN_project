@@ -100,7 +100,14 @@ const AddProduct = () => {
                   stock:formData.stock,
                   title:formData.title,
                   img:formData.img
-                }).then(res=>{console.log(res.data);
+                },{
+                  headers:{
+                      "Content-Type":"application/json",
+                      Authorization:`Bearer ${user?.token}`,
+                  }
+              }
+                
+                ).then(res=>{console.log(res.data);
                     localStorage.removeItem("previewData")})
                 // alert("FORM SUBMITTED");
                 console.log(formData);
