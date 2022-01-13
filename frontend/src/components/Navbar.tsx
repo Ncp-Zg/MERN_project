@@ -32,6 +32,7 @@ import axios from 'axios';
 import ProductDetails from '../pages/ProductDetails';
 import { AddBusiness, AppRegistrationOutlined, HomeMax, ListAltOutlined, LoginOutlined, RemoveCircleOutline, VerifiedUserOutlined } from '@mui/icons-material';
 import { createTheme,ThemeProvider } from '@mui/system';
+import ShoppingCart from '../pages/ShoppingCart';
 
 const drawerWidth = 240;
 
@@ -148,7 +149,7 @@ const handleClick = async()=>{
             {value}
           </Typography>
           {
-            user.token ? <Button variant="contained" color='error' sx={{justifySelf:"end"}} onClick={handleClick}>Logout</Button> : null
+            user.token ? <Button variant="contained" color='error' size='small' sx={{justifySelf:"end"}} onClick={handleClick}>Logout</Button> : null
           }
           
         </Toolbar>
@@ -210,6 +211,7 @@ const handleClick = async()=>{
         <Route path="/admin/addproduct" element={<AddProduct />} />
         <Route path="/admin/myproducts" element={<MyProducts />} />
         <Route path="/details/:id" element={<ProductDetails />} />
+        <Route path="/shoppingcart" element={<ShoppingCart />} />
       </Routes>
         
       </Main>
