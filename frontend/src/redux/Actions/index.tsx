@@ -44,6 +44,7 @@ interface add_to_cart {
         category: string;
         desc:string;
         seller:string;
+        amount:number;
     }[]
 }
 

@@ -6,13 +6,13 @@ import { useNavigate } from "react-router-dom";
 import Product from "../components/Product";
 import { setProducts } from "../redux/ActionCreators/ProductActionCreators";
 import { IRootState } from "../redux/Reducers/rootReducer";
-import { Item } from "../type";
+import { Cart, Item } from "../type";
 
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {cart} = useSelector((state:IRootState)=>({cart:state.cart.cart}))
-  const [data, setData] = useState<Item[]>();
+  const [data, setData] = useState<Cart[]>();
   useEffect(() => {
     axios.get("http://localhost:5000/api/products").then((res) => {
       setData(res.data.data);

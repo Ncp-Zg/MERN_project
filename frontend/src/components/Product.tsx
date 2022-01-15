@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from "react";
-import { Item } from "../type";
+import { Cart, Item } from "../type";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -9,23 +9,26 @@ import Typography from "@mui/material/Typography";
 import "./Product.css"
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../redux/ActionCreators/ProductActionCreators";
+import { addToCart } from "../redux/ActionCreators/CartActionCreators";
+
 
 interface IItemProps {
-  item: Item;
+  item: Cart;
 }
 
 const Product: FunctionComponent<IItemProps> = (props) => {
 
   const navigate = useNavigate();
   const [index,setIndex] = useState<any>(0)
+  const [cartAmount,setCartAmount] = useState<number>(0)
   const { item } = props;
   const dispatch = useDispatch();
+  
 
 
   const handleClick = () => {
-    console.log("click",item._id)
-    dispatch(addToCart([item]))
+    setCartAmount(cartAmount+1);
+    dispatch(addToCart([{...item,amount:cartAmount+1}]))
 
   }
 
