@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useRef, useState } from "react";
 import { Cart, Item } from "../type";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -8,8 +8,9 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import "./Product.css"
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/ActionCreators/CartActionCreators";
+import { IRootState } from "../redux/Reducers/rootReducer";
 
 
 interface IItemProps {
@@ -19,16 +20,26 @@ interface IItemProps {
 const Product: FunctionComponent<IItemProps> = (props) => {
 
   const navigate = useNavigate();
+  const ref = useRef(0);
+  const ref2 = useRef(0);
   const [index,setIndex] = useState<any>(0)
   const [cartAmount,setCartAmount] = useState<number>(0)
   const { item } = props;
   const dispatch = useDispatch();
-  
-
+  const {cart,product} = useSelector((state:IRootState)=>({cart:state.cart.cart,product:state.product.product}))
+  console.log(cart)
 
   const handleClick = () => {
-    setCartAmount(cartAmount+1);
-    dispatch(addToCart([{...item,amount:cartAmount+1}]))
+    if(cart.some(c=>c._id===item._id)){
+      console.log(cart.map((c,index)=>c._id===item._id ? ref2.current=index :null))
+      ref.current = cart[ref2.current].amount
+      console.log(ref.current)
+      dispatch(addToCart([{...item,amount:ref.current+1}]))
+    }else{
+    dispatch(addToCart([{...item,amount:1}]))
+   
+    
+    }
 
   }
 

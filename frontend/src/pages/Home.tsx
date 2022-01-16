@@ -1,6 +1,6 @@
 import { ShoppingCartOutlined } from "@mui/icons-material";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Product from "../components/Product";
@@ -10,6 +10,7 @@ import { Cart, Item } from "../type";
 
 const Home = () => {
   const dispatch = useDispatch();
+  const ref = useRef(0);
   const navigate = useNavigate();
   const {cart} = useSelector((state:IRootState)=>({cart:state.cart.cart}))
   const [data, setData] = useState<Cart[]>();
@@ -19,7 +20,14 @@ const Home = () => {
       dispatch(setProducts(res.data.data));
     });
   }, []);
-  console.log(data);
+  // console.log(data);
+  if(cart[0]._id !== 0){
+    const sumAll=cart.map(c=>c.amount).reduce((prev,curr)=>prev+curr, 0)
+    ref.current=sumAll
+  }
+
+  
+
   return (
     <div>
       <ShoppingCartOutlined
@@ -50,7 +58,7 @@ const Home = () => {
           color: "white",
           paddingLeft: "5px",
         }}
-      >{cart.length}</div>
+      >{ref.current }</div>
         )}
       
       <div
