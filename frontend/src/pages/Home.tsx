@@ -1,4 +1,5 @@
 import { ShoppingCartOutlined } from "@mui/icons-material";
+import { Button } from "@mui/material";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,12 +15,13 @@ const Home = () => {
   const navigate = useNavigate();
   const {cart} = useSelector((state:IRootState)=>({cart:state.cart.cart}))
   const [data, setData] = useState<Cart[]>();
+  const [page, setPage] = useState<number>(1);
   useEffect(() => {
-    axios.get("http://localhost:5000/api/products").then((res) => {
+    axios.get("http://localhost:5000/api/products",{ params: { page: `${page}` } }).then((res) => {
       setData(res.data.data);
       dispatch(setProducts(res.data.data));
     });
-  }, []);
+  }, [page]);
   console.log(cart.length);
   if(cart[0]?._id !== 0 ){
     const sumAll=cart.map(c=>c.amount).reduce((prev,curr)=>prev+curr, 0)
@@ -72,6 +74,7 @@ const Home = () => {
           <Product item={item} key={item._id} />
         ))}
       </div>
+      <Button onClick={()=>setPage(page+1)}>Next Page</Button>
     </div>
   );
 };

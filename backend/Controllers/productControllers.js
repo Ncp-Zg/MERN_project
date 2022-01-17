@@ -1,16 +1,15 @@
 const asyncHandler = require("express-async-handler");
-const data = require("../data.json")
 const Product = require("../Modals/productModal");
 
-const getProducts = asyncHandler(async(req,res)=>{
+// const getProducts = asyncHandler(async(req,res)=>{
 
-    const products = await Product.find({})
+//     const products = await Product.find({})
 
-        res.status(201).json({
-            success:true,
-            data:products
-        })
-})
+//         res.status(201).json({
+//             success:true,
+//             data:products
+//         })
+// })
 
 const addProduct = asyncHandler(async(req,res)=>{
 
@@ -46,6 +45,5 @@ const addProduct = asyncHandler(async(req,res)=>{
 
 
 module.exports={
-    getProducts,
     addProduct
 }
