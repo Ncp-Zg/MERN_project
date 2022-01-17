@@ -20,10 +20,12 @@ const Home = () => {
       dispatch(setProducts(res.data.data));
     });
   }, []);
-  // console.log(data);
-  if(cart[0]._id !== 0){
+  console.log(cart.length);
+  if(cart[0]?._id !== 0 ){
     const sumAll=cart.map(c=>c.amount).reduce((prev,curr)=>prev+curr, 0)
     ref.current=sumAll
+  }else{
+    console.log("w")
   }
 
   
@@ -44,7 +46,7 @@ const Home = () => {
         onClick={() => navigate("/shoppingcart")}
       />
       
-        {cart[0]._id === 0 ? null : (
+        {cart[0]?._id === 0 ? null : (
           <div
         style={{
           backgroundColor: "gray",

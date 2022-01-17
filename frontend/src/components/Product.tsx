@@ -23,10 +23,9 @@ const Product: FunctionComponent<IItemProps> = (props) => {
   const ref = useRef(0);
   const ref2 = useRef(0);
   const [index,setIndex] = useState<any>(0)
-  const [cartAmount,setCartAmount] = useState<number>(0)
   const { item } = props;
   const dispatch = useDispatch();
-  const {cart,product} = useSelector((state:IRootState)=>({cart:state.cart.cart,product:state.product.product}))
+  const {cart} = useSelector((state:IRootState)=>({cart:state.cart.cart,product:state.product.product}))
   console.log(cart)
 
   const handleClick = () => {

@@ -48,4 +48,9 @@ interface add_to_cart {
     }[]
 }
 
-export type Action = set_User | register_User | logout_user | set_all_products | add_to_cart;
+interface delete_cart_item {
+    type: ActionTypes.DELETE_ITEM_FROM_CART
+    payload:number
+}
+
+export type Action = set_User | register_User | logout_user | set_all_products | add_to_cart | delete_cart_item;

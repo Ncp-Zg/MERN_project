@@ -19,7 +19,7 @@ const initialState = {
 const cartReducer = (state=initialState,Action:Action)=>{
     switch (Action.type) {
         case ActionTypes.ADD_TO_CART:
-            if(state.cart[0]._id === 0){
+            if(state.cart[0]?._id === 0){
                 state.cart.shift()
             }
             let a = Action.payload
@@ -31,6 +31,15 @@ const cartReducer = (state=initialState,Action:Action)=>{
                state={cart:[...state.cart,...Action.payload]} 
             } 
             
+            return state;
+        case ActionTypes.DELETE_ITEM_FROM_CART:
+            if(state.cart[Action.payload].amount === 1){
+                state.cart.splice(Action.payload,1)
+            }else{
+                state.cart[Action.payload].amount = state.cart[Action.payload].amount -1  
+            }
+            
+
             return state;
         default:
             return state;
