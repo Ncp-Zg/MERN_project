@@ -19,6 +19,7 @@ const productMiddleware =asyncErrorWrapper(async function (req, res, next) {
       res.status(201).json({
         success:true,
         data:queryResults,
+        total:total,
         count:queryResults.length,
         pagination:pagination,
     })

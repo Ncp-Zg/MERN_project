@@ -16,9 +16,20 @@ const Home = () => {
   const {cart} = useSelector((state:IRootState)=>({cart:state.cart.cart}))
   const [data, setData] = useState<Cart[]>();
   const [page, setPage] = useState<number>(1);
+  const [total, setTotal] = useState<number>(0);
+
+
+  const forik = ()=>{let value = [];
+    for(let i =0; i< Math.floor(total/5)+1;i++){
+     value.push(i+1);
+    
+}return value;
+}
+
   useEffect(() => {
-    axios.get("http://localhost:5000/api/products",{ params: { page: `${page}` } }).then((res) => {
+    axios.get("http://localhost:5000/api/products",{ params: { page: `${page}`} }).then((res) => {
       setData(res.data.data);
+      setTotal(res.data.total)
       dispatch(setProducts(res.data.data));
     });
   }, [page]);
@@ -74,7 +85,13 @@ const Home = () => {
           <Product item={item} key={item._id} />
         ))}
       </div>
-      <Button onClick={()=>setPage(page+1)}>Next Page</Button>
+      {console.log(Math.floor(9/5))}
+      <div style={{display:"flex",justifyContent:"center"}}>
+      {
+      forik().map(pg=>
+        <Button onClick={()=>setPage(pg)}>{pg}</Button>)
+      }
+      </div>
     </div>
   );
 };
