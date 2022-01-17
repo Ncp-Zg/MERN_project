@@ -18,3 +18,10 @@ export const deleteItemFromCart = (data:number)=>(dispatch: Dispatch<Action>) =>
         })
 }
 
+export const addItemToCart = (data:number)=>(dispatch: Dispatch<Action>) => {
+        dispatch({
+            type:ActionTypes.ADD_ITEM_TO_CART,
+            payload:data
+        })
+}
+

@@ -41,6 +41,10 @@ const cartReducer = (state=initialState,Action:Action)=>{
             
 
             return state;
+
+        case ActionTypes.ADD_ITEM_TO_CART:
+            state.cart[Action.payload].amount = state.cart[Action.payload].amount +1  
+            return state;
         default:
             return state;
     }

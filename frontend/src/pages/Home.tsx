@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Product from "../components/Product";
 import { setProducts } from "../redux/ActionCreators/ProductActionCreators";
 import { IRootState } from "../redux/Reducers/rootReducer";
-import { Cart, Item } from "../type";
+import { Cart} from "../type";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -24,8 +24,6 @@ const Home = () => {
   if(cart[0]?._id !== 0 ){
     const sumAll=cart.map(c=>c.amount).reduce((prev,curr)=>prev+curr, 0)
     ref.current=sumAll
-  }else{
-    console.log("w")
   }
 
   
@@ -46,7 +44,7 @@ const Home = () => {
         onClick={() => navigate("/shoppingcart")}
       />
       
-        {cart[0]?._id === 0 ? null : (
+        {cart[0]?._id === 0 || cart.length === 0 ? null : (
           <div
         style={{
           backgroundColor: "gray",

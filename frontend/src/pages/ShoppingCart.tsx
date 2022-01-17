@@ -6,23 +6,31 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { AddCircleRounded, RemoveCircleRounded } from "@mui/icons-material";
-import { deleteItemFromCart } from "../redux/ActionCreators/CartActionCreators";
+import { addItemToCart, deleteItemFromCart } from "../redux/ActionCreators/CartActionCreators";
+import { useEffect, useState } from "react";
 
 
 const ShoppingCart = () => {
 
     const {cart} = useSelector((state:IRootState)=>({cart:state.cart.cart}))
     const dispatch = useDispatch();
+    const [amount,setAmount]=useState<number>(0);
     console.log(cart)
     const handleIncrease = (i:number) => {
-      console.log(i)
+      setAmount(cart[i].amount)
+      dispatch(addItemToCart(i))
       
     }
 
     const handleDecrease = (i:number) => {
-      console.log(i)
+      console.log(cart[i].amount)
+      setAmount(cart[i].amount)
       dispatch(deleteItemFromCart(i))
     }
+
+    useEffect(()=>{
+      console.log("render")
+    },[amount,cart.length])
 
 
     return (
