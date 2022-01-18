@@ -1,5 +1,5 @@
 import { ShoppingCartOutlined } from "@mui/icons-material";
-import { Button } from "@mui/material";
+import { Button, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,6 +39,13 @@ const Home = () => {
     ref.current=sumAll
   }
 
+
+  const handleAlignment = (
+    event: React.MouseEvent<HTMLElement>,
+    newAlignment: number,
+  ) => {
+    setPage(newAlignment);
+  };
   
 
   return (
@@ -86,12 +93,21 @@ const Home = () => {
         ))}
       </div>
       {console.log(Math.floor(9/5))}
-      <div style={{display:"flex",justifyContent:"center"}}>
+      <ToggleButtonGroup
+      value={page}
+      exclusive
+      onChange={handleAlignment}
+      sx={{display:"flex",justifyContent:"center",marginTop:"20px"}}
+    >
       {
-      forik().map(pg=>
-        <Button onClick={()=>setPage(pg)}>{pg}</Button>)
+        forik().map((pg,index)=>(
+          
+          <ToggleButton value={pg} key={index} sx={{padding:"4px",marginRight:"2px"}}>
+        {pg}
+      </ToggleButton>
+  ))
       }
-      </div>
+      </ToggleButtonGroup>
     </div>
   );
 };
