@@ -58,4 +58,8 @@ interface add_cart_item {
     payload:number
 }
 
-export type Action = set_User | register_User | logout_user | set_all_products | add_to_cart | delete_cart_item | add_cart_item;
+interface empty_basket {
+    type: ActionTypes.EMPTY_BASKET
+}
+
+export type Action = set_User | register_User | logout_user | set_all_products | add_to_cart | delete_cart_item | add_cart_item | empty_basket;

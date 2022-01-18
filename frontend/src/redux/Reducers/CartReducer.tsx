@@ -37,14 +37,15 @@ const cartReducer = (state=initialState,Action:Action)=>{
                 state.cart.splice(Action.payload,1)
             }else{
                 state.cart[Action.payload].amount = state.cart[Action.payload].amount -1  
-            }
-            
-
+            }           
             return state;
 
         case ActionTypes.ADD_ITEM_TO_CART:
             state.cart[Action.payload].amount = state.cart[Action.payload].amount +1  
             return state;
+
+        case ActionTypes.EMPTY_BASKET:
+            return state=initialState;
         default:
             return state;
     }

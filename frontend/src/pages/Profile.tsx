@@ -1,3 +1,4 @@
+import { Button } from "@mui/material"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
@@ -36,7 +37,8 @@ const Profile = () => {
         <div>
             {
                 auth ? 
-                <h3>profile</h3> :
+                (<div><h3>profile</h3>
+                    <Button onClick={()=>navigate("/profile/myorders")}>MyOrders</Button></div>) :
                 <h3>need authorization</h3>
             }
             

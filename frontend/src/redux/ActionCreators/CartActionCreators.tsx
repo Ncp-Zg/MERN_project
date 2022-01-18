@@ -25,3 +25,9 @@ export const addItemToCart = (data:number)=>(dispatch: Dispatch<Action>) => {
         })
 }
 
+export const emptyBasket = ()=>(dispatch: Dispatch<Action>) => {
+        dispatch({
+            type:ActionTypes.EMPTY_BASKET,
+        })
+}
+
