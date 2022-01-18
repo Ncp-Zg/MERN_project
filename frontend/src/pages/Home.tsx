@@ -42,9 +42,9 @@ const Home = () => {
 
   const handleAlignment = (
     event: React.MouseEvent<HTMLElement>,
-    newAlignment: number,
+    newPage: number,
   ) => {
-    setPage(newAlignment);
+    setPage(newPage);
   };
   
 
@@ -89,7 +89,7 @@ const Home = () => {
         }}
       >
         {data?.map((item) => (
-          <Product item={item} key={item._id} />
+          <Product item={item} key={item._id} page={page}/>
         ))}
       </div>
       {console.log(Math.floor(9/5))}

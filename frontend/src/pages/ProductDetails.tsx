@@ -2,7 +2,7 @@ import { CardMedia, Grid, Paper, styled } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { setProducts } from "../redux/ActionCreators/ProductActionCreators";
 import { IRootState } from "../redux/Reducers/rootReducer";
 import "./ProductDetails.css"
@@ -27,11 +27,14 @@ const ProductDetails = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/products")
+      .get("http://localhost:5000/api/products",{params:{page:`${state}`}})
       .then((res) => {
         dispatch(setProducts(res.data.data))
       });
   }, []);
+
+  const {state} = useLocation()
+  console.log(state)
 
   return (
     <div>
