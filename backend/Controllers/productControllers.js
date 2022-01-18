@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const Product = require("../Modals/productModal");
+const Product = require("../Modals/productModel");
 
 // const getProducts = asyncHandler(async(req,res)=>{
 

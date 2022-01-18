@@ -1,6 +1,6 @@
 const asyncErrorWrapper = require("express-async-handler");
 const { paginationHelper } = require("../Helpers/paginationHelper");
-const Product = require("../Modals/productModal");
+const Product = require("../Modals/productModel");
 
 const productMiddleware =asyncErrorWrapper(async function (req, res, next) {
     let query = Product.find();
