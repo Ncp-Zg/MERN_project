@@ -11,14 +11,17 @@ const addOrder = expressAsyncHandler(async(req,res)=>{
         const newOrder = await Orders.create({
             order:req.product,
             amount:req.number,
-            user:req.user
+            user:req.user,
+            delivered:false
+
         })
         
         res.status(201).json({
             _id:newOrder._id,
             amount:newOrder.amount,
             order:newOrder.order,
-            user:newOrder.user
+            user:newOrder.user,
+            
 
         })
     }else{

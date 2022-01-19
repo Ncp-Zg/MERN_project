@@ -19,6 +19,7 @@ const ordersSchema = mongoose.Schema(
         amount: [
             
         ],
+        delivered:Boolean
     },
     {
         timestamps:true,

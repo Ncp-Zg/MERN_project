@@ -29,5 +29,6 @@
         amount:Array<number>;
         createdAt:string;
         __v:number;
+        delivered:false
         
     }

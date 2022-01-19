@@ -1,6 +1,6 @@
 import { Card } from "@mui/material"
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useSelector } from "react-redux"
 import { IRootState } from "../redux/Reducers/rootReducer"
 import { Order } from "../type"
@@ -8,6 +8,7 @@ import { Order } from "../type"
 const Myorders = () => {
     const {user}=useSelector((state:IRootState)=>({user:state.auth}))
     const [myOrders,setMyOrders] = useState<Order[]>([])
+    const ref = useRef<number>(0)
 
     const getMyOrders = async () => {
         await axios.get("http://localhost:5000/api/orders/myorders",
@@ -17,7 +18,6 @@ const Myorders = () => {
         }}).then(res=>setMyOrders(res.data.myorders))
     }
 
-    console.log(user?.user.token)
 
     useEffect(()=>{
         getMyOrders();
@@ -42,9 +42,13 @@ const Myorders = () => {
                 }}
               >
                   <h3>{order.createdAt}</h3>
-                {order.order.map((pr,index)=>(
-                    <p key={index}>{pr.cost}</p>
-                ))}
+                
+                <h3>
+                    {ref.current = order.order.map((c,index) => +order.amount[index] * +c.cost)
+                    .reduce((prev, curr) => prev + curr, 0)}₺
+                </h3>
+                    
+      
               </Card>
                     ))
                 ) : (
