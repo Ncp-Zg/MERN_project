@@ -17,27 +17,34 @@ const Myorders = () => {
         }}).then(res=>setMyOrders(res.data.myorders))
     }
 
+    console.log(user?.user.token)
 
     useEffect(()=>{
         getMyOrders();
-    },[])
+    },[user?.user.token])
+
 
     return (
         <div>
             {
                 myOrders.length !== 0 ? (
-                    myOrders?.map(order=>(
+                    [...myOrders].reverse()?.map(order=>(
                         <Card
                 key={order._id}
                 sx={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 2fr 1fr 1fr",
+                  display: "flex",
+                  flexDirection:"column",
+                  width:"80vh",
+                  
                   justifyItems: "center",
                   alignItems: "center",
                   marginBottom: "5px",
                 }}
               >
-                {order.user}
+                  <h3>{order.createdAt}</h3>
+                {order.order.map((pr,index)=>(
+                    <p key={index}>{pr.cost}</p>
+                ))}
               </Card>
                     ))
                 ) : (
