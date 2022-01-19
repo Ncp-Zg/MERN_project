@@ -1,8 +1,10 @@
 import { Button, Card } from '@mui/material'
-import { useDispatch } from 'react-redux';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify';
 import { emptyBasket } from '../redux/ActionCreators/CartActionCreators';
+import { IRootState } from '../redux/Reducers/rootReducer';
 
 
 const PaymentPage = () => {
@@ -10,8 +12,15 @@ const PaymentPage = () => {
     const {state} = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const {cart,user}=useSelector((state:IRootState)=>({cart:state.cart.cart,user:state.auth}))
+    console.log(cart)
 
     const handleClick = ()=>{
+        axios.post("http://localhost:5000/api/orders/addorders",cart,
+        {headers:{
+            "Content-Type":"application/json",
+            Authorization:`Bearer ${user?.user.token}`,
+        }}).then(res=>console.log(res.data))
         toast.success("Payment is successfull");
         dispatch(emptyBasket())
         navigate("/home")

@@ -21,3 +21,13 @@
         seller:string;
         amount:number;
     }
+
+    export interface Order {
+        _id: string;
+        user:string;
+        order:Array<Item>;
+        amount:Array<number>;
+        createdAt:string;
+        __v:number;
+        
+    }

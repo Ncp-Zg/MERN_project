@@ -1,5 +1,5 @@
 const expressAsyncHandler = require("express-async-handler")
-const Orders = require("../Modals/ordersModel")
+const Orders = require("../Models/ordersModel")
 
 const addOrder = expressAsyncHandler(async(req,res)=>{
     // console.log(req.product)
@@ -10,11 +10,13 @@ const addOrder = expressAsyncHandler(async(req,res)=>{
 
         const newOrder = await Orders.create({
             order:req.product,
+            amount:req.number,
             user:req.user
         })
         
         res.status(201).json({
             _id:newOrder._id,
+            amount:newOrder.amount,
             order:newOrder.order,
             user:newOrder.user
 
@@ -24,7 +26,21 @@ const addOrder = expressAsyncHandler(async(req,res)=>{
     }
 })
 
+const getOrders = expressAsyncHandler(async(req,res)=>{
+   const myorders = await Orders.find({user:req.user.id}).populate('order')
+   console.log(myorders)
+
+   res.status(201).json({
+    myorders:myorders
+
+})
+})
+
+
+
+
 
 module.exports={
-    addOrder
+    addOrder,
+    getOrders
 }

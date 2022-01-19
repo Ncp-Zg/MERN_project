@@ -9,11 +9,16 @@ const ordersSchema = mongoose.Schema(
             ref:"User",
             
         },
-        order:[{
+        order:[
+            {
                 type:mongoose.Schema.ObjectId,
-                ref:"Product",
-                amount:Number,
-            }]
+                ref:"Product"
+            },
+            
+        ],
+        amount: [
+            
+        ],
     },
     {
         timestamps:true,
