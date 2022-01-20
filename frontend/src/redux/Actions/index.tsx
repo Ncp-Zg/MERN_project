@@ -1,3 +1,4 @@
+import { Order } from "../../type";
 import { ActionTypes } from "../ActionTypes";
 
 
@@ -62,4 +63,9 @@ interface empty_basket {
     type: ActionTypes.EMPTY_BASKET
 }
 
-export type Action = set_User | register_User | logout_user | set_all_products | add_to_cart | delete_cart_item | add_cart_item | empty_basket;
+interface set_my_orders {
+    type: ActionTypes.SET_MY_ORDERS
+    payload:Order[]
+}
+
+export type Action = set_User | register_User | logout_user | set_all_products | add_to_cart | delete_cart_item | add_cart_item | empty_basket | set_my_orders;

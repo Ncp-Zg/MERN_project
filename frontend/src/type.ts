@@ -25,7 +25,7 @@
     export interface Order {
         _id: string;
         user:string;
-        order:Array<Item>;
+        order:Item[];
         amount:Array<number>;
         createdAt:string;
         __v:number;

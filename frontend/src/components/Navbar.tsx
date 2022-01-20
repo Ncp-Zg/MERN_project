@@ -15,8 +15,6 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import Home from '../pages/Home';
 import {BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import Login from '../pages/Login';
@@ -31,12 +29,11 @@ import { logoutUser } from '../redux/ActionCreators/AuthActionCreators';
 import axios from 'axios';
 import ProductDetails from '../pages/ProductDetails';
 import { AddBusiness, AppRegistrationOutlined, HomeMax, ListAltOutlined, LoginOutlined, RemoveCircleOutline, VerifiedUserOutlined } from '@mui/icons-material';
-import { createTheme,ThemeProvider } from '@mui/system';
 import ShoppingCart from '../pages/ShoppingCart';
 import PaymentPage from '../pages/PaymentPage';
 import { ToastContainer } from 'react-toastify';
 import Myorders from '../pages/Myorders';
-import OrderDetail from '../pages/OrderDetail';
+import OrderDetails from '../pages/OrderDetails';
 
 const drawerWidth = 240;
 
@@ -214,7 +211,7 @@ const handleClick = async()=>{
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/myorders" element={<Myorders />} />
-        <Route path="/profile/myorders/:id" element={<OrderDetail />} />
+        <Route path="/profile/myorders/:id" element={<OrderDetails />} />
         <Route path="/admin/addproduct" element={<AddProduct />} />
         <Route path="/admin/myproducts" element={<MyProducts />} />
         <Route path="/details/:id" element={<ProductDetails />} />

@@ -1,8 +1,9 @@
 import { Button, Card } from "@mui/material"
 import axios from "axios"
 import { useEffect, useRef, useState } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { setOrders } from "../redux/ActionCreators/OrdersActionCreators"
 import { IRootState } from "../redux/Reducers/rootReducer"
 import { Order } from "../type"
 
@@ -12,13 +13,14 @@ const Myorders = () => {
     const [error, setError] = useState<boolean>(false)
     const ref = useRef<number>(0)
     const navigate = useNavigate()
-
+    const dispatch = useDispatch()
     const getMyOrders = async () => {
+        
         await axios.get("http://localhost:5000/api/orders/myorders",
         {headers:{
             "Content-Type":"application/json",
             Authorization:`Bearer ${user?.user.token}`,
-        }}).then(res=>setMyOrders(res.data.myorders)).catch(err=> err ? setError(true) : null)
+        }}).then(res=>{setMyOrders(res.data.myorders);dispatch(setOrders(res.data.myorders))}).catch(err=> err ? setError(true) : null)
     }
 
     console.log(error);
