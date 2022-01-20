@@ -36,6 +36,7 @@ import ShoppingCart from '../pages/ShoppingCart';
 import PaymentPage from '../pages/PaymentPage';
 import { ToastContainer } from 'react-toastify';
 import Myorders from '../pages/Myorders';
+import OrderDetail from '../pages/OrderDetail';
 
 const drawerWidth = 240;
 
@@ -213,6 +214,7 @@ const handleClick = async()=>{
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/myorders" element={<Myorders />} />
+        <Route path="/profile/myorders/:id" element={<OrderDetail />} />
         <Route path="/admin/addproduct" element={<AddProduct />} />
         <Route path="/admin/myproducts" element={<MyProducts />} />
         <Route path="/details/:id" element={<ProductDetails />} />
