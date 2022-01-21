@@ -51,7 +51,7 @@ const Myorders = () => {
                   <h3>{order.createdAt}</h3>
                 
                 <h3>
-                    {order.order.length} piece {" "}
+                    {order.order.length} brand {" "}
                     {ref.current = order.order.map((c,index) => +order.amount[index] * +c.cost)
                     .reduce((prev, curr) => prev + curr, 0)}₺
                 </h3>
@@ -59,7 +59,7 @@ const Myorders = () => {
                     {
                         order.delivered? (<p style={{fontStyle:"italic",color:"green"}}>Delivered ✔</p>) : (<p style={{fontStyle:"italic", color:"red"}}>not delivered yet ✖</p>)
                     }
-                  <Button variant="contained" size="small" onClick={()=>navigate(`/profile/myorders/${order._id}`)}>Details</Button>  
+                  <Button variant="contained" size="small" onClick={()=>navigate(`/profile/myorders/${order._id}`,{state:order})}>Details</Button>  
                 </div>
                 
                     
