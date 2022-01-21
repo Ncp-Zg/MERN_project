@@ -1,5 +1,6 @@
 const expressAsyncHandler = require("express-async-handler")
 const Orders = require("../Models/ordersModel")
+const Product = require("../Models/productModel")
 
 const addOrder = expressAsyncHandler(async(req,res)=>{
     // console.log(req.product)
@@ -49,6 +50,18 @@ const changeState = expressAsyncHandler(async(req,res)=>{
     order.delivered=true;
 
     await order.save();
+
+    if(order.delivered){
+        order.order.map(async (item) => {
+            let product = await Product.findById(item._id);
+            product.customer.push(req.user.id);
+            await product.save();
+            console.log("calıstı");
+            
+
+        })
+        
+    }
 
     res.status(201).json({
         delivered:order.delivered

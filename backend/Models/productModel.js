@@ -37,7 +37,11 @@ const productSchema = mongoose.Schema(
         category: {
             type:String,
             required:true
-        }
+        },
+        customer:[{
+            type:mongoose.Schema.ObjectId,
+            ref:"Product"
+        }]
 
     },
     {
