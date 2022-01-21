@@ -39,11 +39,29 @@ const getOrders = expressAsyncHandler(async(req,res)=>{
 })
 })
 
+const changeState = expressAsyncHandler(async(req,res)=>{
+    
+    const {orderId} = req.body;
+
+    const order = await Orders.findById(orderId);
+    console.log(order);
+    
+    order.delivered=true;
+
+    await order.save();
+
+    res.status(201).json({
+        delivered:order.delivered
+    })
+
+})
+
 
 
 
 
 module.exports={
     addOrder,
-    getOrders
+    getOrders,
+    changeState
 }

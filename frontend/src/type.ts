@@ -40,6 +40,7 @@ export interface Order {
   order: OrderItem[];
   amount: Array<number>;
   createdAt: string;
+  updatedAt:string;
   __v: number;
   delivered: false;
 }

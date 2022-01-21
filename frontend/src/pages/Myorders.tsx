@@ -57,7 +57,7 @@ const Myorders = () => {
                 </h3>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
                     {
-                        order.delivered? (<p style={{fontStyle:"italic",color:"green"}}>Delivered ✔</p>) : (<p style={{fontStyle:"italic", color:"red"}}>not delivered yet ✖</p>)
+                        order.delivered? (<p style={{fontStyle:"italic",color:"green"}}>Delivered ✔ at {order.updatedAt}</p>) : (<p style={{fontStyle:"italic", color:"red"}}>not delivered yet ✖</p>)
                     }
                   <Button variant="contained" size="small" onClick={()=>navigate(`/profile/myorders/${order._id}`,{state:order})}>Details</Button>  
                 </div>

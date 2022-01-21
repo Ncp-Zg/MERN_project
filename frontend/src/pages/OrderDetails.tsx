@@ -1,18 +1,37 @@
 import { Button, Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import React from 'react';
+import axios from 'axios';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import { IRootState } from '../redux/Reducers/rootReducer';
-import { OrderItem } from '../type';
+import { Order} from '../type';
+
 
 const OrderDetail = () => {
 
-  const {orders} = useSelector((state:IRootState)=>({orders:state.orders.myorders}))
+  const {user}=useSelector((state:IRootState)=>({user:state.auth}))
+
   
     const {id} = useParams()
-    const {state}:any= useLocation()
+    const location= useLocation()
+    const state = location.state as Order
     console.log(state);  
+const [deliver,setDeliver] = useState<Boolean>(state.delivered)
+
+  console.log(deliver);
+  
+    const handleClick = async () => {
+      await axios.post("http://localhost:5000/api/orders/myorders/changeState",{orderId:state._id},{
+        headers:{
+          "Content-Type":"application/json",
+          Authorization:`Bearer ${user?.user.token}`
+        }
+      }).then(res=>setDeliver(res.data.delivered));
+      
+      
+    }
+
   return (
   <div>
     <Card sx={{padding:"1em",width:"100vh"}}>
@@ -84,7 +103,7 @@ const OrderDetail = () => {
           
         </Grid>
         <Grid item xs={12} style={{display:"flex",justifyContent:"end"}}>
-          <Button variant="contained" color='success'>Yes, I received.</Button>
+          <Button disabled = {deliver ? true : false} variant="contained" color='success' onClick={handleClick}>Yes, I received.</Button>
         </Grid>
         
       </Grid>
