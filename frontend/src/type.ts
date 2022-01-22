@@ -44,3 +44,15 @@ export interface Order {
   __v: number;
   delivered: false;
 }
+
+export interface Comments {
+    comment: string;
+    createdAt: string;
+    product: string;
+    updatedAt: string;
+    user: string;
+    __v: number;
+    _id: string;
+}
+
+
