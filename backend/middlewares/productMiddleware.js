@@ -29,5 +29,20 @@ const productMiddleware =asyncErrorWrapper(async function (req, res, next) {
   
   
     });
+
+const checkProductExist =asyncErrorWrapper(async function (req, res, next) {
+    
+    const product_id = req.params.product_id;
+    const product = await Product.findById(product_id);
+    console.log(product_id);
+    
+
+    if(!product){
+        throw new Error("There is no such product with that id!!")
+    }
+    req.data=product
+    next();
   
-  module.exports = productMiddleware;
+    });
+  
+  module.exports = {productMiddleware,checkProductExist};

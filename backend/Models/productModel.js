@@ -40,8 +40,14 @@ const productSchema = mongoose.Schema(
         },
         customer:[{
             type:mongoose.Schema.ObjectId,
-            ref:"Product"
-        }]
+            ref:"User"
+        }],
+        comments:[
+            {
+            type:mongoose.Schema.ObjectId,
+            ref:"Comment"
+            }
+        ]
 
     },
     {
