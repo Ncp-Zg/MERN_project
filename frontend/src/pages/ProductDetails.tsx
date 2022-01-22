@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
+import Comment from "../components/Comment";
 import { setProducts } from "../redux/ActionCreators/ProductActionCreators";
 import { IRootState } from "../redux/Reducers/rootReducer";
 import "./ProductDetails.css"
@@ -66,6 +67,9 @@ const ProductDetails = () => {
         }} >
           &#10095;
         </a>
+          </Item>
+          <Item>
+            <Comment />
           </Item>
         </Grid>
         <Grid item xs={6} >

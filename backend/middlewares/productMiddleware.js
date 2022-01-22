@@ -33,7 +33,7 @@ const productMiddleware =asyncErrorWrapper(async function (req, res, next) {
 const checkProductExist =asyncErrorWrapper(async function (req, res, next) {
     
     const product_id = req.params.product_id;
-    const product = await Product.findById(product_id);
+    const product = await Product.findById(product_id).populate('comments');
     console.log(product_id);
     
 

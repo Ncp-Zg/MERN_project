@@ -42,12 +42,21 @@ const addProduct = asyncHandler(async (req, res) => {
 });
 
 const addComment = asyncHandler(async (req, res) => {
+
+
   if (req.data.customer.includes(req.user.id)) {
     const newComment = await Comment.create({
       comment: req.body.comment,
       user: req.user,
       product: req.data,
     });
+
+    const product = await Product.findById(req.params.product_id);
+
+    product.comments.push(newComment)
+
+    await product.save(); 
+
     res.status(201).json({
       comment: newComment.comment,
       user: newComment.user,
@@ -58,7 +67,16 @@ const addComment = asyncHandler(async (req, res) => {
   }
 });
 
+const getAllComments = asyncHandler(async (req, res) => {
+  
+    res.status(201).json({
+        comments:req.data.comments
+    })
+    
+});
+
 module.exports = {
   addProduct,
   addComment,
+  getAllComments
 };
