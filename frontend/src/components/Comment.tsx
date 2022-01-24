@@ -1,3 +1,4 @@
+import { Card } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -23,9 +24,9 @@ const Comment = () => {
   <div>
       {
           comments.map(cmt=>(
-              <div key={cmt._id}>
+              <Card key={cmt._id} sx={{marginBottom:"5px"}}>
                   <h3>{cmt.comment}</h3>
-              </div>
+              </Card>
               
           ))
       }

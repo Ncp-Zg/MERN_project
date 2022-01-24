@@ -22,21 +22,24 @@ const ShoppingCart = () => {
   }));
   const dispatch = useDispatch();
   const [amount, setAmount] = useState<number>(0);
+  const [id, setId] = useState<number>(0);
   console.log(cart);
   const handleIncrease = (i: number) => {
     setAmount(cart[i].amount);
+    setId(cart[i]._id)
     dispatch(addItemToCart(i));
   };
 
   const handleDecrease = (i: number) => {
-    console.log(cart[i].amount);
+    setId(cart[i]._id)
     setAmount(cart[i].amount);
     dispatch(deleteItemFromCart(i));
   };
 
+  console.log(amount,id);
   useEffect(() => {
     console.log("render");
-  }, [amount, cart.length, dispatch]);
+  }, [id,amount]);
 
   if (cart[0]?._id !== 0) {
     const sumAll = cart

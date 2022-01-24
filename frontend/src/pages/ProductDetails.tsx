@@ -68,9 +68,9 @@ const ProductDetails = () => {
           &#10095;
         </a>
           </Item>
-          <Item>
+          
             <Comment />
-          </Item>
+          
         </Grid>
         <Grid item xs={6} >
           <Item style={{height:"87vh",maxWidth:"100vh"}}>

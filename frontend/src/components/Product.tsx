@@ -82,7 +82,7 @@ const Product: FunctionComponent<IItemProps> = (props) => {
           {item.category}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {item.desc.slice(0,50)}...
+          {item.desc.slice(0,30)}...
         </Typography>
       </CardContent>
       <CardActions>
