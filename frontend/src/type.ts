@@ -50,7 +50,11 @@ export interface Comments {
     createdAt: string;
     product: string;
     updatedAt: string;
-    user: string;
+    user: {
+     createdAt:string;
+     email:string;
+     name:string; 
+    }
     __v: number;
     _id: string;
 }

@@ -20,12 +20,23 @@ const Comment = () => {
         getComments();
     },[user.token])
 
+    console.log(comments);
+
   return (
   <div>
       {
           comments.map(cmt=>(
               <Card key={cmt._id} sx={{marginBottom:"5px"}}>
-                  <h3>{cmt.comment}</h3>
+                  <div style={{display:"flex",justifyContent:"space-between"}}>
+                  <h6 style={{margin:"5px 5px 0px 0px"}}>⭐⭐⭐⭐⭐</h6>
+                  <h6 style={{margin:"5px 5px 0px 0px"}}>{cmt.createdAt}</h6>
+                  </div>
+                  
+                  <h4>{cmt.comment}</h4>
+                  <div style={{display:"flex",justifyContent:"end"}}>
+                    <h6 style={{margin:"0px 5px 5px 0px"}}>{cmt.user.name}</h6>  
+                  </div>
+                  
               </Card>
               
           ))
