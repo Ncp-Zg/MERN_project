@@ -73,7 +73,7 @@ const ProductDetails = () => {
           
         </Grid>
         <Grid item xs={6} >
-          <Item style={{height:"87vh",maxWidth:"100vh"}}>
+          <Item style={{maxWidth:"100vh"}}>
               <h3>{filteredState[0]?.title}</h3>
           
               <h6>{filteredState[0]?.category}</h6>

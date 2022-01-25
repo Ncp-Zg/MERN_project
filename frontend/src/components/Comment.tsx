@@ -1,5 +1,6 @@
 import { Card } from "@mui/material";
 import axios from "axios";
+import moment from "moment";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -29,7 +30,7 @@ const Comment = () => {
               <Card key={cmt._id} sx={{marginBottom:"5px"}}>
                   <div style={{display:"flex",justifyContent:"space-between"}}>
                   <h6 style={{margin:"5px 5px 0px 0px"}}>⭐⭐⭐⭐⭐</h6>
-                  <h6 style={{margin:"5px 5px 0px 0px"}}>{cmt.createdAt}</h6>
+                  <h6 style={{margin:"5px 5px 0px 0px"}}>{moment(cmt.createdAt).format('LLL')}</h6>
                   </div>
                   
                   <h4>{cmt.comment}</h4>

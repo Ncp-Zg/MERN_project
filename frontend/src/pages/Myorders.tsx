@@ -1,5 +1,6 @@
 import { Button, Card } from "@mui/material"
 import axios from "axios"
+import moment from "moment"
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
@@ -57,7 +58,7 @@ const Myorders = () => {
                 </h3>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
                     {
-                        order.delivered? (<p style={{fontStyle:"italic",color:"green"}}>Delivered ✔ at {order.updatedAt}</p>) : (<p style={{fontStyle:"italic", color:"red"}}>not delivered yet ✖</p>)
+                        order.delivered? (<p style={{fontStyle:"italic",color:"green"}}>Delivered ✔ at {moment(order.updatedAt).format("LLL") }</p>) : (<p style={{fontStyle:"italic", color:"red"}}>not delivered yet ✖</p>)
                     }
                   <Button variant="contained" size="small" onClick={()=>navigate(`/profile/myorders/${order._id}`,{state:order})}>Details</Button>  
                 </div>
