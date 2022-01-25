@@ -47,6 +47,7 @@ const addComment = asyncHandler(async (req, res) => {
   if (req.data.customer.includes(req.user.id)) {
     const newComment = await Comment.create({
       comment: req.body.comment,
+      rating:req.body.rating,
       user: req.user,
       product: req.data,
     });
@@ -61,6 +62,7 @@ const addComment = asyncHandler(async (req, res) => {
       comment: newComment.comment,
       user: newComment.user,
       product: newComment.product,
+      rating:newComment.rating,
     });
   }else{
     throw new Error("only who bought this product can do comment below")

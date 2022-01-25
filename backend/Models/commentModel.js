@@ -17,6 +17,11 @@ const commentSchema = mongoose.Schema(
         product:{
             type:mongoose.Schema.ObjectId,
             ref:"Product"
+        },
+
+        rating:{
+            type:Number,
+            required:true
         }
 
     },

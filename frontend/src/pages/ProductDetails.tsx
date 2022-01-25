@@ -1,9 +1,11 @@
-import { CardMedia, Grid, Paper, styled } from "@mui/material";
+import { Favorite, FavoriteBorder, FavoriteOutlined } from "@mui/icons-material";
+import { Button, CardMedia, Grid, Paper, styled, TextField } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import Comment from "../components/Comment";
+import { addToCart } from "../redux/ActionCreators/CartActionCreators";
 import { setProducts } from "../redux/ActionCreators/ProductActionCreators";
 import { IRootState } from "../redux/Reducers/rootReducer";
 import "./ProductDetails.css"
@@ -17,14 +19,12 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const ProductDetails = () => {
     const [index,setIndex] = useState<any>(0)
+    const [amount,setAmount] = useState<number>(1)
     const dispatch = useDispatch();
   const { id } = useParams();
   const { product } = useSelector((state: IRootState) => ({
     product: state.product.product,
   }));
-
-  const filteredState = product.filter((item) => item._id.toString() === id);
-  console.log(filteredState);
 
   useEffect(() => {
     axios
@@ -33,9 +33,13 @@ const ProductDetails = () => {
         dispatch(setProducts(res.data.data))
       });
   }, []);
-
+ const filteredState = product.filter((item) => item._id.toString() === id);
+  console.log(filteredState);
   const {state} = useLocation()
-  console.log(state)
+  
+  const handleClick=()=>{
+    dispatch(addToCart([{...filteredState[0],amount:+amount}]))
+  }
 
   return (
     <div>
@@ -68,8 +72,10 @@ const ProductDetails = () => {
           &#10095;
         </a>
           </Item>
-          
-            <Comment />
+          {
+            filteredState.length !== 0 ? <Comment product={filteredState[0]}/> : null
+          }
+            
           
         </Grid>
         <Grid item xs={6} >
@@ -80,6 +86,14 @@ const ProductDetails = () => {
           
               <p style={{textAlign:"justify",wordWrap:"break-word"}}>{filteredState[0]?.desc}</p>
               <p>₺{filteredState[0]?.cost}</p>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
+              <TextField type="number" size="small" sx={{width:"4rem"}} onChange = {(e:any)=>setAmount(e.target.value)} InputProps={{
+        inputProps: { min: 0,max:12} 
+      }}/>
+                <Button onClick={handleClick}>Add to Cart</Button>
+                <FavoriteBorder color="error"/>
+              </div>
+              
           </Item>
         </Grid>
       </Grid>

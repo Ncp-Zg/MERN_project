@@ -7,6 +7,7 @@ export interface Item {
   category: string;
   desc: string;
   seller: string;
+  customer:Array<string>
 }
 
 export interface Cart {
@@ -46,6 +47,7 @@ export interface Order {
 }
 
 export interface Comments {
+    rating:number;
     comment: string;
     createdAt: string;
     product: string;

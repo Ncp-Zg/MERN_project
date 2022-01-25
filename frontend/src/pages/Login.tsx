@@ -10,6 +10,7 @@ export interface auth {
   email: string;
   isAdmin: boolean;
   token:string;
+  id:string
 }
 
 const Login = () => {
@@ -38,7 +39,8 @@ const Login = () => {
             name: res.data.name,
             email: res.data.email,
             isAdmin: res.data.isAdmin,
-            token:res.data.token
+            token:res.data.token,
+            id:res.data._id
           })
         );
       });

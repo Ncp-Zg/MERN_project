@@ -12,7 +12,8 @@ export const loginUser = (data:auth) => (dispatch: Dispatch<Action>) =>{
             email:data.email,
             name:data.name,
             isAdmin:data.isAdmin,
-            token:data.token
+            token:data.token,
+            id:data.id
         }
     })
     localStorage.setItem("user",JSON.stringify(data))
@@ -30,7 +31,8 @@ export const registerUser = (data:auth) => (dispatch: Dispatch<Action>) =>{
             email:data.email,
             name:data.name,
             isAdmin:data.isAdmin,
-            token:data.token
+            token:data.token,
+            id:data.id
         }
     })
     localStorage.setItem("user",JSON.stringify(data))

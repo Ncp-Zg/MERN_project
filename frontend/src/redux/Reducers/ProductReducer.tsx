@@ -11,6 +11,7 @@ const initialState = {
         category: "",
         desc:"",
         seller:"",
+        customer:[""],
     }]
 }
 

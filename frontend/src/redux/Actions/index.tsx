@@ -8,7 +8,8 @@ interface set_User {
         email:string,
         name:string,
         isAdmin:boolean,
-        token:string
+        token:string,
+        id:string
     }
 }
 
@@ -31,6 +32,7 @@ interface set_all_products {
         category: string;
         desc:string;
         seller:string;
+        customer:Array<string>
     }[]
 }
 
