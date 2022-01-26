@@ -49,3 +49,10 @@ export const logoutUser = () => (dispatch: Dispatch<Action>) =>{
 
     localStorage.removeItem("user");
 }
+
+export const setLikes = (data:Array<string>) => (dispatch: Dispatch<Action>) =>{
+    dispatch({
+        type:ActionTypes.SET_LIKE,
+        payload:data
+    })
+}

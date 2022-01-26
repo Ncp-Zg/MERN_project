@@ -1,10 +1,11 @@
 import { Favorite, FavoriteBorder, FavoriteOutlined } from "@mui/icons-material";
 import { Button, CardMedia, Grid, Paper, styled, TextField } from "@mui/material";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import Comment from "../components/Comment";
+import { setLikes } from "../redux/ActionCreators/AuthActionCreators";
 import { addToCart } from "../redux/ActionCreators/CartActionCreators";
 import { setProducts } from "../redux/ActionCreators/ProductActionCreators";
 import { IRootState } from "../redux/Reducers/rootReducer";
@@ -20,6 +21,7 @@ const Item = styled(Paper)(({ theme }) => ({
 const ProductDetails = () => {
     const [index,setIndex] = useState<any>(0)
     const [amount,setAmount] = useState<number>(1)
+    const [like,setLike] = useState<boolean>(false)
     const dispatch = useDispatch();
   const { id } = useParams();
   const { product,user } = useSelector((state: IRootState) => ({
@@ -27,12 +29,13 @@ const ProductDetails = () => {
   }));
 
   useEffect(() => {
+    console.log("render");
     axios
       .get("http://localhost:5000/api/products",{params:{page:`${state}`}})
       .then((res) => {
         dispatch(setProducts(res.data.data))
       });
-  }, []);
+  }, [like]);
  const filteredState = product.filter((item) => item._id.toString() === id);
   console.log(filteredState);
   const {state} = useLocation()
@@ -48,9 +51,16 @@ const ProductDetails = () => {
   }
 
   const removeFromFavorite = ()=>{
-    
+    setLike(!like)
+    let favorites = JSON.parse(localStorage.getItem("user") || '{}');
+    let newFavs = favorites.fav.filter((fav:string)=> fav.toString() !== filteredState[0]._id.toString())
+    console.log(newFavs);
+    favorites.fav = newFavs;
+    localStorage.setItem("user",JSON.stringify(favorites));
+    dispatch(setLikes(newFavs))
   }
-
+  console.log(like);
+ 
   return (
     <div>
       <Grid container spacing={2}>
@@ -102,7 +112,7 @@ const ProductDetails = () => {
       }}/>
                 <Button onClick={handleClick}>Add to Cart</Button>
                 {
-                  user.fav.includes(filteredState[0]._id.toString()) ? <Favorite onClick={removeFromFavorite}/> :
+                  user.fav.includes(filteredState[0]?._id.toString()) ? <Favorite onClick={removeFromFavorite} color="error"/> :
                   
                   <FavoriteBorder onClick={addToFavorite} color="error"/>}
               </div>

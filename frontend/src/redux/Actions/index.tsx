@@ -14,6 +14,12 @@ interface set_User {
     }
 }
 
+interface set_like {
+    type: ActionTypes.SET_LIKE,
+    payload:Array<string>
+    
+}
+
 interface register_User {
     type: ActionTypes.SIGN_UP_USER,
 }
@@ -71,4 +77,4 @@ interface set_my_orders {
     payload:Order[]
 }
 
-export type Action = set_User | register_User | logout_user | set_all_products | add_to_cart | delete_cart_item | add_cart_item | empty_basket | set_my_orders;
+export type Action = set_User | register_User | logout_user | set_all_products | add_to_cart | delete_cart_item | add_cart_item | empty_basket | set_my_orders | set_like;
