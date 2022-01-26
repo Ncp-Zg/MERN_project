@@ -7,7 +7,7 @@ export interface Item {
   category: string;
   desc: string;
   seller: string;
-  customer:Array<string>
+  customer:Array<string>;
 }
 
 export interface Cart {

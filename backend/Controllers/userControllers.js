@@ -24,7 +24,8 @@ const registerUser = asyncHandler(async(req,res)=>{
             name:user.name,
             email:user.email,
             isAdmin:user.isAdmin,
-            token:generateToken(user._id)
+            token:generateToken(user._id),
+            fav:[""]
         })
     }else{
         res.status(400)
@@ -43,7 +44,8 @@ const authUser = asyncHandler(async(req,res)=>{
             name:user.name,
             email:user.email,
             isAdmin:user.isAdmin,
-            token:generateToken(user._id)
+            token:generateToken(user._id),
+            fav:user.fav
         })
     }else{
         res.status(400);
@@ -79,6 +81,24 @@ const logoutUser = asyncHandler(async (req,res)=>{
     
 });
 
+const likeProduct = asyncHandler(async (req,res)=>{
+
+const user = await User.findById(req.user.id);
+user.fav.push(req.data._id);
+await user.save(); 
+
+res.status(201).json({
+    id:user._id,
+    name:user.name,
+    email:user.email,
+    fav:user.fav,
+    admin:user.isAdmin,
+
+})
+
+    
+});
+
 
 
 
@@ -86,5 +106,6 @@ module.exports={
     registerUser,
     authUser,
     getUser,
-    logoutUser
+    logoutUser,
+    likeProduct
 }

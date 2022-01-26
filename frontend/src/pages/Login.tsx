@@ -10,7 +10,8 @@ export interface auth {
   email: string;
   isAdmin: boolean;
   token:string;
-  id:string
+  id:string;
+  fav:Array<string>;
 }
 
 const Login = () => {
@@ -40,9 +41,10 @@ const Login = () => {
             email: res.data.email,
             isAdmin: res.data.isAdmin,
             token:res.data.token,
-            id:res.data._id
+            id:res.data._id,
+            fav:res.data.fav
           })
-        );
+        );console.log(res.data);
       });
   };
 

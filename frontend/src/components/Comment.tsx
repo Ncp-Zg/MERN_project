@@ -22,6 +22,7 @@ const Comment: FunctionComponent<Comment> = (props) => {
   }));
   const [comments, setComments] = useState<Comments[]>([]);
   const [cmt, setCmt] = useState<string>("");
+  const [newComment, setNewComment] = useState<Comments>();
 
   const [rating, setRating] = useState(20); // initial rating value
 
@@ -39,10 +40,10 @@ const Comment: FunctionComponent<Comment> = (props) => {
 
   useEffect(() => {
     getComments();
-  }, [user.token]);
+  }, [user.token,newComment]);
 
   const handleClick = async (e: any) => {
-    e.preventDefault();
+    e.preventDefault()
     await axios
       .post(
         `http://localhost:5000/api/products/${product._id}/addcomment`,
@@ -54,10 +55,11 @@ const Comment: FunctionComponent<Comment> = (props) => {
           },
         }
       )
-      .then((res) => console.log(res.data));
+      .then((res) => {setNewComment(res.data);setCmt("")});
+      
   };
 
-  console.log(comments);
+  console.log(cmt);
 
   return (
     <div>
@@ -97,6 +99,7 @@ const Comment: FunctionComponent<Comment> = (props) => {
             }}
           >
             <TextField
+            value={cmt}
               rows={5}
               multiline
               fullWidth

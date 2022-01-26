@@ -7,7 +7,8 @@ const initialState = {
         name:"",
         isAdmin:false,
         token:"",
-        id:""
+        id:"",
+        fav:[""]
     }
 }
 

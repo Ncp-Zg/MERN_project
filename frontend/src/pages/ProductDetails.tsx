@@ -22,8 +22,8 @@ const ProductDetails = () => {
     const [amount,setAmount] = useState<number>(1)
     const dispatch = useDispatch();
   const { id } = useParams();
-  const { product } = useSelector((state: IRootState) => ({
-    product: state.product.product,
+  const { product,user } = useSelector((state: IRootState) => ({
+    product: state.product.product,user:state.auth.user
   }));
 
   useEffect(() => {
@@ -39,6 +39,16 @@ const ProductDetails = () => {
   
   const handleClick=()=>{
     dispatch(addToCart([{...filteredState[0],amount:+amount}]))
+  }
+
+  const LikeProduct = ()=>{
+    if (user) {
+      
+    }
+  }
+
+  const takeLikeBack = ()=>{
+    
   }
 
   return (
@@ -91,7 +101,10 @@ const ProductDetails = () => {
         inputProps: { min: 0,max:12} 
       }}/>
                 <Button onClick={handleClick}>Add to Cart</Button>
-                <FavoriteBorder color="error"/>
+                {
+                  user.fav.includes(filteredState[0]._id.toString()) ? <Favorite onClick={takeLikeBack}/> :
+                  
+                  <FavoriteBorder onClick={LikeProduct} color="error"/>}
               </div>
               
           </Item>

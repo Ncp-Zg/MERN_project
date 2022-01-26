@@ -9,7 +9,8 @@ interface set_User {
         name:string,
         isAdmin:boolean,
         token:string,
-        id:string
+        id:string,
+        fav:Array<string>
     }
 }
 
