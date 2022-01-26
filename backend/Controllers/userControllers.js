@@ -81,10 +81,38 @@ const logoutUser = asyncHandler(async (req,res)=>{
     
 });
 
-const likeProduct = asyncHandler(async (req,res)=>{
+const addToFavorite = asyncHandler(async (req,res)=>{
 
 const user = await User.findById(req.user.id);
-user.fav.push(req.data._id);
+
+if(!user.fav.includes(req.data._id)){
+   user.fav.push(req.data._id); 
+   await user.save(); 
+
+res.status(201).json({
+    id:user._id,
+    name:user.name,
+    email:user.email,
+    fav:user.fav,
+    admin:user.isAdmin,
+
+})
+}else{
+    throw new Error("you already liked this Product")
+}
+
+
+
+
+    
+});
+
+const removeFromFavorite = asyncHandler(async (req,res)=>{
+const id= req.data._id
+
+const user = await User.findById(req.user.id);
+const newFav = user.fav.filter(favorites=>favorites.toString() !== id.toString());
+user.fav=newFav;
 await user.save(); 
 
 res.status(201).json({
@@ -107,5 +135,6 @@ module.exports={
     authUser,
     getUser,
     logoutUser,
-    likeProduct
+    addToFavorite,
+    removeFromFavorite
 }

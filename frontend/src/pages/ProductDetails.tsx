@@ -41,13 +41,13 @@ const ProductDetails = () => {
     dispatch(addToCart([{...filteredState[0],amount:+amount}]))
   }
 
-  const LikeProduct = ()=>{
+  const addToFavorite = ()=>{
     if (user) {
       
     }
   }
 
-  const takeLikeBack = ()=>{
+  const removeFromFavorite = ()=>{
     
   }
 
@@ -102,9 +102,9 @@ const ProductDetails = () => {
       }}/>
                 <Button onClick={handleClick}>Add to Cart</Button>
                 {
-                  user.fav.includes(filteredState[0]._id.toString()) ? <Favorite onClick={takeLikeBack}/> :
+                  user.fav.includes(filteredState[0]._id.toString()) ? <Favorite onClick={removeFromFavorite}/> :
                   
-                  <FavoriteBorder onClick={LikeProduct} color="error"/>}
+                  <FavoriteBorder onClick={addToFavorite} color="error"/>}
               </div>
               
           </Item>
