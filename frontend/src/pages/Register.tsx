@@ -74,6 +74,7 @@ const Register = () => {
             }}
           >
             <TextField
+            autoComplete="on"
               id="outlined-basic"
               label="Name"
               variant="outlined"
@@ -81,15 +82,17 @@ const Register = () => {
               onChange={(e)=>setValues({...values,name:e.target.value})}
             />
             <TextField
+            autoComplete="on"
             type="email"
-              id="outlined-basic"
+              id="outlined-basic1"
               label="Email"
               variant="outlined"
               sx={{ marginBottom: "10px" }}
               onChange={(e)=>setValues({...values,email:e.target.value})}
             />
             <TextField
-              id="outlined-basic"
+            autoComplete="on"
+              id="outlined-basic2"
               type="password"
               label="Password"
               variant="outlined"
@@ -97,7 +100,8 @@ const Register = () => {
               onChange={(e)=>setValues({...values,password:e.target.value})}
             />
             <TextField
-              id="outlined-basic"
+            autoComplete="on"
+              id="outlined-basic3"
               type="password"
               label="Confirm Password"
               variant="outlined"

@@ -80,6 +80,7 @@ const Login = () => {
             }}
           >
             <TextField
+            autoComplete="on"
               onChange={(e) => setValues({ ...values, email: e.target.value })}
               id="outlined-basic"
               label="Email"
@@ -87,11 +88,12 @@ const Login = () => {
               sx={{ marginBottom: "10px" }}
             />
             <TextField
+            autoComplete="on"
               onChange={(e) =>
                 setValues({ ...values, password: e.target.value })
               }
               type="password"
-              id="outlined-basic"
+              id="outlined-basic1"
               label="Password"
               variant="outlined"
               sx={{ marginBottom: "20px" }}

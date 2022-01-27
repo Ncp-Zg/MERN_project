@@ -46,11 +46,24 @@ const ProductDetails = () => {
 
   const addToFavorite = ()=>{
     if (user) {
+      axios.get(`http://localhost:5000/api/users/${filteredState[0]._id}/addtofavorite`,{headers:{
+        "Content-Type":"application/json",
+        Authorization:`Bearer ${user.token}`
+    }}).then(res=>console.log(res.data))
+    setLike(!like)
+    let favorites = JSON.parse(localStorage.getItem("user") || '{}');
+    favorites.fav.push(filteredState[0]._id)
+    localStorage.setItem("user",JSON.stringify(favorites));
+    dispatch(setLikes(favorites.fav))
       
     }
   }
 
   const removeFromFavorite = ()=>{
+    axios.get(`http://localhost:5000/api/users/${filteredState[0]._id}/removefromfavorite`,{headers:{
+        "Content-Type":"application/json",
+        Authorization:`Bearer ${user.token}`
+    }}).then(res=>console.log(res.data))
     setLike(!like)
     let favorites = JSON.parse(localStorage.getItem("user") || '{}');
     let newFavs = favorites.fav.filter((fav:string)=> fav.toString() !== filteredState[0]._id.toString())

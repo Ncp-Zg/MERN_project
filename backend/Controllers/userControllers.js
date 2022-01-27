@@ -25,7 +25,7 @@ const registerUser = asyncHandler(async(req,res)=>{
             email:user.email,
             isAdmin:user.isAdmin,
             token:generateToken(user._id),
-            fav:[""]
+            fav:[]
         })
     }else{
         res.status(400)

@@ -21,7 +21,7 @@ const authReducer = (state=initialState,Action:Action)=>{
         case ActionTypes.LOG_OUT_USER:
             return state=initialState;
         case ActionTypes.SET_LIKE:
-            return state = {...state,user:{...state.user,fav:Action.payload}}
+            return state = {user:{...state.user,fav:Action.payload}}
         default:
             return state;
     }

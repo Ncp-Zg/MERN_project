@@ -1,4 +1,4 @@
-import { Button, Card, TextField } from "@mui/material";
+import { Button, Card, TextField, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
 import moment from "moment";
@@ -26,6 +26,17 @@ const Comment: FunctionComponent<Comment> = (props) => {
 
   const [rating, setRating] = useState(20); // initial rating value
 
+  const [page, setPage] = useState<number>(1);
+  const [total, setTotal] = useState<number>(0);
+
+
+  const forik = ()=>{let value = [];
+    for(let i =0; i< Math.floor(total/5)+1;i++){
+     value.push(i+1);
+    
+}return value;
+}
+
   // Catch Rating value
   const handleRating = (rate: number) => {
     setRating(rate);
@@ -34,13 +45,13 @@ const Comment: FunctionComponent<Comment> = (props) => {
 
   const getComments = async () => {
     await axios
-      .get(`http://localhost:5000/api/products/${id}/getallcomments`)
-      .then((res) => setComments(res.data.comments));
+      .get(`http://localhost:5000/api/products/${id}/getallcomments`,{params:{page:`${page}`}})
+      .then((res) => {setComments(res.data.data);setTotal(res.data.total)});
   };
 
   useEffect(() => {
     getComments();
-  }, [user.token,newComment]);
+  }, [user.token,newComment,page]);
 
   const handleClick = async (e: any) => {
     e.preventDefault()
@@ -60,6 +71,14 @@ const Comment: FunctionComponent<Comment> = (props) => {
   };
 
   console.log(cmt);
+
+  
+  const handleAlignment = (
+    event: React.MouseEvent<HTMLElement>,
+    newPage: number,
+  ) => {
+    setPage(newPage);
+  };
 
   return (
     <div>
@@ -88,6 +107,21 @@ const Comment: FunctionComponent<Comment> = (props) => {
           </div>
         </Card>
       ))}
+      <ToggleButtonGroup
+      value={page}
+      exclusive
+      onChange={handleAlignment}
+      sx={{display:"flex",justifyContent:"center",marginTop:"20px"}}
+    >
+      {
+        forik().map((pg,index)=>(
+          
+          <ToggleButton value={pg} key={index} sx={{padding:"4px",marginRight:"2px"}}>
+        {pg}
+      </ToggleButton>
+  ))
+      }
+      </ToggleButtonGroup>
 
       {product.customer?.includes(user.id) ? (
         <Card sx={{ marginTop: "2rem", padding: "0.2rem" }}>
