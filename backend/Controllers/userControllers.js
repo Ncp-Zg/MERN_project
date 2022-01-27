@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../Helpers/generateToken");
+const Product = require("../Models/productModel");
 const User = require("../Models/userModel");
 
 
@@ -127,6 +128,28 @@ res.status(201).json({
     
 });
 
+const getFavs = asyncHandler(async (req,res)=>{
+
+    let favs = []
+
+    await req.user.fav.map( async fav=>{
+        
+        let product = await Product.findById(fav);
+        favs.push(product)
+
+    })
+    
+    setTimeout(()=>
+    {
+        res.status(200).json({
+            favs:favs
+        })
+    }
+    ,2000);
+
+    
+});
+
 
 
 
@@ -136,5 +159,6 @@ module.exports={
     getUser,
     logoutUser,
     addToFavorite,
-    removeFromFavorite
+    removeFromFavorite,
+    getFavs
 }

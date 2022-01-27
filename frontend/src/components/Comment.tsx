@@ -116,9 +116,9 @@ const Comment: FunctionComponent<Comment> = (props) => {
       {
         forik().map((pg,index)=>(
           
-          <ToggleButton value={pg} key={index} sx={{padding:"4px",marginRight:"2px"}}>
-        {pg}
-      </ToggleButton>
+        
+        forik().length=== 1 ? null : <ToggleButton value={pg} key={index} sx={{padding:"4px",marginRight:"2px"}}>{pg}</ToggleButton>
+      
   ))
       }
       </ToggleButtonGroup>

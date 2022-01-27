@@ -121,7 +121,7 @@ const ProductDetails = () => {
               <p>₺{filteredState[0]?.cost}</p>
               <div style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
               <TextField type="number" size="small" sx={{width:"4rem"}} onChange = {(e:any)=>setAmount(e.target.value)} InputProps={{
-        inputProps: { min: 0,max:12} 
+        inputProps: { min: 1,max:12} 
       }}/>
                 <Button onClick={handleClick}>Add to Cart</Button>
                 {
