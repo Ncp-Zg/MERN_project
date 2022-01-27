@@ -4,6 +4,7 @@ import moment from "moment"
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { ClimbingBoxLoader } from "react-spinners"
 import { setOrders } from "../redux/ActionCreators/OrdersActionCreators"
 import { IRootState } from "../redux/Reducers/rootReducer"
 import { Order } from "../type"
@@ -12,16 +13,19 @@ const Myorders = () => {
     const {user}=useSelector((state:IRootState)=>({user:state.auth}))
     const [myOrders,setMyOrders] = useState<Order[]>([])
     const [error, setError] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false)
     const ref = useRef<number>(0)
     const navigate = useNavigate()
     const dispatch = useDispatch()
+
+    
     const getMyOrders = async () => {
-        
+        setLoading(true)
         await axios.get("http://localhost:5000/api/orders/myorders",
         {headers:{
             "Content-Type":"application/json",
             Authorization:`Bearer ${user?.user.token}`,
-        }}).then(res=>{setMyOrders(res.data.myorders);dispatch(setOrders(res.data.myorders))}).catch(err=> err ? setError(true) : null)
+        }}).then(res=>{setMyOrders(res.data.myorders);setLoading(false);dispatch(setOrders(res.data.myorders))}).catch(err=> err ? setError(true) : null)
     }
 
     console.log(error);
@@ -29,7 +33,10 @@ const Myorders = () => {
 
 
     useEffect(()=>{
-        getMyOrders();
+        if(user.user.token){
+            getMyOrders();
+        }
+        
     },[user?.user.token])
 
 
@@ -49,7 +56,7 @@ const Myorders = () => {
                   marginBottom: "5px",
                 }}
               >
-                  <h3>{order.createdAt}</h3>
+                  <h3>{moment(order.createdAt).format("LLL")}</h3>
                 
                 <h3>
                     {order.order.length} brand {" "}
@@ -70,6 +77,19 @@ const Myorders = () => {
                 ) : error ? 
                 (
                     <h3>need authorization</h3>
+                )
+                :
+                loading ? (
+                    <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "80vh",
+          }}
+        >
+          <ClimbingBoxLoader size={30} color="#c67c03" />
+        </div>
                 )
                 :
                 (
