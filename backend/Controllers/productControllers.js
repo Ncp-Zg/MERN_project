@@ -2,15 +2,15 @@ const asyncHandler = require("express-async-handler");
 const Product = require("../Models/productModel");
 const Comment = require("../Models/commentModel");
 
-// const getProducts = asyncHandler(async(req,res)=>{
+const getProducts = asyncHandler(async(req,res)=>{
 
-//     const products = await Product.find({})
+    const products = await Product.find({})
 
-//         res.status(201).json({
-//             success:true,
-//             data:products
-//         })
-// })
+        res.status(201).json({
+            success:true,
+            data:products
+        })
+})
 
 const addProduct = asyncHandler(async (req, res) => {
   const { title, cost, stock, seller, desc, category, img } = req.body;
@@ -78,6 +78,7 @@ const getAllComments = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
+  getProducts,
   addProduct,
   addComment,
   getAllComments

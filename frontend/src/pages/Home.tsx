@@ -89,7 +89,7 @@ const Home = () => {
         }}
       >
         {data?.map((item) => (
-          <Product item={item} key={item._id} page={page}/>
+          <Product item={item} key={item._id}/>
         ))}
       </div>
       {console.log(Math.floor(9/5))}

@@ -31,14 +31,14 @@ const ProductDetails = () => {
   useEffect(() => {
     console.log("render");
     axios
-      .get("http://localhost:5000/api/products",{params:{page:`${state}`}})
+      .get("http://localhost:5000/api/products/getallproducts")
       .then((res) => {
         dispatch(setProducts(res.data.data))
       });
   }, [like]);
  const filteredState = product.filter((item) => item._id.toString() === id);
   console.log(filteredState);
-  const {state} = useLocation()
+
   
   const handleClick=()=>{
     dispatch(addToCart([{...filteredState[0],amount:+amount}]))

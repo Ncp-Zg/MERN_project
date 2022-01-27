@@ -15,7 +15,6 @@ import { IRootState } from "../redux/Reducers/rootReducer";
 
 interface IItemProps {
   item: Cart;
-  page: number
 }
 
 const Product: FunctionComponent<IItemProps> = (props) => {
@@ -24,10 +23,10 @@ const Product: FunctionComponent<IItemProps> = (props) => {
   const ref = useRef(0);
   const ref2 = useRef(0);
   const [index,setIndex] = useState<any>(0)
-  const { item,page } = props;
+  const { item } = props;
   const dispatch = useDispatch();
   const {cart} = useSelector((state:IRootState)=>({cart:state.cart.cart,product:state.product.product}))
-  console.log(page)
+  
 
   const handleClick = () => {
     if(cart.some(c=>c._id===item._id)){
@@ -87,7 +86,7 @@ const Product: FunctionComponent<IItemProps> = (props) => {
       </CardContent>
       <CardActions>
         <Button size="small" onClick={handleClick}>Add to Cart</Button>
-        <Button size="small" onClick={()=>navigate(`/details/${item._id}`,{state:page})}>Details</Button>
+        <Button size="small" onClick={()=>navigate(`/details/${item._id}`)}>Details</Button>
       </CardActions>
     </Card>
   );
