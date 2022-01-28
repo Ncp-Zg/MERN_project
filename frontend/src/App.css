@@ -47,6 +47,7 @@ body::-webkit-scrollbar-track {
 }
  
 body::-webkit-scrollbar-thumb {
+  border-radius: 5em;
   background-color: #FFAD60;
   /* outline: 1px solid slategrey; */
 }

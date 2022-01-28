@@ -3,15 +3,43 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { ClimbingBoxLoader } from "react-spinners";
 import { IRootState } from "../redux/Reducers/rootReducer";
+import Alert from 'react-popup-alert'
+import 'react-popup-alert/dist/index.css'
 
 const Profile = () => {
   const navigate: any = useNavigate();
-  const [auth, setAuth] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const { user } = useSelector((state: IRootState) => state.auth);
+
+  const [alert, setAlert] = useState({
+    type: 'error',
+    text: 'This is a alert message',
+    show: false
+  })
+
+  function onCloseAlert() {
+    setAlert({
+      type: '',
+      text: '',
+      show: false
+    });
+    navigate("/login")
+  }
+
+  function onShowAlert(type:any) {
+    setAlert({
+      type: type,
+      text: 'You need to login. Your token is expired already.',
+      show: true
+    })
+  }
 
   const getProfile = async () => {
     if (user.token !== "") {
+        setLoading(true)
       await axios
         .get("http://localhost:5000/api/users/profile", {
           headers: {
@@ -20,12 +48,8 @@ const Profile = () => {
           },
         })
         .then((res) => {
-          if (res.data.success) {
-            setAuth(true);
-          } else {
-            setAuth(false);
-          }
-        });
+            setLoading(false)
+        }).catch(err=>{if(err){setLoading(false);setError(true)}});
     }
   };
 
@@ -35,7 +59,7 @@ const Profile = () => {
 
   return (
     <div>
-      {auth ? (
+      {user.id !== "" && !error ? (
         <div
           style={{
             display: "flex",
@@ -51,8 +75,39 @@ const Profile = () => {
           </Button>
           <Button variant="contained" onClick={() => navigate("/profile/myfavorites")}>MyFavorites</Button>
         </div>
-      ) : (
-        <h3>need authorization</h3>
+      ) : loading ? (
+        <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "80vh",
+        }}
+      >
+        <ClimbingBoxLoader size={30} color="#c67c03" />
+      </div>
+      ):(
+           
+        <div>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: 50 }}>
+        <Button onClick={() => onShowAlert('error')}>Something went wrong!!</Button>
+      </div>
+      <Alert
+        header={'Authorization'}
+        btnText={'Close'}
+        text={alert.text}
+        type={alert.type}
+        show={alert.show}
+        onClosePress={onCloseAlert}
+        pressCloseOnOutsideClick={true}
+        showBorderBottom={true}
+        alertStyles={{}}
+        headerStyles={{}}
+        textStyles={{}}
+        buttonStyles={{}}
+      />
+    </div>
+
       )}
     </div>
   );

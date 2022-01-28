@@ -4,6 +4,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { ClimbingBoxLoader } from "react-spinners";
 import Product from "../components/Product";
 import { setProducts } from "../redux/ActionCreators/ProductActionCreators";
 import { IRootState } from "../redux/Reducers/rootReducer";
@@ -17,6 +18,7 @@ const Home = () => {
   const [data, setData] = useState<Cart[]>();
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
 
 
   const forik = ()=>{let value = [];
@@ -27,7 +29,9 @@ const Home = () => {
 }
 
   useEffect(() => {
+    setLoading(true);
     axios.get("http://localhost:5000/api/products",{ params: { page: `${page}`} }).then((res) => {
+      setLoading(false);
       setData(res.data.data);
       setTotal(res.data.total)
       dispatch(setProducts(res.data.data));
@@ -50,7 +54,10 @@ const Home = () => {
 
   return (
     <div>
-      <ShoppingCartOutlined
+      {
+        !loading ? (
+          <div>
+            <ShoppingCartOutlined
         style={{
           position: "fixed",
           right: "35",
@@ -108,6 +115,22 @@ const Home = () => {
   ))
       }
       </ToggleButtonGroup>
+          </div>
+          
+        ) : (
+          <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "80vh",
+          }}
+        >
+          <ClimbingBoxLoader size={30} color="#c67c03" />
+        </div>
+        )
+      }
+      
     </div>
   );
 };

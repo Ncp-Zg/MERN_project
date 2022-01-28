@@ -4,6 +4,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import Comment from "../components/Comment";
 import { setLikes } from "../redux/ActionCreators/AuthActionCreators";
 import { addToCart } from "../redux/ActionCreators/CartActionCreators";
@@ -22,6 +23,7 @@ const ProductDetails = () => {
     const [index,setIndex] = useState<any>(0)
     const [amount,setAmount] = useState<number>(1)
     const [like,setLike] = useState<boolean>(false)
+    const [error,setError] = useState<boolean>(false)
     const dispatch = useDispatch();
   const { id } = useParams();
   const { product,user } = useSelector((state: IRootState) => ({
@@ -44,18 +46,23 @@ const ProductDetails = () => {
     dispatch(addToCart([{...filteredState[0],amount:+amount}]))
   }
 
-  const addToFavorite = ()=>{
-    if (user) {
-      axios.get(`http://localhost:5000/api/users/${filteredState[0]._id}/addtofavorite`,{headers:{
+  const addToFavorite = async ()=>{
+    if (user.id!=="") {
+      await axios.get(`http://localhost:5000/api/users/${filteredState[0]._id}/addtofavorite`,{headers:{
         "Content-Type":"application/json",
         Authorization:`Bearer ${user.token}`
-    }}).then(res=>console.log(res.data))
+    }}).then(res=>{console.log(res.data)
     setLike(!like)
     let favorites = JSON.parse(localStorage.getItem("user") || '{}');
     favorites.fav.push(filteredState[0]._id)
     localStorage.setItem("user",JSON.stringify(favorites));
     dispatch(setLikes(favorites.fav))
-      
+    }).catch(err=>{if(err){
+      console.error(err);
+      toast.error("need authorization")
+    }})
+    console.log(error);
+    
     }
   }
 

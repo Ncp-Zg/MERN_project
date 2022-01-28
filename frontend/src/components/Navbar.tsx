@@ -178,14 +178,25 @@ const handleClick = async()=>{
         </DrawerHeader>
         <Divider />
         <List>
-          {['Home', 'Login', 'Register', 'Profile'].map((text, index) => (
+          {
+            user.id === "" ? (['Home', 'Login', 'Register'].map((text, index) => (
+              <ListItem button key={text} onClick={()=>changeRoute(text)}>
+                <ListItemIcon>
+                  {index === 0 ? <HomeMax /> : index === 1 ? <LoginOutlined /> : index === 2 ? <AppRegistrationOutlined/> : <VerifiedUserOutlined/> }
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            )))
+          :(
+          
+          ['Home', 'Login', 'Register', 'Profile'].map((text, index) => (
             <ListItem button key={text} onClick={()=>changeRoute(text)}>
               <ListItemIcon>
                 {index === 0 ? <HomeMax /> : index === 1 ? <LoginOutlined /> : index === 2 ? <AppRegistrationOutlined/> : <VerifiedUserOutlined/> }
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
-          ))}
+          )))}
         </List>
         <Divider />
         
