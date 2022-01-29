@@ -1,0 +1,28 @@
+
+.imageBox {
+    margin:0px;
+    padding:0px;
+    display:grid;
+    grid-template-columns:1fr
+}
+
+
+.imageBox .hoverImg {
+    
+    display: none;
+  
+  }
+  
+  .imageBox:hover .hoverImg {
+    object-fit: cover;
+    width: 100px;
+    height: 75px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    opacity: 0.4;
+    cursor:pointer;
+    display:grid;
+    grid-row-start:1;
+    grid-column-start:1;
+  }
