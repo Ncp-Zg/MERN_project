@@ -3,13 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { ClimbingBoxLoader } from 'react-spinners'
 import { toast } from 'react-toastify'
-import Product from '../../components/Product'
+import MyProduct from '../../components/MyProduct'
 import { IRootState } from '../../redux/Reducers/rootReducer'
-import { Cart} from '../../type'
+import { Item } from '../../type'
 
 const MyProducts = () => {
 
-    const[myProducts,setMyProducts]=useState<Cart[] | null>(null)
+    const[myProducts,setMyProducts]=useState<Item[] | null>(null)
     const[loading,setLoading]=useState<boolean>(false)
     const {user}= useSelector((state:IRootState)=>state.auth)
   
@@ -35,7 +35,7 @@ const MyProducts = () => {
     return (
         <div>
             {myProducts ? 
-            (myProducts?.map(prdct => <Product item={prdct} />)) : loading ? (<div
+            (myProducts?.map(prdct => <MyProduct item={prdct}/>)) : loading ? (<div
                 style={{
                   display: "flex",
                   justifyContent: "center",

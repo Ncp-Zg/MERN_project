@@ -35,6 +35,7 @@ import { ToastContainer } from 'react-toastify';
 import Myorders from '../pages/Myorders';
 import OrderDetails from '../pages/OrderDetails';
 import Myfavorites from '../pages/Myfavorites';
+import EditMyProduct from '../pages/AdminPanel/EditMyProduct';
 
 const drawerWidth = 240;
 
@@ -227,6 +228,7 @@ const handleClick = async()=>{
         <Route path="/profile/myfavorites" element={<Myfavorites />} />
         <Route path="/admin/addproduct" element={<AddProduct />} />
         <Route path="/admin/myproducts" element={<MyProducts />} />
+        <Route path="/admin/myproducts/:id/edit" element={<EditMyProduct />} />
         <Route path="/details/:id" element={<ProductDetails />} />
         <Route path="/shoppingcart" element={<ShoppingCart />} />
         <Route path="/shoppingcart/payment" element={<PaymentPage />} />
