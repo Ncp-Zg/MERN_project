@@ -1,5 +1,6 @@
 const expressAsyncHandler = require("express-async-handler");
 const jsonwebtoken = require("jsonwebtoken");
+const CustomError = require("../Helpers/CustomError");
 const User = require("../Models/userModel");
 
 const protect = expressAsyncHandler(async (req, res, next) => {
@@ -20,14 +21,12 @@ const protect = expressAsyncHandler(async (req, res, next) => {
   
         next();
       } catch (error) {
-        res.status(401);
-        throw new Error("Not authorized, token failed");
+        next(new CustomError("Not authorized, token failed", 401))
       }
     }
   
     if (!token) {
-      res.status(401);
-      throw new Error("Not authorized, no token");
+     next(new CustomError("Not authorized, no token",401));
     }
   });
   

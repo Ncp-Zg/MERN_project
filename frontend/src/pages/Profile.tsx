@@ -49,7 +49,7 @@ const Profile = () => {
         })
         .then((res) => {
             setLoading(false)
-        }).catch(err=>{if(err){setLoading(false);setError(true)}});
+        }).catch(err=>{console.log(err.response.data);if(err){setLoading(false);setError(true)}});
     }
   };
 
