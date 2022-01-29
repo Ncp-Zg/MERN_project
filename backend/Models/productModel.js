@@ -20,8 +20,8 @@ const productSchema = mongoose.Schema(
         },
 
         seller: {
-            type: String,
-            required:true,
+            type: mongoose.Schema.ObjectId,
+            ref:"User"
         },
 
         desc: {

@@ -6,7 +6,6 @@ const CustomError = require("../Helpers/CustomError");
 
 const customErrorHandler =(err,req,res,next)=>{
     let customError = err ;
-    console.log(err.status);
 
     if (err.name === "SyntaxError"){
       customError = new CustomError("Unexpected Syntax",400);

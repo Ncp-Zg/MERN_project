@@ -3,6 +3,7 @@ import { Button } from '@mui/material'
 import axios from 'axios';
 import { useEffect, useState} from 'react'
 import { useSelector } from 'react-redux';
+import { ClimbingBoxLoader } from 'react-spinners';
 import Step1 from '../../components/AddProduct/Step1';
 import Step2 from '../../components/AddProduct/Step2';
 import Step3 from '../../components/AddProduct/Step3';
@@ -13,10 +14,12 @@ import { IRootState } from '../../redux/Reducers/rootReducer';
 const AddProduct = () => {
 
   const[auth,setAuth]=useState<boolean>(false)
+  const[loading,setLoading]=useState<boolean>(false)
   const {user}= useSelector((state:IRootState)=>state.auth)
 
   const getProfile= async()=>{console.log("user.token",user.token)
       if(user.token!== ""){
+        setLoading(true)
          
       await axios.get("http://localhost:5000/api/users/profile",{
           headers:{
@@ -26,13 +29,10 @@ const AddProduct = () => {
       }).then(res=>{
           if(res.data.success){
               setAuth(true)
-          }else{
-              setAuth(false)
-          }
-      }) 
+              setLoading(false)
       }
+      }).catch((err)=>{setLoading(false);setAuth(false)})}}
       
-  }
 
   useEffect(()=>{
       getProfile();
@@ -96,7 +96,6 @@ const AddProduct = () => {
                   category:formData.category,
                   cost:formData.cost,
                   desc:formData.description,
-                  seller:formData.seller,
                   stock:formData.stock,
                   title:formData.title,
                   img:formData.img
@@ -107,15 +106,24 @@ const AddProduct = () => {
                   }
               }
                 
-                ).then(res=>{console.log(res.data);
-                    localStorage.removeItem("previewData")})
-                // alert("FORM SUBMITTED");
+                ).then(res=>{console.log(res.data)})
                 console.log(formData);
               } else {
                 setPage((currPage) => currPage + 1);
               }
             }} sx={{}}>{page === FormTitles.length - 1 ? "Submit" : "Next"}</Button>
-            </div></>):(
+            </div></>): loading ? (
+              <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "80vh",
+              }}
+            >
+              <ClimbingBoxLoader size={30} color="#c67c03" />
+            </div>
+            ) :(
               <h3>need authorization, token failed</h3>
             )
           }

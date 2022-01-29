@@ -16,7 +16,7 @@ const commentMiddleware =asyncErrorWrapper(async function (req, res, next) {
       const pagination = paginationResult.pagination;
       
   
-      const queryResults = await query;
+      const queryResults = await query.populate("user");
       
 
       res.status(201).json({

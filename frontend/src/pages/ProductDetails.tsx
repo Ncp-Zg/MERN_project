@@ -58,8 +58,7 @@ const ProductDetails = () => {
     localStorage.setItem("user",JSON.stringify(favorites));
     dispatch(setLikes(favorites.fav))
     }).catch(err=>{if(err){
-      console.error(err);
-      toast.error("need authorization")
+      toast.error(err.response.data.message)
     }})
     console.log(error);
     

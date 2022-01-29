@@ -26,15 +26,6 @@ const Step3 : FunctionComponent<form> = (props) => {
         />
         <TextField
           id="filled-textarea"
-          label="Seller"
-          placeholder=""
-          multiline
-          variant="filled"
-          sx={{ width: "50%",marginBottom:"5px" }}
-          onChange={(e)=>setFormData({...formdata,seller:e.target.value})}
-        />
-        <TextField
-          id="filled-textarea"
           label="Cost"
           placeholder=""
           multiline

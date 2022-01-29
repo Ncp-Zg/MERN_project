@@ -18,7 +18,6 @@ const protect = expressAsyncHandler(async (req, res, next) => {
         const decoded = jsonwebtoken.verify(token, process.env.JWT_SECRET);
   
         req.user = await User.findById(decoded.id).select("-password");
-  
         next();
       } catch (error) {
         next(new CustomError("Not authorized, token failed", 401))
@@ -26,7 +25,7 @@ const protect = expressAsyncHandler(async (req, res, next) => {
     }
   
     if (!token) {
-     next(new CustomError("Not authorized, no token",401));
+     throw new CustomError("Not authorized, no token",401);
     }
   });
   

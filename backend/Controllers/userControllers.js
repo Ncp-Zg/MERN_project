@@ -1,4 +1,5 @@
 const asyncHandler = require("express-async-handler");
+const CustomError = require("../Helpers/CustomError");
 const generateToken = require("../Helpers/generateToken");
 const Product = require("../Models/productModel");
 const User = require("../Models/userModel");
@@ -99,7 +100,7 @@ res.status(201).json({
 
 })
 }else{
-    throw new Error("you already liked this Product")
+    throw new CustomError("you already liked this Product",500)
 }
 
 
@@ -150,6 +151,17 @@ const getFavs = asyncHandler(async (req,res)=>{
     
 });
 
+const getMyProducts = asyncHandler(async (req,res)=>{
+
+    const product = await Product.find({seller:req.user.id});
+
+    res.status(200).json({
+        myproduct:product
+    })
+    
+
+});
+
 
 
 
@@ -160,5 +172,6 @@ module.exports={
     logoutUser,
     addToFavorite,
     removeFromFavorite,
-    getFavs
+    getFavs,
+    getMyProducts
 }
