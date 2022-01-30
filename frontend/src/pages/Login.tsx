@@ -21,7 +21,7 @@ const Login = () => {
   console.log(user)
 
   const [values, setValues] = useState({
-    email: "",
+    email: `${user.email}`,
     password: "",
   });
 
@@ -85,6 +85,7 @@ const Login = () => {
               id="outlined-basic"
               label="Email"
               variant="outlined"
+              value={values.email}
               sx={{ marginBottom: "10px" }}
             />
             <TextField
