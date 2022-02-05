@@ -162,6 +162,10 @@ const getMyProducts = asyncHandler(async (req,res)=>{
 
 });
 
+const editMyProduct = asyncHandler(async (req,res)=>{
+
+});
+
 
 
 
@@ -173,5 +177,6 @@ module.exports={
     addToFavorite,
     removeFromFavorite,
     getFavs,
-    getMyProducts
+    getMyProducts,
+    editMyProduct
 }

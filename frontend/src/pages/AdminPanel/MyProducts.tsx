@@ -16,7 +16,7 @@ const MyProducts = () => {
     const getProfile= async()=>{console.log("user.token",user.token)
         if(user.token!== ""){
         setLoading(true)   
-        await axios.get("http://localhost:5000/api/users/profile/getmyproducts",{
+        await axios.get("http://localhost:5000/api/users/admin/getmyproducts",{
             headers:{
                 "Content-Type":"application/json",
                 Authorization:`Bearer ${user?.token}`,

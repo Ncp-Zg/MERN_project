@@ -7,7 +7,7 @@ export interface Item {
   category: string;
   desc: string;
   seller: string;
-  customer:Array<string>;
+  customer: Array<string>;
 }
 
 export interface Cart {
@@ -41,24 +41,30 @@ export interface Order {
   order: OrderItem[];
   amount: Array<number>;
   createdAt: string;
-  updatedAt:string;
+  updatedAt: string;
   __v: number;
   delivered: false;
 }
 
 export interface Comments {
-    rating:number;
-    comment: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
+  product: string;
+  updatedAt: string;
+  user: {
     createdAt: string;
-    product: string;
-    updatedAt: string;
-    user: {
-     createdAt:string;
-     email:string;
-     name:string; 
-    }
-    __v: number;
-    _id: string;
+    email: string;
+    name: string;
+  };
+  __v: number;
+  _id: string;
 }
 
-
+export interface formdata {
+  category: string;
+  description: string;
+  stock: number;
+  cost: string;
+  title: string;
+}

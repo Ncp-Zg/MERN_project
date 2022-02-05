@@ -1,5 +1,5 @@
 const express = require("express");
-const { registerUser, authUser, getUser, logoutUser, addToFavorite, removeFromFavorite,getFavs, getMyProducts } = require("../Controllers/userControllers");
+const { registerUser, authUser, getUser, logoutUser, addToFavorite, removeFromFavorite,getFavs, getMyProducts, editMyProduct } = require("../Controllers/userControllers");
 const { checkProductExist } = require("../Middlewares/productMiddleware");
 const { protect } = require("../Middlewares/userMiddleware");
 
@@ -10,7 +10,8 @@ router.route("/register").post(registerUser)
 router.route("/login").post(authUser)
 router.route("/profile").get(protect, getUser);
 router.route("/profile/getfavorites").get(protect, getFavs);
-router.route("/profile/getmyproducts").get(protect, getMyProducts);
+router.route("/admin/getmyproducts").get(protect, getMyProducts);
+router.route("/admin/:product_id/edit").put(checkProductExist, editMyProduct);
 router.route("/logout").get(protect, logoutUser);
 router.route("/:product_id/addtofavorite").get(checkProductExist,protect,addToFavorite);
 router.route("/:product_id/removefromfavorite").get(checkProductExist,protect,removeFromFavorite);

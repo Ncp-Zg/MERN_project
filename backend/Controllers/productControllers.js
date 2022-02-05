@@ -12,6 +12,13 @@ const getProducts = asyncHandler(async(req,res)=>{
         })
 })
 
+const getSingleProduct = asyncHandler(async(req,res)=>{
+
+    res.status(200).json({
+      product:req.data
+    })
+})
+
 const addProduct = asyncHandler(async (req, res) => {
   const { title, cost, stock, desc, category, img } = req.body;
 
@@ -81,5 +88,6 @@ module.exports = {
   getProducts,
   addProduct,
   addComment,
-  getAllComments
+  getAllComments,
+  getSingleProduct
 };

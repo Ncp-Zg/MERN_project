@@ -1,11 +1,7 @@
 import { ShoppingCartOutlined } from "@mui/icons-material";
 import {
-  Button,
   Pagination,
   Stack,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
 } from "@mui/material";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
@@ -132,7 +128,7 @@ const Home = () => {
               <Pagination
                 sx={{color:"red"}}
                 count={forik()}
-                page={pageRef.current}
+                page={!RouterPage ? pageRef.current : Number(RouterPage)}
                 onChange={handleAlignment}
                 defaultPage={1}
                 color="primary"
