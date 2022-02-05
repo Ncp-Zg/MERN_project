@@ -1,4 +1,4 @@
-import { Button, Card, TextField, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { Button, Card, Pagination, Stack, TextField, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
 import moment from "moment";
@@ -30,12 +30,13 @@ const Comment: FunctionComponent<Comment> = (props) => {
   const [total, setTotal] = useState<number>(0);
 
 
-  const forik = ()=>{let value = [];
-    for(let i =0; i< Math.floor(total/5)+1;i++){
-     value.push(i+1);
-    
-}return value;
-}
+  const forik = () => {
+    let value = 0;
+    for (let i = 0; i < Math.floor(total / 5) + 1; i++) {
+      value += 1;
+    }
+    return value;
+  };
 
   // Catch Rating value
   const handleRating = (rate: number) => {
@@ -74,7 +75,7 @@ const Comment: FunctionComponent<Comment> = (props) => {
 
   
   const handleAlignment = (
-    event: React.MouseEvent<HTMLElement>,
+    event: React.ChangeEvent<unknown>,
     newPage: number,
   ) => {
     setPage(newPage);
@@ -107,21 +108,18 @@ const Comment: FunctionComponent<Comment> = (props) => {
           </div>
         </Card>
       ))}
-      <ToggleButtonGroup
-      value={page}
-      exclusive
-      onChange={handleAlignment}
-      sx={{display:"flex",justifyContent:"center",marginTop:"20px"}}
-    >
-      {
-        forik().map((pg,index)=>(
-          
-        
-        forik().length=== 1 ? null : <ToggleButton value={pg} key={index} sx={{padding:"4px",marginRight:"2px"}}>{pg}</ToggleButton>
-      
-  ))
-      }
-      </ToggleButtonGroup>
+      <div style={{ display: "flex", justifyContent: "center",marginTop:"1rem" }}>
+            <Stack spacing={2}>
+              <Pagination
+                sx={{color:"red"}}
+                count={forik()}
+                page={page}
+                onChange={handleAlignment}
+                defaultPage={1}
+                color="primary"
+              />
+            </Stack>
+          </div>
 
       {product.customer?.includes(user.id) ? (
         <Card sx={{ marginTop: "2rem", padding: "0.2rem" }}>

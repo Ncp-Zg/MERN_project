@@ -13,7 +13,7 @@ const EditMyProduct = () => {
     category:  "",
     description: "",
     stock:  0,
-    cost:  "",
+    cost:  0,
     title:"",
   });
 
@@ -59,7 +59,7 @@ const EditMyProduct = () => {
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <Card sx={{ width: "70%" }}>
-        <div className="slideshow-container1">
+        <div className="slideshow-container3">
           <CardMedia
             className="fade"
             sx={{ objectFit: "contain", maxWidth: "500" }}
@@ -69,7 +69,7 @@ const EditMyProduct = () => {
             alt={product?.title}
           />
           <a
-            className="prev1"
+            className="prev3"
             onClick={() => {
               if (index === 0 && product) {
                 setIndex(product?.img.length - 1);
@@ -81,7 +81,7 @@ const EditMyProduct = () => {
             &#10094;
           </a>
           <a
-            className="next1"
+            className="next3"
             onClick={() => {
               if (product && index === product?.img.length - 1) {
                 setIndex(0);
@@ -173,7 +173,7 @@ const EditMyProduct = () => {
             variant="filled"
             sx={{ width: "70%" }}
             onChange={(e) =>
-              setFormData({ ...formData, cost: e.target.value })}
+              setFormData({ ...formData, cost: +e.target.value })}
           />
         </div>
       </Card>

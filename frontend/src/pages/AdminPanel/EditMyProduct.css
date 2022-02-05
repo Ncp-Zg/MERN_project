@@ -1,11 +1,11 @@
-.slideshow-container1 {
+.slideshow-container3 {
     max-width: 70%;
     position: relative;
     margin: auto;
   }
 
   /* Next & previous buttons */
-.prev1, .next1 {
+.prev3, .next3 {
     cursor: pointer;
     position: absolute;
     top: 50%;
@@ -21,14 +21,14 @@
   }
   
   /* Position the "next button" to the right */
-  .next1 {
+  .next3 {
     right: 0;
     border-radius: 3px 0 0 3px;
     
   }
   
   /* On hover, add a black background color with a little bit see-through */
-  .prev1:hover, .next1:hover {
+  .prev3:hover, .next3:hover {
     background-color: gray;
   }
   
