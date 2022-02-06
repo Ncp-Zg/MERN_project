@@ -46,8 +46,7 @@ const Product: FunctionComponent<IItemProps> = (props) => {
     <Card sx={{ maxWidth: 320, margin: "10px" }}>
       <div className="slideshow-container1">
         <CardMedia
-          className="fade"
-          sx={{ objectFit: "contain", maxWidth:"320px" }}
+          sx={{ objectFit: "contain", width:"320px" }}
           component="img"
           height="250"
           image={item.img[index]}

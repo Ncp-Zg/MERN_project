@@ -37,7 +37,7 @@ const Home = () => {
 
   const forik = () => {
     let value = 0;
-    for (let i = 0; i < Math.floor(total / 4) + 1; i++) {
+    for (let i = 0; i < Math.floor(total / 8) + 1; i++) {
       value += 1;
     }
     return value;
@@ -49,7 +49,7 @@ const Home = () => {
     console.log("render");
     axios
       .get("http://localhost:5000/api/products", {
-        params: { page: `${RouterPage}`, limit: 4 },
+        params: { page: `${RouterPage}`, limit: 8 },
       })
       .then((res) => {
         setLoading(false);

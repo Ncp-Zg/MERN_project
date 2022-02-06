@@ -163,6 +163,25 @@ const getMyProducts = asyncHandler(async (req,res)=>{
 });
 
 const editMyProduct = asyncHandler(async (req,res)=>{
+    console.log(req.body);
+
+    let product = await Product.findById(req.data.id);
+    product.category = req.body.category
+    product.desc = req.body.description
+    product.stock = req.body.stock
+    product.cost = req.body.cost
+    product.title = req.body.title
+
+
+    product = await product.save();
+
+    res.status(200).json({
+        success:true,
+        updatedData:product
+    })
+
+
+    
 
 });
 

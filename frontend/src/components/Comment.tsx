@@ -108,7 +108,9 @@ const Comment: FunctionComponent<Comment> = (props) => {
           </div>
         </Card>
       ))}
-      <div style={{ display: "flex", justifyContent: "center",marginTop:"1rem" }}>
+      {
+        comments.length === 0 ? null : (
+          <div style={{ display: "flex", justifyContent: "center",marginTop:"1rem" }}>
             <Stack spacing={2}>
               <Pagination
                 sx={{color:"red"}}
@@ -121,6 +123,9 @@ const Comment: FunctionComponent<Comment> = (props) => {
             </Stack>
           </div>
 
+        )
+       }
+      
       {product.customer?.includes(user.id) ? (
         <Card sx={{ marginTop: "2rem", padding: "0.2rem" }}>
           <Rating onClick={handleRating} ratingValue={rating} />

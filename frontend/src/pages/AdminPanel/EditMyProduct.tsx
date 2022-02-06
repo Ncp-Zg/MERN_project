@@ -1,7 +1,10 @@
-import { Card, CardMedia, MenuItem, TextField } from "@mui/material";
+import { Button, Card, CardMedia, MenuItem, TextField } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { IRootState } from "../../redux/Reducers/rootReducer";
 import { formdata, Item } from "../../type";
 import "./EditMyProduct.css";
 
@@ -9,6 +12,7 @@ const EditMyProduct = () => {
   const { id } = useParams();
   const [product, setProduct] = useState<Item>();
   const [index, setIndex] = useState<any>(0);
+  const {user}= useSelector((state:IRootState)=>state.auth)
   const [formData, setFormData] = useState<formdata>({
     category:  "",
     description: "",
@@ -17,7 +21,6 @@ const EditMyProduct = () => {
     title:"",
   });
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {};
   const getsingleproduct = async () => {
     await axios
       .get(`http://localhost:5000/api/products/getsingleproduct/${id}`)
@@ -32,6 +35,17 @@ const EditMyProduct = () => {
         });
       });
   };
+
+  const handleClick = async () => {
+    await axios.put(`http://localhost:5000/api/users/admin/${id}/edit`,formData,{
+      headers:{
+        "Content-type":"application/json",
+        Authorization:`Bearer ${user?.token}`
+      }
+    }).then(res=>console.log(res.data)).catch((error)=>{
+        toast.warn(error.response.data.message)
+    })
+  }
 
   useEffect(() => {
     getsingleproduct();
@@ -95,7 +109,7 @@ const EditMyProduct = () => {
         </div>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <TextField
-            sx={{ width: "70%" }}
+            sx={{ width: "90%" }}
             id="filled-select-currency"
             select
             label="Select Category"
@@ -128,7 +142,7 @@ const EditMyProduct = () => {
             multiline
             value={formData.title}
             variant="filled"
-            sx={{ width: "70%", marginBottom: "5px" }}
+            sx={{ width: "90%", marginBottom: "5px" }}
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })}
           />
@@ -139,7 +153,7 @@ const EditMyProduct = () => {
             rows={10}
             value={formData.description}
             variant="filled"
-            sx={{ width: "70%", marginBottom: "5px" }}
+            sx={{ width: "90%", marginBottom: "5px" }}
             onChange={(e) =>
               setFormData({ ...formData, description: e.target.value })}
           />
@@ -160,7 +174,7 @@ const EditMyProduct = () => {
             multiline
             value={formData.stock}
             variant="filled"
-            sx={{ width: "70%", marginBottom: "5px" }}
+            sx={{ width: "90%", marginBottom: "5px" }}
             onChange={(e) =>
               setFormData({ ...formData, stock: +e.target.value })}
           />
@@ -171,11 +185,13 @@ const EditMyProduct = () => {
             multiline
             value={formData.cost}
             variant="filled"
-            sx={{ width: "70%" }}
+            sx={{ width: "90%",marginBottom:"4px"}}
             onChange={(e) =>
               setFormData({ ...formData, cost: +e.target.value })}
           />
+          <Button variant="contained" sx={{width:"90%",marginBottom:"2rem"}} onClick={handleClick}>Edit</Button>
         </div>
+
       </Card>
     </div>
   );
