@@ -68,3 +68,14 @@ export interface formdata {
   cost: number;
   title: string;
 }
+
+export interface incomingOrders {
+  data : Item;
+  amount: number;
+  orderedAt : string;
+  toWho: {
+    _id:string;
+    name:string;
+    email:string;
+  } 
+}
