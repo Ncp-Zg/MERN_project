@@ -130,7 +130,7 @@ const Step1: FunctionComponent<form> = (props) => {
           formdata.img.length !== 0 ? (
             formdata.img?.map((pre: any, index: number) => {
               return (
-                <div className="imageBox">
+                <div className="imageBox" key={index}>
                   <img
                     className="image"
                     key={index}

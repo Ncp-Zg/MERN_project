@@ -31,11 +31,12 @@ import ProductDetails from '../pages/ProductDetails';
 import { AddBusiness, AppRegistrationOutlined, HomeMax, ListAltOutlined, LoginOutlined, RemoveCircleOutline, VerifiedUserOutlined } from '@mui/icons-material';
 import ShoppingCart from '../pages/ShoppingCart';
 import PaymentPage from '../pages/PaymentPage';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import Myorders from '../pages/Myorders';
 import OrderDetails from '../pages/OrderDetails';
 import Myfavorites from '../pages/Myfavorites';
 import EditMyProduct from '../pages/AdminPanel/EditMyProduct';
+import IncomingOrders from '../pages/AdminPanel/IncomingOrders';
 
 const drawerWidth = 240;
 
@@ -130,7 +131,7 @@ const handleClick = async()=>{
         "Content-Type":"application/json",
         Authorization:`Bearer ${user.token}`,
       }
-    }).then(res=>console.log(res.data))
+    }).then(res=>toast.success("You logged out successfully!"))
 }
 
 
@@ -202,7 +203,7 @@ const handleClick = async()=>{
         <Divider />
         
         {user?.isAdmin ? <List>
-          <ListItem>Admin Panel</ListItem>{['Add Product', 'Remove Product', 'My Products'].map((text, index) => (
+          <ListItem>Admin Panel</ListItem>{['Add Product', 'Incoming Orders', 'My Products'].map((text, index) => (
             <ListItem button key={text} onClick={()=>changeRouteAdmin(text)}>
               <ListItemIcon>
                 {index === 0 ? <AddBusiness /> : index === 1 ? <RemoveCircleOutline/> : <ListAltOutlined/>}
@@ -229,6 +230,7 @@ const handleClick = async()=>{
         <Route path="/admin/addproduct" element={<AddProduct />} />
         <Route path="/admin/myproducts" element={<MyProducts />} />
         <Route path="/admin/myproducts/:id/edit" element={<EditMyProduct />} />
+        <Route path="/admin/incomingorders" element={<IncomingOrders />} />
         <Route path="/details/:id" element={<ProductDetails />} />
         <Route path="/shoppingcart" element={<ShoppingCart />} />
         <Route path="/shoppingcart/payment" element={<PaymentPage />} />

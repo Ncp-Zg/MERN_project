@@ -21,6 +21,7 @@ const Step3 : FunctionComponent<form> = (props) => {
           placeholder=""
           multiline
           variant="filled"
+          value={formdata.stock}
           sx={{ width: "50%",marginBottom:"5px" }}
           onChange={(e)=>setFormData({...formdata,stock:e.target.value.toString()})}
         />
@@ -29,6 +30,7 @@ const Step3 : FunctionComponent<form> = (props) => {
           label="Cost"
           placeholder=""
           multiline
+          value={formdata.cost}
           variant="filled"
           sx={{ width: "50%" }}
           onChange={(e)=>setFormData({...formdata,cost:e.target.value.toString()})}

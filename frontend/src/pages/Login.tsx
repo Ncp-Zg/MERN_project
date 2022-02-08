@@ -2,6 +2,8 @@ import { Box, Button,TextField } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { loginUser } from "../redux/ActionCreators/AuthActionCreators";
 import { IRootState } from "../redux/Reducers/rootReducer";
 
@@ -16,6 +18,7 @@ export interface auth {
 
 const Login = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {user}= useSelector((state:IRootState)=>state.auth)
   console.log(user)
@@ -44,7 +47,7 @@ const Login = () => {
             id:res.data._id,
             fav:res.data.fav
           })
-        );console.log(res.data);
+        );toast.success("You logged in successfully!");navigate(-1)
       });
   };
 

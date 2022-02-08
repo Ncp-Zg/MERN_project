@@ -6,12 +6,40 @@ import { toast } from 'react-toastify'
 import MyProduct from '../../components/MyProduct'
 import { IRootState } from '../../redux/Reducers/rootReducer'
 import { Item } from '../../type'
+import Alert from 'react-popup-alert'
+import 'react-popup-alert/dist/index.css'
+import { useNavigate } from 'react-router-dom'
+import { Button } from '@mui/material'
 
 const MyProducts = () => {
 
     const[myProducts,setMyProducts]=useState<Item[] | null>(null)
     const[loading,setLoading]=useState<boolean>(false)
     const {user}= useSelector((state:IRootState)=>state.auth)
+    const navigate = useNavigate()
+
+    const [alert, setAlert] = useState({
+        type: "error",
+        text: "This is a alert message",
+        show: false,
+      });
+    
+      function onCloseAlert() {
+        setAlert({
+          type: "",
+          text: "",
+          show: false,
+        });
+        navigate("/login");
+      }
+    
+      function onShowAlert(type: any) {
+        setAlert({
+          type: type,
+          text: "You need to login. Your token is expired already.",
+          show: true,
+        });
+      }
   
     const getProfile= async()=>{console.log("user.token",user.token)
         if(user.token!== ""){
@@ -35,7 +63,7 @@ const MyProducts = () => {
     return (
         <div>
             {myProducts ? 
-            (myProducts?.map(prdct => <MyProduct item={prdct}/>)) : loading ? (<div
+            (myProducts?.map(prdct => <MyProduct key={prdct._id} item={prdct}/>)) : loading ? (<div
                 style={{
                   display: "flex",
                   justifyContent: "center",
@@ -44,8 +72,33 @@ const MyProducts = () => {
                 }}
               >
                 <ClimbingBoxLoader size={30} color="#c67c03" />
-              </div>) :
-            <h3>need authorization, token failed</h3>}
+              </div>) :(
+                  <div>
+                  <div
+                    style={{ display: "flex", justifyContent: "center", marginTop: 50 }}
+                  >
+                    <Button onClick={() => onShowAlert("error")}>
+                      Something went wrong!!
+                    </Button>
+                  </div>
+                  <Alert
+                    header={"Authorization"}
+                    btnText={"Close"}
+                    text={alert.text}
+                    type={alert.type}
+                    show={alert.show}
+                    onClosePress={onCloseAlert}
+                    pressCloseOnOutsideClick={true}
+                    showBorderBottom={true}
+                    alertStyles={{}}
+                    headerStyles={{}}
+                    textStyles={{}}
+                    buttonStyles={{}}
+                  />
+                </div>
+                  )
+            
+            }
             
         </div>
     )

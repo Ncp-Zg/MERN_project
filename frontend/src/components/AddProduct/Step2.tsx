@@ -23,6 +23,7 @@ const Step2: FunctionComponent<form> = (props) => {
           label="Title"
           placeholder=""
           multiline
+          value={formdata.title}
           variant="filled"
           sx={{ width: "50%",marginBottom:"5px" }}
           onChange={(e)=>setFormData({...formdata,title:e.target.value})}
@@ -32,7 +33,7 @@ const Step2: FunctionComponent<form> = (props) => {
         label="Description"
         multiline
         rows={10}
-        defaultValue={formdata.description}
+        value={formdata.description}
         variant="filled"
         sx={{ width: "50%" }}
         onChange={handleChange}
