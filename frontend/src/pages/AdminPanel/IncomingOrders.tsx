@@ -1,15 +1,18 @@
+import { Card } from "@mui/material";
 import axios from "axios";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { IRootState } from "../../redux/Reducers/rootReducer";
 import { incomingOrders } from "../../type";
+import {io, Socket} from "socket.io-client"
 
 
 const IncomingOrders = () => {
 
 const [ data , setData] = useState<incomingOrders[]>();
+const socket = useRef<Socket>()
 const {user}= useSelector((state:IRootState)=>state.auth)
 const getIncomingOrders = async () => {
     if(user.token!== ""){
@@ -22,6 +25,17 @@ const getIncomingOrders = async () => {
 }
 
 useEffect(()=>{
+    socket.current=io("ws://localhost:8900");
+},[])
+
+useEffect(()=>{
+    if(socket.current && user.id !== ""){socket?.current.emit("addUser",user.id)
+    socket?.current.on("getUsers",users=>{
+        console.log(users.filter((usr:any)=>usr.user._id === user.id))
+    })}
+},[user])
+
+useEffect(()=>{
     getIncomingOrders();
 },[user.token])
 
@@ -30,11 +44,11 @@ useEffect(()=>{
   <div>
       {data?.map((ordr,index) => 
         
-        <div key={index}>
+        <Card key={index} sx={{marginBottom:"4px",padding:"0px 5px 0px 5px"}}>
             <h3>{ordr.data.title} : {ordr.amount} piece</h3>
             <h4>Customer : {ordr.toWho.email}</h4>
             <p>{moment(ordr.orderedAt).format("LLL")}</p>
-        </div>
+        </Card>
         
         )}
   </div>
