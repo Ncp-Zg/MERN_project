@@ -16,8 +16,8 @@ let users = [];
 
 const addUser = async (userId, socketId) => {
      const user=await User.findById(userId)
-    !users.some(user=>user.userId === userId) && 
-    users.push({userId, socketId, user});
+    !users.some(user=>user.userId === userId) ? 
+    users.push({userId, socketId, user}) : (users.splice(users.findIndex(usr=>usr.userId === userId),1,{userId, socketId, user}))
     
 }
 

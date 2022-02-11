@@ -12,6 +12,7 @@ import {io, Socket} from "socket.io-client"
 const IncomingOrders = () => {
 
 const [ data , setData] = useState<incomingOrders[]>();
+const [ orders , setOrders] = useState<number>(0);
 const socket = useRef<Socket>()
 const {user}= useSelector((state:IRootState)=>state.auth)
 const getIncomingOrders = async () => {
@@ -30,14 +31,17 @@ useEffect(()=>{
 
 useEffect(()=>{
     if(socket.current && user.id !== ""){socket?.current.emit("addUser",user.id)
-    socket?.current.on("getUsers",users=>{
-        console.log(users.filter((usr:any)=>usr.user._id === user.id))
+    socket?.current.on("getUsers",(users)=>{
+        const order = users.filter((usr:any)=>usr.user._id === user.id)
+        setOrders(order[0].user.incomingOrders.length)
     })}
 },[user])
 
+console.log(orders)
+
 useEffect(()=>{
     getIncomingOrders();
-},[user.token])
+},[user.token,orders])
 
   return (
   
