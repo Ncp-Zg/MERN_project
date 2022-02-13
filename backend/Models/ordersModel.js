@@ -19,7 +19,9 @@ const ordersSchema = mongoose.Schema(
         amount: [
             
         ],
-        delivered:Boolean
+        preparing:[],
+        sentbycargo:[],
+        delivered:[],
     },
     {
         timestamps:true,

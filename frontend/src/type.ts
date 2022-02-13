@@ -43,7 +43,9 @@ export interface Order {
   createdAt: string;
   updatedAt: string;
   __v: number;
-  delivered: false;
+  delivered: Array<boolean>;
+  preparing: Array<boolean>;
+  sentbycargo: Array<boolean>;
 }
 
 export interface Comments {
@@ -78,4 +80,5 @@ export interface incomingOrders {
     name:string;
     email:string;
   } 
+  orderId:string;
 }

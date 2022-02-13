@@ -1,4 +1,4 @@
-import { Card } from "@mui/material";
+import { Button, Card } from "@mui/material";
 import axios from "axios";
 import moment from "moment";
 import { useEffect, useRef, useState } from "react";
@@ -12,9 +12,37 @@ import {io, Socket} from "socket.io-client"
 const IncomingOrders = () => {
 
 const [ data , setData] = useState<incomingOrders[]>();
+const [ prep , setPrep] = useState<Array<boolean>>();
+const [ sent , setSent] = useState<Array<boolean>>();
 const [ orders , setOrders] = useState<number>(0);
 const socket = useRef<Socket>()
 const {user}= useSelector((state:IRootState)=>state.auth)
+
+const changePrep = async (index:number) => {
+    console.log(index)
+    if(data){
+      await axios.post("http://localhost:5000/api/orders/myorders/changepreparing",{orderId:data[index].orderId,productId:data[index].data._id},{
+          headers:{
+              "Content-Type" : "application/json",
+              Authorization: `Bearer ${user?.token}`
+          }
+      }).then((res)=>setPrep(res.data.preparing)).catch(err=>console.log(err.response.data.message))  
+    }
+    
+}
+
+const changeSentByCargo = async (index:number) => {
+    if(data){
+      await axios.post("http://localhost:5000/api/orders/myorders/changesentbycargo",{orderId:data[index].orderId,productId:data[index].data._id},{
+          headers:{
+              "Content-Type" : "application/json",
+              Authorization: `Bearer ${user?.token}`
+          }
+      }).then((res)=>setSent(res.data.sentbycargo)).catch(err=>console.log(err.response.data.message))  
+    }
+    
+}
+
 const getIncomingOrders = async () => {
     if(user.token!== ""){
     await axios.get("http://localhost:5000/api/users/admin/incomingorders",{
@@ -30,10 +58,13 @@ useEffect(()=>{
 },[])
 
 useEffect(()=>{
-    if(socket.current && user.id !== ""){socket?.current.emit("addUser",user.id)
-    socket?.current.on("getUsers",(users)=>{
-        const order = users.filter((usr:any)=>usr.user._id === user.id)
-        setOrders(order[0].user.incomingOrders.length)
+    if(socket.current && user.id !== ""){
+    socket?.current.on("getUsers",(usr)=>{
+        console.log(usr)
+        if(usr.userId === user.id){
+           setOrders(usr.user.incomingOrders.length) 
+        }
+        
     })}
 },[user])
 
@@ -48,10 +79,12 @@ useEffect(()=>{
   <div>
       {data?.map((ordr,index) => 
         
-        <Card key={index} sx={{marginBottom:"4px",padding:"0px 5px 0px 5px"}}>
+        <Card key={index} sx={{marginBottom:"4px",padding:"0px 0px 5px 5px", backgroundColor:"#E4CDA7"}}>
             <h3>{ordr.data.title} : {ordr.amount} piece</h3>
             <h4>Customer : {ordr.toWho.email}</h4>
             <p>{moment(ordr.orderedAt).format("LLL")}</p>
+            <Button onClick={()=>changePrep(index)}>preparing...</Button>
+            <Button onClick={()=>changeSentByCargo(index)}>sent by cargo</Button>
         </Card>
         
         )}

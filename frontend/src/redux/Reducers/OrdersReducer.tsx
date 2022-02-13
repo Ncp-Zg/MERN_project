@@ -24,7 +24,9 @@ const initialState = {
       amount:[0],
       createdAt: "",
       __v: 0,
-      delivered: false,
+      delivered: [false],
+      preparing: [false],
+      sentbycargo: [false],
     },
   ],
 };

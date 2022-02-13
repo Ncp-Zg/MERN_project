@@ -160,7 +160,6 @@ const editMyProduct = asyncHandler(async (req, res) => {
 });
 
 const getIncomingOrders = asyncHandler(async (req, res) => {
-  console.log(req.user);
   if (!req.user.isAdmin) {
     throw new CustomError("You are not admin", 400);
   } else {

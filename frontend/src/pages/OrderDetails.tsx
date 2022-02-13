@@ -17,12 +17,13 @@ const OrderDetail = () => {
     const location= useLocation()
     const state = location.state as Order
     console.log(state);  
-const [deliver,setDeliver] = useState<Boolean>(state.delivered)
+const [deliver,setDeliver] = useState<Array<Boolean>>(state.delivered)
 
-  console.log(deliver);
+  console.log(state.delivered);
   
-    const handleClick = async () => {
-      await axios.post("http://localhost:5000/api/orders/myorders/changeState",{orderId:state._id},{
+    const handleClick = async (index:number) => {
+      console.log(index)
+      await axios.post("http://localhost:5000/api/orders/myorders/changeDelivered",{orderId:state._id,index:index},{
         headers:{
           "Content-Type":"application/json",
           Authorization:`Bearer ${user?.user.token}`
@@ -98,14 +99,12 @@ const [deliver,setDeliver] = useState<Boolean>(state.delivered)
                     ₺{crt.cost}
                   </Typography>
                 </Box>
+          <Button disabled = {deliver[index] ? true : false} variant="contained" color='success' onClick={()=>handleClick(index)}>Yes, I received.</Button>
+
               </Card>
             ))}
           
-        </Grid>
-        <Grid item xs={12} style={{display:"flex",justifyContent:"end"}}>
-          <Button disabled = {deliver ? true : false} variant="contained" color='success' onClick={handleClick}>Yes, I received.</Button>
-        </Grid>
-        
+        </Grid>    
       </Grid>
      
     </Card>

@@ -12,18 +12,14 @@ const io = require("socket.io")(8900,{
     }
 });
 
-let users = [];
+let seller;
 
 const addUser = async (userId, socketId) => {
      const user=await User.findById(userId)
-    !users.some(user=>user.userId === userId) ? 
-    users.push({userId, socketId, user}) : (users.splice(users.findIndex(usr=>usr.userId === userId),1,{userId, socketId, user}))
+     seller = {userId, socketId, user}
     
 }
 
-const removeUser = (socketId) => {
-    users = users.filter(user=>user.socketId !== socketId)
-}
 
 io.on("connection",(socket)=>{
     console.log("user is connected")
@@ -31,12 +27,12 @@ io.on("connection",(socket)=>{
     //take userId and socketId from user
     socket.on("addUser", async (userId) =>{
         await addUser(userId,socket.id);
-        io.emit("getUsers",users)
+        io.emit("getUsers",seller)
     });
 
-    socket.on("disconnect",()=>{
-        console.log("a user disconnected");
-        removeUser(socket.id)
-        io.emit("getUsers",users)
-    })
+    // socket.on("disconnect",()=>{
+    //     console.log("a user disconnected");
+    //     removeUser(socket.id)
+    //     io.emit("getUsers",users)
+    // })
 })
