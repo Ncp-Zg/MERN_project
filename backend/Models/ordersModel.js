@@ -22,6 +22,9 @@ const ordersSchema = mongoose.Schema(
         preparing:[],
         sentbycargo:[],
         delivered:[],
+        preparedAt:[],
+        sentAt:[],
+        deliveredAt:[],
     },
     {
         timestamps:true,

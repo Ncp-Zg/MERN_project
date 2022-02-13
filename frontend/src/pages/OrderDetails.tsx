@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import { IRootState } from "../redux/Reducers/rootReducer";
@@ -27,12 +27,26 @@ const OrderDetail = () => {
   const state = location.state as Order;
   console.log(state);
   const [deliver, setDeliver] = useState<Array<Boolean>>(state.delivered);
-  const [preparing, setPreparing] = useState<Array<Boolean>>(state.preparing);
-  const [sentByCargo, setSentByCargo] = useState<Array<Boolean>>(
-    state.sentbycargo
-  );
+  const [data,setData]=useState<Order>(state)
 
   console.log(state.delivered);
+
+  const getOrder = async()=>{
+    if(user.user.id !== ""){
+      await axios.get(`http://localhost:5000/api/orders/myorders/${state._id}`,
+    {headers:{
+        "Content-Type":"application/json",
+        Authorization:`Bearer ${user?.user.token}`,
+    }}).then(res=>setData(res.data.data))
+  }
+  
+    }
+    
+console.log(data)
+  useEffect(()=>{
+    getOrder()
+  },[user.user.token,deliver])
+
 
   const handleClick = async (index: number) => {
     console.log(index);
@@ -50,6 +64,7 @@ const OrderDetail = () => {
       .then((res) => {
         setDeliver(res.data.delivered);
       });
+
   };
 
   return (
@@ -58,7 +73,7 @@ const OrderDetail = () => {
         <h3>Order - {id}</h3>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            {state.order.map((crt: any, index: number) => (
+            {data?.order.map((crt: any, index: number) => (
               <Card key={crt._id} sx={{marginBottom:"5px",padding:"3px"}}>
                 <div
                   
@@ -104,7 +119,7 @@ const OrderDetail = () => {
                     }}
                   >
                     <Typography component="div" variant="h6">
-                      {state.amount[index]} piece
+                      {data?.amount[index]} piece
                     </Typography>
                   </Box>
                   <Box
@@ -128,18 +143,18 @@ const OrderDetail = () => {
                       justifyContent: "center",
                     }}
                   >
-                    <Check sx={preparing[index] ? {color:"green"} : {color:"black"}}/>
-                    <h5 style={preparing[index] ? {color:"green"} : {color:"black"}}>Preparing...</h5>
-                    <div style={sentByCargo[index] ? {backgroundColor:"green",width:"100px",height:"5px",borderRadius:"10px"} :{backgroundColor:"lightgray",width:"100px",height:"5px",borderRadius:"10px"}}/>
-                    <LocalShipping sx={sentByCargo[index] ? {color:"green"} : {color:"black"}}/>
-                    <h5 style={sentByCargo[index] ? {color:"green"} : {color:"black"}}>SentByCargo</h5>
-                    <div style={deliver[index] ? {backgroundColor:"green",width:"100px",height:"5px",borderRadius:"10px"} : {backgroundColor:"lightgray",width:"100px",height:"5px",borderRadius:"10px"}}/>
-                    <AssignmentReturnedOutlined sx={deliver[index] ? {color:"green"} : {color:"black"}}/>
-                    <h6 style={deliver[index] ? {color:"green"} : {color:"black"}}>Confirm When you received.</h6>
+                    <Check sx={data.preparing[index] ? {color:"green"} : {color:"black"}}/>
+                    <h5 style={data.preparing[index] ? {color:"green"} : {color:"black"}}>Preparing...</h5>
+                    <div style={data.sentbycargo[index] ? {backgroundColor:"green",width:"100px",height:"5px",borderRadius:"10px"} :{backgroundColor:"lightgray",width:"100px",height:"5px",borderRadius:"10px"}}/>
+                    <LocalShipping sx={data.sentbycargo[index] ? {color:"green"} : {color:"black"}}/>
+                    <h5 style={data.sentbycargo[index] ? {color:"green"} : {color:"black"}}>SentByCargo</h5>
+                    <div style={data.delivered[index] ? {backgroundColor:"green",width:"100px",height:"5px",borderRadius:"10px"} : {backgroundColor:"lightgray",width:"100px",height:"5px",borderRadius:"10px"}}/>
+                    <AssignmentReturnedOutlined sx={data.delivered[index] ? {color:"green"} : {color:"black"}}/>
+                    <h6 style={data.delivered[index] ? {color:"green"} : {color:"black"}}>Confirm When you received.</h6>
                   </Box>
-                  <Box>
+                  <Box sx={{display:"flex",justifyContent:"end"}}>
                     <Button
-                      disabled={((preparing[index] || sentByCargo[index]) && !deliver[index])? false : true}
+                      disabled={((data.preparing[index] || data.sentbycargo[index]) && !data.delivered[index])? false : true}
                       variant="contained"
                       color="success"
                       onClick={() => handleClick(index)}

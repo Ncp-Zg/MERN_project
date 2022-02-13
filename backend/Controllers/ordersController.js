@@ -16,6 +16,9 @@ const addOrder = expressAsyncHandler(async (req, res) => {
       preparing: req.prep,
       sentbycargo: req.sent,
       delivered: req.delivered,
+      preparedAt: req.prepAt,
+      sentAt: req.sentAt,
+      deliveredAt: req.deliveredAt,
     });
     await req.product.map(async (prdct,index) => {
         const productseller = await User.findById(prdct.seller);
@@ -54,6 +57,12 @@ const getOrders = expressAsyncHandler(async (req, res) => {
   });
 });
 
+const getSingleOrder = expressAsyncHandler(async (req, res) => {
+  res.status(200).json({
+    data:req.data
+  })
+});
+
 const changePreparing = expressAsyncHandler(async (req, res) => {
   const { orderId, productId } = req.body;
   const order = await Orders.findById(orderId);
@@ -63,6 +72,7 @@ const changePreparing = expressAsyncHandler(async (req, res) => {
 
 
       order.preparing[index] = true;
+      order.preparedAt[index] = new Date();
       await order.save();
 
       res.status(201).json({
@@ -81,6 +91,7 @@ const changeSentByCargo = expressAsyncHandler(async (req, res) => {
 
 
       order.sentbycargo[index] = true;
+      order.sentAt[index] = new Date();
       await order.save();
 
       res.status(201).json({
@@ -97,6 +108,7 @@ const changeDelivered = expressAsyncHandler(async (req, res) => {
   console.log(index);
 
   order.delivered[index] = true;
+  order.deliveredAt[index] = new Date();
 
   await order.save();
 
@@ -120,5 +132,6 @@ module.exports = {
   getOrders,
   changeDelivered,
   changePreparing,
-  changeSentByCargo
+  changeSentByCargo,
+  getSingleOrder
 };
