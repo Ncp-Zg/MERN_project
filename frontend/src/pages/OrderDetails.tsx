@@ -72,7 +72,7 @@ const OrderDetail = () => {
 
   return (
     <div>
-      <Card sx={{ padding: "1em", width: "100vh" }}>
+      <Box sx={{ padding: "1em", width: "100vh" }}>
         <h3>Order - {id}</h3>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -198,7 +198,7 @@ const OrderDetail = () => {
                     />
                     <Card
                       sx={
-                        data.preparing[index] ?
+                        data.sentbycargo[index] ?
                         {
                         backgroundColor:"#F4EEA9",
                         display: "flex",
@@ -233,6 +233,11 @@ const OrderDetail = () => {
                           ? moment(data.sentAt[index]).format("LLL")
                           : null}
                       </h6>
+                      <h6 style={{ margin: "5px", color: "green" }}>
+                        {data.cargoTrackNumber[index] !== ""
+                          ? `Track No : ${data.cargoTrackNumber[index]}`
+                          : null}
+                      </h6>
                     </Card>
                     <ArrowRightAlt
                       fontSize="large"
@@ -249,7 +254,7 @@ const OrderDetail = () => {
 
                     <Card
                       sx={
-                        data.preparing[index] ?
+                        data.delivered[index] ?
                         {
                         backgroundColor:"#F4EEA9",
                         display: "flex",
@@ -306,7 +311,7 @@ const OrderDetail = () => {
             ))}
           </Grid>
         </Grid>
-      </Card>
+      </Box>
     </div>
   );
 };

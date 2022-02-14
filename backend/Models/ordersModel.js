@@ -25,6 +25,7 @@ const ordersSchema = mongoose.Schema(
         preparedAt:[],
         sentAt:[],
         deliveredAt:[],
+        cargoTrackNumber:[],
     },
     {
         timestamps:true,

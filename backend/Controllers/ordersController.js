@@ -19,6 +19,8 @@ const addOrder = expressAsyncHandler(async (req, res) => {
       preparedAt: req.prepAt,
       sentAt: req.sentAt,
       deliveredAt: req.deliveredAt,
+      cargoTrackNumber: req.cargoTrackNumber
+
     });
     await req.product.map(async (prdct,index) => {
         const productseller = await User.findById(prdct.seller);
@@ -30,7 +32,9 @@ const addOrder = expressAsyncHandler(async (req, res) => {
             amount:req.number[index],
             toWho:req.user,
             orderedAt:newOrder.createdAt,
-            orderId:newOrder.id
+            orderId:newOrder.id,
+            prepared:false,
+            cargotracknumber:""
         })
         await productseller.save()
     });
@@ -64,8 +68,14 @@ const getSingleOrder = expressAsyncHandler(async (req, res) => {
 });
 
 const changePreparing = expressAsyncHandler(async (req, res) => {
-  const { orderId, productId } = req.body;
+  const { orderId, productId, index } = req.body;
   const order = await Orders.findById(orderId);
+
+  const user = await User.findById(req.user.id);
+  user.incomingOrders[index].prepared=true;
+  user.markModified("incomingOrders");
+  await user.save();
+
 
   await order.order.forEach(async (ordr,index) => {
     if(ordr.toString() === productId){
@@ -83,8 +93,14 @@ const changePreparing = expressAsyncHandler(async (req, res) => {
 });
 
 const changeSentByCargo = expressAsyncHandler(async (req, res) => {
-  const { orderId, productId } = req.body;
+  const { orderId, productId, trackNo ,i } = req.body;
+  console.log(trackNo)
   const order = await Orders.findById(orderId);
+
+  const user = await User.findById(req.user.id);
+  user.incomingOrders[i].cargotracknumber=trackNo.toString();
+  user.markModified("incomingOrders");
+  await user.save();
 
   await order.order.forEach(async (ordr,index) => {
     if(ordr.toString() === productId){
@@ -92,6 +108,7 @@ const changeSentByCargo = expressAsyncHandler(async (req, res) => {
 
       order.sentbycargo[index] = true;
       order.sentAt[index] = new Date();
+      order.cargoTrackNumber[index] = trackNo.toString();
       await order.save();
 
       res.status(201).json({

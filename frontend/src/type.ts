@@ -49,6 +49,7 @@ export interface Order {
   deliveredAt: Array<string>;
   preparedAt: Array<string>;
   sentAt: Array<string>;
+  cargoTrackNumber: Array<string>;
 }
 
 export interface Comments {
@@ -84,4 +85,6 @@ export interface incomingOrders {
     email:string;
   } 
   orderId:string;
+  prepared:boolean;
+  cargotracknumber:string;
 }

@@ -14,6 +14,7 @@ const ordersMiddleware =asyncErrorWrapper(async function (req, res, next) {
     const deliveredAt = []
     const prepAt = []
     const sentAt = []
+    const cargoTrackNumber = []
     await req.body.map(async (body)=>{
         let product = await Product.findById(body._id);
         arr.push(product)
@@ -24,6 +25,7 @@ const ordersMiddleware =asyncErrorWrapper(async function (req, res, next) {
         deliveredAt.push("now")
         prepAt.push("now")
         sentAt.push("now")
+        cargoTrackNumber.push("")
 
         
     })
@@ -38,6 +40,7 @@ const ordersMiddleware =asyncErrorWrapper(async function (req, res, next) {
         req.deliveredAt = deliveredAt
         req.prepAt = prepAt
         req.sentAt = sentAt
+        req.cargoTrackNumber = cargoTrackNumber
         next();
     },3000)
       
