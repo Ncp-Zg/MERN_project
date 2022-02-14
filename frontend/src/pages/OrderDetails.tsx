@@ -1,6 +1,8 @@
 import {
+  ArrowRightAlt,
   AssignmentReturnedOutlined,
   Check,
+  CheckCircleOutline,
   LocalShipping,
 } from "@mui/icons-material";
 import {
@@ -13,6 +15,7 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
+import moment from "moment";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
@@ -27,26 +30,27 @@ const OrderDetail = () => {
   const state = location.state as Order;
   console.log(state);
   const [deliver, setDeliver] = useState<Array<Boolean>>(state.delivered);
-  const [data,setData]=useState<Order>(state)
+  const [data, setData] = useState<Order>(state);
 
   console.log(state.delivered);
 
-  const getOrder = async()=>{
-    if(user.user.id !== ""){
-      await axios.get(`http://localhost:5000/api/orders/myorders/${state._id}`,
-    {headers:{
-        "Content-Type":"application/json",
-        Authorization:`Bearer ${user?.user.token}`,
-    }}).then(res=>setData(res.data.data))
-  }
-  
+  const getOrder = async () => {
+    if (user.user.id !== "") {
+      await axios
+        .get(`http://localhost:5000/api/orders/myorders/${state._id}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user?.user.token}`,
+          },
+        })
+        .then((res) => setData(res.data.data));
     }
-    
-console.log(data)
-  useEffect(()=>{
-    getOrder()
-  },[user.user.token,deliver])
+  };
 
+  console.log(data);
+  useEffect(() => {
+    getOrder();
+  }, [user.user.token, deliver]);
 
   const handleClick = async (index: number) => {
     console.log(index);
@@ -64,7 +68,6 @@ console.log(data)
       .then((res) => {
         setDeliver(res.data.delivered);
       });
-
   };
 
   return (
@@ -74,9 +77,8 @@ console.log(data)
         <Grid container spacing={2}>
           <Grid item xs={12}>
             {data?.order.map((crt: any, index: number) => (
-              <Card key={crt._id} sx={{marginBottom:"5px",padding:"3px"}}>
+              <Card key={crt._id} sx={{ marginBottom: "5px", padding: "3px" }}>
                 <div
-                  
                   style={{
                     display: "grid",
                     gridTemplateColumns: "1fr 2fr 1fr 1fr",
@@ -140,23 +142,160 @@ console.log(data)
                     sx={{
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "center",
+                      justifyContent: "space-evenly",
+                      marginBottom: "5px",
                     }}
                   >
-                    <Check sx={data.preparing[index] ? {color:"green"} : {color:"black"}}/>
-                    <h5 style={data.preparing[index] ? {color:"green"} : {color:"black"}}>Preparing...</h5>
-                    <div style={data.sentbycargo[index] ? {backgroundColor:"green",width:"100px",height:"5px",borderRadius:"10px"} :{backgroundColor:"lightgray",width:"100px",height:"5px",borderRadius:"10px"}}/>
-                    <LocalShipping sx={data.sentbycargo[index] ? {color:"green"} : {color:"black"}}/>
-                    <h5 style={data.sentbycargo[index] ? {color:"green"} : {color:"black"}}>SentByCargo</h5>
-                    <div style={data.delivered[index] ? {backgroundColor:"green",width:"100px",height:"5px",borderRadius:"10px"} : {backgroundColor:"lightgray",width:"100px",height:"5px",borderRadius:"10px"}}/>
-                    <AssignmentReturnedOutlined sx={data.delivered[index] ? {color:"green"} : {color:"black"}}/>
-                    <h6 style={data.delivered[index] ? {color:"green"} : {color:"black"}}>Confirm When you received.</h6>
+                    <Card
+                      sx={
+                        data.preparing[index] ?
+                        {
+                        backgroundColor:"#F4EEA9",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        padding: "5px",
+                      } : {
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        padding: "5px",
+                      }}
+                    >
+                      <CheckCircleOutline
+                        sx={
+                          data.preparing[index]
+                            ? { color: "green" }
+                            : { color: "lightgray" }
+                        }
+                      />
+                      <h5
+                        style={
+                          data.preparing[index]
+                            ? { color: "green", margin: "0px" }
+                            : { color: "lightgray", margin: "0px" }
+                        }
+                      >
+                        Preparing...
+                      </h5>
+                      <h6 style={{ margin: "5px", color: "green" }}>
+                        {data.preparedAt[index] !== "now"
+                          ? moment(data.preparedAt[index]).format("LLL")
+                          : null}
+                      </h6>
+                    </Card>
+                    <ArrowRightAlt
+                      fontSize="large"
+                      sx={
+                        data.delivered[index]
+                          ? {
+                              color: "green",
+                            }
+                          : {
+                              color: "lightgray",
+                            }
+                      }
+                    />
+                    <Card
+                      sx={
+                        data.preparing[index] ?
+                        {
+                        backgroundColor:"#F4EEA9",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        padding: "5px",
+                      } : {
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        padding: "5px",
+                      }}
+                    >
+                      <LocalShipping
+                        sx={
+                          data.sentbycargo[index]
+                            ? { color: "green" }
+                            : { color: "lightgray" }
+                        }
+                      />
+                      <h5
+                        style={
+                          data.sentbycargo[index]
+                            ? { color: "green", margin: "0px" }
+                            : { color: "lightgray", margin: "0px" }
+                        }
+                      >
+                        Sent by cargo
+                      </h5>
+                      <h6 style={{ margin: "5px", color: "green" }}>
+                        {data.sentAt[index] !== "now"
+                          ? moment(data.sentAt[index]).format("LLL")
+                          : null}
+                      </h6>
+                    </Card>
+                    <ArrowRightAlt
+                      fontSize="large"
+                      sx={
+                        data.delivered[index]
+                          ? {
+                              color: "green",
+                            }
+                          : {
+                              color: "lightgray",
+                            }
+                      }
+                    />
+
+                    <Card
+                      sx={
+                        data.preparing[index] ?
+                        {
+                        backgroundColor:"#F4EEA9",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        padding: "5px",
+                      } : {
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        padding: "5px",
+                      }}
+                    >
+                      <AssignmentReturnedOutlined
+                        sx={
+                          data.delivered[index]
+                            ? { color: "green" }
+                            : { color: "lightgray" }
+                        }
+                      />
+                      <h5
+                        style={
+                          data.delivered[index]
+                            ? { color: "green", margin: "0px" }
+                            : { color: "lightgray", margin: "0px" }
+                        }
+                      >
+                        Confirm When you received.
+                      </h5>
+                      <h6 style={{ margin: "5px",color:"green" }}>
+                        {data.deliveredAt[index] !== "now"
+                          ? moment(data.deliveredAt[index]).format("LLL")
+                          : null}
+                      </h6>
+                    </Card>
                   </Box>
-                  <Box sx={{display:"flex",justifyContent:"end"}}>
+                  <Box sx={{ display: "flex", justifyContent: "end" }}>
                     <Button
-                      disabled={((data.preparing[index] || data.sentbycargo[index]) && !data.delivered[index])? false : true}
-                      variant="contained"
+                      disabled={
+                        (data.preparing[index] || data.sentbycargo[index]) &&
+                        !data.delivered[index]
+                          ? false
+                          : true
+                      }
                       color="success"
+                      size="small"
                       onClick={() => handleClick(index)}
                     >
                       Yes, I received.

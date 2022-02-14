@@ -46,6 +46,9 @@ export interface Order {
   delivered: Array<boolean>;
   preparing: Array<boolean>;
   sentbycargo: Array<boolean>;
+  deliveredAt: Array<string>;
+  preparedAt: Array<string>;
+  sentAt: Array<string>;
 }
 
 export interface Comments {
