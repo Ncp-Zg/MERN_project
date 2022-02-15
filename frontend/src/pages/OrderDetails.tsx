@@ -16,11 +16,12 @@ import {
 import { Box } from "@mui/system";
 import axios from "axios";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import { IRootState } from "../redux/Reducers/rootReducer";
 import { Order } from "../type";
+import { io, Socket } from "socket.io-client";
 
 const OrderDetail = () => {
   const { user } = useSelector((state: IRootState) => ({ user: state.auth }));
@@ -30,7 +31,10 @@ const OrderDetail = () => {
   const state = location.state as Order;
   console.log(state);
   const [deliver, setDeliver] = useState<Array<Boolean>>(state.delivered);
-  const [data, setData] = useState<Order>(state);
+  const [data, setData] = useState<Order>();
+  const [prep, setPrep] = useState<boolean>();
+  const [cargo, setCargo] = useState<string>();
+  const socket = useRef<Socket>();
 
   console.log(state.delivered);
 
@@ -50,7 +54,7 @@ const OrderDetail = () => {
   console.log(data);
   useEffect(() => {
     getOrder();
-  }, [user.user.token, deliver]);
+  }, [user.user.token, deliver,prep,cargo]);
 
   const handleClick = async (index: number) => {
     console.log(index);
@@ -69,6 +73,22 @@ const OrderDetail = () => {
         setDeliver(res.data.delivered);
       });
   };
+
+  useEffect(() => {
+    socket.current = io("ws://localhost:8900");
+  }, []);
+
+  useEffect(() => {
+    if (socket.current && user.user.id !== "" ) {
+      socket?.current.on("changes",(data) => {
+        if(state._id === data.orderId){
+          setPrep(data.prepared)
+          setCargo(data.cargotracknumber)
+        }
+        
+      });
+    }
+  }, [user.user]);
 
   return (
     <div>

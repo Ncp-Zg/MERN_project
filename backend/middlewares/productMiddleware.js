@@ -6,13 +6,11 @@ const productMiddleware =asyncErrorWrapper(async function (req, res, next) {
     let query = Product.find();
       //Pagination
       const total= await Product.countDocuments();
-      console.log(total)
       const paginationResult = await paginationHelper(total,query,req);
   
       query = paginationResult.query;
   
       const pagination = paginationResult.pagination;
-      console.log(pagination)
   
       const queryResults = await query;
 

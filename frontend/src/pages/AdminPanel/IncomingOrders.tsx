@@ -14,11 +14,13 @@ const IncomingOrders = () => {
   const [sent, setSent] = useState<Array<boolean>>();
   const [orders, setOrders] = useState<number>(0);
   const [trackNumber, setTrackNumber] = useState<number>(0);
+  const [indx, setIndex] = useState<number>(0);
   const socket = useRef<Socket>();
   const { user } = useSelector((state: IRootState) => state.auth);
 
   const changePrep = async (index: number) => {
     if (data) {
+      setIndex(data.length - 1 - index)
       console.log(data[index]?.prepared, data[index]?.cargotracknumber);
       await axios
         .post(
@@ -41,9 +43,10 @@ const IncomingOrders = () => {
   };
 
   const changeSentByCargo = async (index: number) => {
-    if (data && !isNaN(trackNumber)) {
+    if (data && !isNaN(trackNumber) && trackNumber !== 0) {
 
         console.log(trackNumber)
+        setIndex(data.length - 1 - index)
 
       await axios
         .post(
@@ -92,6 +95,13 @@ const IncomingOrders = () => {
     }
   }, [user]);
 
+  useEffect(()=>{
+    if(socket.current){
+      socket.current.emit("changeState",{i:indx,userId:user.id})
+      
+    }
+  },[prep,sent])
+
   console.log(orders);
 
   useEffect(() => {
@@ -127,6 +137,7 @@ const IncomingOrders = () => {
             sent by cargo
           </Button>
           <TextField
+          defaultValue={data[index].cargotracknumber !== "" ? data[index].cargotracknumber : null}
             onChange={(
               e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
             ) => setTrackNumber(+e.target.value)}
