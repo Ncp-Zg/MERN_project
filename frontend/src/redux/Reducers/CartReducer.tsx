@@ -35,13 +35,20 @@ const cartReducer = (state=initialState,Action:Action)=>{
         case ActionTypes.DELETE_ITEM_FROM_CART:
             if(state.cart[Action.payload].amount === 1){
                 state.cart.splice(Action.payload,1)
-            }else{
+            }else if(state.cart[Action.payload].stock === 0){
+                state.cart.splice(Action.payload,1)
+            }
+            else{
                 state.cart[Action.payload].amount = state.cart[Action.payload].amount -1  
             }           
             return state;
 
         case ActionTypes.ADD_ITEM_TO_CART:
             state.cart[Action.payload].amount = state.cart[Action.payload].amount +1  
+            return state;
+
+        case ActionTypes.CHECK_STOCK:
+             state.cart[Action.payload].amount = state.cart[Action.payload].stock  
             return state;
 
         case ActionTypes.EMPTY_BASKET:

@@ -34,8 +34,11 @@ const PaymentPage = () => {
           Authorization: `Bearer ${user?.user.token}`,
         },
       })
-      .then((res) => console.log(res.data));
-    toast.success("Payment is successfull");
+      .then((res) => {console.log(res.data);
+    toast.success("Payment is successfull")})
+    .catch(err=>{console.log(err);toast.error(`${err.response.data.message}`)})
+
+
     setLoading(false);
 
     

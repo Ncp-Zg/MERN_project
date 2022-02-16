@@ -77,4 +77,9 @@ interface set_my_orders {
     payload:Order[]
 }
 
-export type Action = set_User | register_User | logout_user | set_all_products | add_to_cart | delete_cart_item | add_cart_item | empty_basket | set_my_orders | set_like;
+interface check_stock {
+    type: ActionTypes.CHECK_STOCK
+    payload:number
+}
+
+export type Action = set_User | register_User | logout_user | set_all_products | add_to_cart | delete_cart_item | add_cart_item | empty_basket | set_my_orders | set_like | check_stock;

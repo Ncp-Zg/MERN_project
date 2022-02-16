@@ -1,4 +1,5 @@
 const expressAsyncHandler = require("express-async-handler");
+const CustomError = require("../Helpers/CustomError");
 const Orders = require("../Models/ordersModel");
 const Product = require("../Models/productModel");
 const User = require("../Models/userModel");
@@ -29,7 +30,7 @@ const addOrder = expressAsyncHandler(async (req, res) => {
         const productseller = await User.findById(prdct.seller);
         console.log(productseller);
 
-        if(prdct.stock > 0){
+        if(prdct.stock >= req.number[index]){
         
           const SingleProduct = await Product.findById(prdct.id);
           SingleProduct.stock = SingleProduct.stock - req.number[index]
@@ -46,26 +47,7 @@ const addOrder = expressAsyncHandler(async (req, res) => {
             cargotracknumber:""
         })
         await productseller.save()
-        }else{
-
-          productseller.incomingOrders.push({
-            data:prdct,
-            amount:req.number[index],
-            toWho:req.user,
-            orderedAt:newOrder.createdAt,
-            orderId:newOrder.id,
-            prepared:false,
-            cargotracknumber:""
-        })
-          await productseller.save()
-
-          throw new CustomError(`This product(${prdct.id}) is out of stock`,400)
-
         }
-        
-        
-        
-        
     });
 
     

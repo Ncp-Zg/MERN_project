@@ -8,11 +8,13 @@ import Typography from "@mui/material/Typography";
 import { AddCircleRounded, RemoveCircleRounded } from "@mui/icons-material";
 import {
   addItemToCart,
+  checkStock,
   deleteItemFromCart,
 } from "../redux/ActionCreators/CartActionCreators";
 import { useEffect, useRef, useState } from "react";
 import { Button, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const ShoppingCart = () => {
   const navigate = useNavigate();
@@ -23,23 +25,45 @@ const ShoppingCart = () => {
   const dispatch = useDispatch();
   const [amount, setAmount] = useState<number>(0);
   const [id, setId] = useState<number>(0);
+  const [state, setState] = useState<boolean>(false);
   console.log(cart);
   const handleIncrease = (i: number) => {
     setAmount(cart[i].amount);
-    setId(cart[i]._id)
+    setId(cart[i]._id);
     dispatch(addItemToCart(i));
   };
 
   const handleDecrease = (i: number) => {
-    setId(cart[i]._id)
+    setId(cart[i]._id);
     setAmount(cart[i].amount);
     dispatch(deleteItemFromCart(i));
   };
 
-  console.log(amount,id);
+  const handleClick = () => {
+    cart.map((prdct, index) => {
+      if (prdct.amount > prdct.stock && prdct.stock !== 0) {
+        dispatch(checkStock(index));
+        setState(!state);
+        toast.warn(
+          `${prdct.title} is already updated with new amount you can buy `
+        );
+      }else if(prdct.stock === 0){
+        dispatch(deleteItemFromCart(index))
+        toast.warn(
+          `${prdct.title} is out of stock `
+        );
+        setState(!state);
+
+      } else {
+        navigate("/shoppingcart/payment", { state: ref.current });
+      }
+    });
+  };
+
+  console.log(amount, id, state);
   useEffect(() => {
     console.log("render");
-  }, [id,amount]);
+  }, [id, amount, state]);
 
   if (cart[0]?._id !== 0) {
     const sumAll = cart
@@ -132,7 +156,7 @@ const ShoppingCart = () => {
                 variant="contained"
                 size="small"
                 sx={{ marginTop: "20px" }}
-                onClick={()=>navigate("/shoppingcart/payment",{state:ref.current})}
+                onClick={() => handleClick()}
               >
                 Continue
               </Button>
