@@ -37,6 +37,9 @@ import OrderDetails from '../pages/OrderDetails';
 import Myfavorites from '../pages/Myfavorites';
 import EditMyProduct from '../pages/AdminPanel/EditMyProduct';
 import IncomingOrders from '../pages/AdminPanel/IncomingOrders';
+import {Elements} from '@stripe/react-stripe-js';
+import {loadStripe} from '@stripe/stripe-js';
+
 
 const drawerWidth = 240;
 
@@ -94,7 +97,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function PersistentDrawerLeft() {
 
-
+  const stripePromise = loadStripe(`${process.env.REACT_APP_STRIPE_PUBLIC_KEY}`);
 
 const {user} = useSelector((state: IRootState)=>({user:state.auth.user }));
 const dispatch = useDispatch()
@@ -233,7 +236,13 @@ const handleClick = async()=>{
         <Route path="/admin/incomingorders" element={<IncomingOrders />} />
         <Route path="/details/:id" element={<ProductDetails />} />
         <Route path="/shoppingcart" element={<ShoppingCart />} />
-        <Route path="/shoppingcart/payment" element={<PaymentPage />} />
+          
+            <Route path="/shoppingcart/payment" element={
+            <Elements stripe={stripePromise}>
+              <PaymentPage />
+              </Elements>
+            } />
+          
       </Routes>
         
       </Main>

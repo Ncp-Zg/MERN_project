@@ -8,9 +8,18 @@ import { toast } from "react-toastify";
 import { io, Socket } from "socket.io-client";
 import { emptyBasket } from "../redux/ActionCreators/CartActionCreators";
 import { IRootState } from "../redux/Reducers/rootReducer";
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import {Elements} from '@stripe/react-stripe-js';
+import {loadStripe} from '@stripe/stripe-js';
+
 
 const PaymentPage = () => {
+  
+  const stripe:any = useStripe();
+  const elements:any = useElements();
+
   const [loading, setLoading] = useState<boolean>(false);
+  const [clientSecret, setClientSecret] = useState<boolean>(true);
   const { state } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -51,11 +60,36 @@ const PaymentPage = () => {
     navigate("/home");
   };
 
+  useEffect(() => {
+    const getClientSecret = async () => {
+      await axios.post(`http://localhost:5000/api/payment/add/?total=${state}`).then(res=>{console.log(res.data);setClientSecret(res.data.clientSecret)}).catch(err=>console.log(err.response))
+      
+      
+    };
+
+    getClientSecret();
+  }, []);
+
+  const handleSubmit = async (e:any) => {
+    e.preventDefault();
+
+    const payload = await stripe
+      .confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: elements.getElement(CardElement),
+        },
+      })
+      .then(({ paymentIntent } :any) => {
+        console.log(paymentIntent)
+
+      });
+  };
+
   return (
     <div>
       {!loading ? (
         <div>
-          <div style={{ display: "flex", justifyContent: "center" }}>
+            <div style={{ display: "flex", justifyContent: "center" }}>
             <Card
               style={{
                 height: "50vh",
@@ -66,6 +100,9 @@ const PaymentPage = () => {
               }}
             >
               <h3>Credit Card Information</h3>
+              <form onSubmit={handleSubmit}>
+              <CardElement/>
+              </form>
             </Card>
           </div>
           <div
@@ -88,7 +125,7 @@ const PaymentPage = () => {
               <h3>Total:₺{state}</h3>
               <Button onClick={handleClick}>Buy</Button>
             </Card>
-          </div>
+          </div>     
         </div>
       ) : (
         <div
