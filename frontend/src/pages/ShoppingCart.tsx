@@ -40,7 +40,7 @@ const ShoppingCart = () => {
   };
 
   const handleClick = () => {
-    cart.map((prdct, index) => {
+    cart.forEach((prdct, index) => {
       if (prdct.amount > prdct.stock && prdct.stock !== 0) {
         dispatch(checkStock(index));
         setState(!state);

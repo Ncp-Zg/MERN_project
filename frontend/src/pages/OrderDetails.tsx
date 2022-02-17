@@ -47,7 +47,7 @@ const OrderDetail = () => {
             Authorization: `Bearer ${user?.user.token}`,
           },
         })
-        .then((res) => setData(res.data.data));
+        .then((res) => setData(res.data.data)).catch(err=>console.log(err.response));
     }
   };
 
