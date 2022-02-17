@@ -21,13 +21,13 @@ const MyProduct: FunctionComponent<IItemProps> = (props) => {
   const { item } = props;
 
   return (
-    <Card sx={{ maxWidth: 320, margin: "10px" }}>
+    <Card sx={{width: 300, margin: "10px" }}>
       <div className="slideshow-container1">
         <CardMedia
           className="fade"
-          sx={{ objectFit: "contain", maxWidth:"320px" }}
-          component="img"
+          sx={{ objectFit: "contain"}}
           height="250"
+          component="img"
           image={item.img[index]}
           alt={item.title}
         />

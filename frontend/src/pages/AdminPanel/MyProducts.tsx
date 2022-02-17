@@ -61,7 +61,7 @@ const MyProducts = () => {
         getProfile();
     },[user.token])
     return (
-        <div>
+        <div style={{display:"flex",flexWrap:"wrap",justifyContent:"center"}}>
             {myProducts ? 
             (myProducts?.map(prdct => <MyProduct key={prdct._id} item={prdct}/>)) : loading ? (<div
                 style={{

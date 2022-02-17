@@ -51,7 +51,7 @@ const Myorders = () => {
                   display: "grid",
                   gridAutoRows:"1fr,1fr,1fr",
                   width:"80vh",
-                    padding:"5px 5px 0px 5px",
+                    padding:"5px 5px 5px 5px",
                   alignItems: "center",
                   marginBottom: "5px",
                 }}
@@ -63,7 +63,7 @@ const Myorders = () => {
                     {ref.current = order.order.map((c,index) => +order.amount[index] * +c.cost)
                     .reduce((prev, curr) => prev + curr, 0)}₺
                 </h3>
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                <div style={{display:"flex",justifyContent:"end",alignItems:"center"}}>
                   <Button variant="contained" size="small" onClick={()=>navigate(`/profile/myorders/${order._id}`,{state:order})}>Details</Button>  
                 </div>
                 

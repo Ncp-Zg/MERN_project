@@ -28,7 +28,7 @@ import { Button } from '@mui/material';
 import { logoutUser } from '../redux/ActionCreators/AuthActionCreators';
 import axios from 'axios';
 import ProductDetails from '../pages/ProductDetails';
-import { AddBusiness, AppRegistrationOutlined, HomeMax, ListAltOutlined, LoginOutlined, RemoveCircleOutline, VerifiedUserOutlined } from '@mui/icons-material';
+import { AddBusiness, AppRegistrationOutlined, CoPresentOutlined, ExitToAppOutlined, HomeMax, HomeMiniOutlined, HomeOutlined, ListAltOutlined, LoginOutlined, MoveToInboxOutlined, RemoveCircleOutline, VerifiedUserOutlined } from '@mui/icons-material';
 import ShoppingCart from '../pages/ShoppingCart';
 import PaymentPage from '../pages/PaymentPage';
 import { toast, ToastContainer } from 'react-toastify';
@@ -194,7 +194,7 @@ const handleClick = async()=>{
           ['Home', 'Login', 'Register', 'Profile'].map((text, index) => (
             <ListItem button key={text} onClick={()=>changeRoute(text)}>
               <ListItemIcon>
-                {index === 0 ? <HomeMax /> : index === 1 ? <LoginOutlined /> : index === 2 ? <AppRegistrationOutlined/> : <VerifiedUserOutlined/> }
+                {index === 0 ? <HomeOutlined /> : index === 1 ? <ExitToAppOutlined /> : index === 2 ? <AppRegistrationOutlined/> : <CoPresentOutlined/> }
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
@@ -206,7 +206,7 @@ const handleClick = async()=>{
           <ListItem>Admin Panel</ListItem>{['Add Product', 'Incoming Orders', 'My Products'].map((text, index) => (
             <ListItem button key={text} onClick={()=>changeRouteAdmin(text)}>
               <ListItemIcon>
-                {index === 0 ? <AddBusiness /> : index === 1 ? <RemoveCircleOutline/> : <ListAltOutlined/>}
+                {index === 0 ? <AddBusiness /> : index === 1 ? <MoveToInboxOutlined/> : <ListAltOutlined/>}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
