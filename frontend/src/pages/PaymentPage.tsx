@@ -9,17 +9,16 @@ import { io, Socket } from "socket.io-client";
 import { emptyBasket } from "../redux/ActionCreators/CartActionCreators";
 import { IRootState } from "../redux/Reducers/rootReducer";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import {Elements} from '@stripe/react-stripe-js';
-import {loadStripe} from '@stripe/stripe-js';
-
 
 const PaymentPage = () => {
-  
-  const stripe:any = useStripe();
-  const elements:any = useElements();
+  const stripe: any = useStripe();
+  const elements: any = useElements();
 
+  const [processing, setProcessing] = useState<boolean>(false);
+  const [error, setError] = useState(null);
+  const [disabled, setDisabled] = useState(true);
   const [loading, setLoading] = useState<boolean>(false);
-  const [clientSecret, setClientSecret] = useState<boolean>(true);
+  const [clientSecret, setClientSecret] = useState<string>("");
   const { state } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -34,62 +33,120 @@ const PaymentPage = () => {
     socket.current = io("ws://localhost:8900");
   }, []);
 
-  const handleClick = async () => {
-    setLoading(true);
-    await axios
+  // const handleClick = async () => {
+  //   setLoading(true);
+  //   await axios
+  //     .post("http://localhost:5000/api/orders/addorders", cart, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${user?.user.token}`,
+  //       },
+  //     })
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       toast.success("Payment is successfull");
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       toast.error(`${err.response.data.message}`);
+  //     });
+
+  //   setLoading(false);
+
+  //   cart.forEach((crt) => {
+  //     setTimeout(() => {
+  //       if (socket.current && user.user.id !== "") {
+  //         socket?.current.emit("addUser", crt.seller);
+  //       }
+  //     }, 500);
+  //   });
+
+  //   dispatch(emptyBasket());
+  //   navigate("/home");
+  // };
+
+  useEffect(() => {
+    if(cart[0].cost !== ""){const getClientSecret = async () => {
+      await axios
+        .post(`http://localhost:5000/api/payment/add/?total=${state}`)
+        .then((res) => {
+          console.log(res.data);
+          setClientSecret(res.data.clientSecret);
+        })
+        .catch((err) => console.log(err.response));
+    };
+
+    getClientSecret();}else{
+      toast.warning("your cart is empty")
+    }
+  }, []);
+
+  const handleSubmit = async (e: any) => {
+    setProcessing(true);
+    
+    e.preventDefault();
+
+    await stripe
+      .confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: elements.getElement(CardElement),
+        },
+      })
+      .then(async (data: any) => {
+        if(data.error){
+          toast.error(data.error.message)
+          setProcessing(false)
+        }else{
+          setLoading(true);
+        await axios
       .post("http://localhost:5000/api/orders/addorders", cart, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${user?.user.token}`,
         },
       })
-      .then((res) => {console.log(res.data);
-    toast.success("Payment is successfull")})
-    .catch(err=>{console.log(err);toast.error(`${err.response.data.message}`)})
+      .then((res) => {
+        console.log(res.data);
+        toast.success("Payment is successfull");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(`${err.response.data.message}`);
+      });
 
-
+      setProcessing(false)
+      setError(null);
     setLoading(false);
 
-    
-      cart.forEach((crt) => {
-            setTimeout(()=>{if(socket.current && user.user.id !== "") {socket?.current.emit("addUser", crt.seller)}},500)
-        
-      });
-    
+    cart.forEach((crt) => {
+      setTimeout(() => {
+        if (socket.current && user.user.id !== "") {
+          socket?.current.emit("addUser", crt.seller);
+        }
+      }, 500);
+    });
+
     dispatch(emptyBasket());
     navigate("/home");
+      
+
+        }
+        })
+      
   };
 
-  useEffect(() => {
-    const getClientSecret = async () => {
-      await axios.post(`http://localhost:5000/api/payment/add/?total=${state}`).then(res=>{console.log(res.data);setClientSecret(res.data.clientSecret)}).catch(err=>console.log(err.response))
-      
-      
-    };
+  const handleChange = (e:any)=>{
+    console.log(e.empty)
+      setDisabled(e.empty);
+      setError(e.error ? e.error.massage : "");
+  }
 
-    getClientSecret();
-  }, []);
-
-  const handleSubmit = async (e:any) => {
-    e.preventDefault();
-
-    const payload = await stripe
-      .confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: elements.getElement(CardElement),
-        },
-      })
-      .then(({ paymentIntent } :any) => {
-        console.log(paymentIntent)
-
-      });
-  };
-
+  
   return (
     <div>
       {!loading ? (
         <div>
-            <div style={{ display: "flex", justifyContent: "center" }}>
+          <div style={{ display: "flex", justifyContent: "center" }}>
             <Card
               style={{
                 height: "50vh",
@@ -99,10 +156,17 @@ const PaymentPage = () => {
                 justifyContent: "center",
               }}
             >
-              <h3>Credit Card Information</h3>
-              <form onSubmit={handleSubmit}>
-              <CardElement/>
+              {/* <h3>Credit Card Information</h3> */}
+              <div style={{display:"flex",justifyContent:"center",flexDirection:"column"}}>
+              <form onSubmit={handleSubmit} style={{marginTop:"20px"}}>
+                <CardElement onChange={handleChange}/>
+                <Button sx={{ width: 300 }} type="submit" disabled={processing || disabled}>
+                <span>{processing ? <p>Processing</p> : "Buy Now"}</span>
+                </Button>
+                {error && <div>{error}</div>}
               </form>
+              </div>
+              
             </Card>
           </div>
           <div
@@ -122,10 +186,10 @@ const PaymentPage = () => {
                 padding: "10px",
               }}
             >
-              <h3>Total:₺{state}</h3>
-              <Button onClick={handleClick}>Buy</Button>
+              <h3>Total:${state}</h3>
+              {/* <Button onClick={handleClick}>Buy</Button> */}
             </Card>
-          </div>     
+          </div>
         </div>
       ) : (
         <div

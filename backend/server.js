@@ -12,7 +12,7 @@ const customErrorHandler = require("./Middlewares/errorMiddleware");
 
 const app = express();
 
-app.use(cors({origin: true}));
+app.use(cors({origin: "http://localhost:3000"}));
 app.use(express.json())
 dotenv.config();
 connectDB();
