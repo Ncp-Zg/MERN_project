@@ -71,7 +71,7 @@ export interface formdata {
   category: string;
   description: string;
   stock: number;
-  cost: number;
+  cost: string;
   title: string;
 }
 

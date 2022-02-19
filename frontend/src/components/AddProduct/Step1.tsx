@@ -14,8 +14,8 @@ export interface form {
   formdata: {
     category: string;
     description: string;
-    stock: string;
-    cost: string;
+    stock: number;
+    cost: number;
     title: string;
     seller: string;
     img: Array<any>;

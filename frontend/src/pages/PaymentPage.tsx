@@ -9,6 +9,7 @@ import { io, Socket } from "socket.io-client";
 import { emptyBasket } from "../redux/ActionCreators/CartActionCreators";
 import { IRootState } from "../redux/Reducers/rootReducer";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import CurrencyFormat from "react-currency-format";
 
 const PaymentPage = () => {
   const stripe: any = useStripe();
@@ -19,7 +20,7 @@ const PaymentPage = () => {
   const [disabled, setDisabled] = useState(true);
   const [loading, setLoading] = useState<boolean>(false);
   const [clientSecret, setClientSecret] = useState<string>("");
-  const { state } = useLocation();
+  const { state } :any = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { cart, user } = useSelector((state: IRootState) => ({
@@ -33,53 +34,54 @@ const PaymentPage = () => {
     socket.current = io("ws://localhost:8900");
   }, []);
 
-  // const handleClick = async () => {
-  //   setLoading(true);
-  //   await axios
-  //     .post("http://localhost:5000/api/orders/addorders", cart, {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${user?.user.token}`,
-  //       },
-  //     })
-  //     .then((res) => {
-  //       console.log(res.data);
-  //       toast.success("Payment is successfull");
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       toast.error(`${err.response.data.message}`);
-  //     });
+  const handleClick = async () => {
+    setLoading(true);
+    await axios
+      .post("http://localhost:5000/api/orders/addorders", cart, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.user.token}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        toast.success("Payment is successfull");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(`${err.response.data.message}`);
+      });
 
-  //   setLoading(false);
+    setLoading(false);
 
-  //   cart.forEach((crt) => {
-  //     setTimeout(() => {
-  //       if (socket.current && user.user.id !== "") {
-  //         socket?.current.emit("addUser", crt.seller);
-  //       }
-  //     }, 500);
-  //   });
+    cart.forEach((crt) => {
+      setTimeout(() => {
+        if (socket.current && user.user.id !== "") {
+          socket?.current.emit("addUser", crt.seller);
+        }
+      }, 500);
+    });
 
-  //   dispatch(emptyBasket());
-  //   navigate("/home");
-  // };
+    dispatch(emptyBasket());
+    navigate("/home");
+  };
 
-  useEffect(() => {
-    if(cart[0].cost !== ""){const getClientSecret = async () => {
-      await axios
-        .post(`http://localhost:5000/api/payment/add/?total=${state}`)
-        .then((res) => {
-          console.log(res.data);
-          setClientSecret(res.data.clientSecret);
-        })
-        .catch((err) => console.log(err.response));
-    };
+  // useEffect(() => {
+  //   if(cart[0].cost !== ""){
+  //     const getClientSecret = async () => {
+  //     await axios
+  //       .post(`http://localhost:5000/api/payment/add/?total=${state*100}`)
+  //       .then((res) => {
+  //         console.log(res.data);
+  //         setClientSecret(res.data.clientSecret);
+  //       })
+  //       .catch((err) => console.log(err.response));
+  //   };
 
-    getClientSecret();}else{
-      toast.warning("your cart is empty")
-    }
-  }, []);
+  //   getClientSecret();}else{
+  //     toast.warning("your cart is empty")
+  //   }
+  // }, []);
 
   const handleSubmit = async (e: any) => {
     setProcessing(true);
@@ -120,7 +122,7 @@ const PaymentPage = () => {
 
     cart.forEach((crt) => {
       setTimeout(() => {
-        if (socket.current && user.user.id !== "") {
+        if (socket.current && crt.seller !== "") {
           socket?.current.emit("addUser", crt.seller);
         }
       }, 500);
@@ -186,8 +188,22 @@ const PaymentPage = () => {
                 padding: "10px",
               }}
             >
-              <h3>Total:${state}</h3>
-              {/* <Button onClick={handleClick}>Buy</Button> */}
+              <CurrencyFormat
+                  renderText={(value:any) => (
+                    <>
+                      <h3>
+                        Order Total:{" "}
+                        <strong>{value}</strong>
+                      </h3>
+                    </>
+                  )}
+                  decimalScale={2}
+                  value={state}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₺"}
+                />
+              <Button onClick={handleClick}>Buy</Button>
             </Card>
           </div>
         </div>

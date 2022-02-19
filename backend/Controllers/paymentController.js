@@ -7,7 +7,7 @@ const paymentController = asyncHandler(async (req, res) => {
     console.log("payment request recieved >>>>",total)
     const paymentIntent = await stripe.paymentIntents.create({
         amount: total, // subunits of the currency
-        currency: "usd",
+        currency: "try",
     });
 
     // OK - Created

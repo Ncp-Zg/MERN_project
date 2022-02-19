@@ -74,8 +74,8 @@ const AddProduct = () => {
   const [formData, setFormData] = useState({
     category: "",
     description: "",
-    stock: "",
-    cost: "",
+    stock: 0,
+    cost: 0,
     title: "",
     seller: "",
     img: [],
@@ -128,7 +128,8 @@ const AddProduct = () => {
               color={page === FormTitles.length - 1 ? "success" : "primary"}
               onClick={async (e) => {
                 if (page === FormTitles.length - 1) {
-                  e.preventDefault();
+                  if(!isNaN(formData.stock) && !isNaN(+formData.cost)){
+                    e.preventDefault();
                   await axios
                     .post(
                       "http://localhost:5000/api/products/add",
@@ -151,6 +152,11 @@ const AddProduct = () => {
                       toast.success("Product added successfully");
                       navigate("/home");
                     });
+                  }else{
+                    console.log(typeof formData.stock,+formData.cost)
+                    toast.error("provide a valid stock or cost for the product")
+                  }
+                  
                 } else {
                   setPage((currPage) => currPage + 1);
                 }

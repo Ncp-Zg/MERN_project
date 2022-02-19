@@ -36,14 +36,14 @@ io.on("connection",(socket)=>{
     //take userId and socketId from user
 
     socket.on("changeState", async ({i,userId})=>{
-        await findOrder(i,userId)
-        io.emit("changes",data)
+        if(userId.match(/^[0-9a-fA-F]{24}$/)){await findOrder(i,userId)
+        io.emit("changes",data)}
     })
 
 
     socket.on("addUser", async (userId) =>{
-        await addUser(userId,socket.id);
-        io.emit("getUsers",seller)
+        if(userId.match(/^[0-9a-fA-F]{24}$/)){await addUser(userId,socket.id);
+        io.emit("getUsers",seller)}
     });
 
     // socket.on("disconnect",()=>{

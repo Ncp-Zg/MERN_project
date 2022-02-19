@@ -17,7 +17,7 @@ const EditMyProduct = () => {
     category:  "",
     description: "",
     stock:  0,
-    cost:  0,
+    cost:  "",
     title:"",
   });
 
@@ -37,7 +37,7 @@ const EditMyProduct = () => {
   };
 
   const handleClick = async () => {
-    await axios.put(`http://localhost:5000/api/users/admin/${id}/edit`,formData,{
+    await axios.put(`http://localhost:5000/api/users/admin/${id}/edit`,{...formData,stock:+(formData.stock)},{
       headers:{
         "Content-type":"application/json",
         Authorization:`Bearer ${user?.token}`
@@ -187,7 +187,7 @@ const EditMyProduct = () => {
             variant="filled"
             sx={{ width: "90%",marginBottom:"4px"}}
             onChange={(e) =>
-              setFormData({ ...formData, cost: +e.target.value })}
+              setFormData({ ...formData, cost: (+e.target.value).toFixed(2) })}
           />
           <Button variant="contained" sx={{width:"90%",marginBottom:"2rem"}} onClick={handleClick}>Edit</Button>
         </div>

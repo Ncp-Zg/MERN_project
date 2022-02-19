@@ -20,6 +20,7 @@
     "axios": "^0.24.0",
     "moment": "^2.29.1",
     "react": "^17.0.2",
+    "react-currency-format": "^1.1.0",
     "react-dom": "^17.0.2",
     "react-paginate": "^8.1.0",
     "react-popup-alert": "^2.0.0",
@@ -62,6 +63,7 @@
     ]
   },
   "devDependencies": {
-    "@types/react-credit-cards": "^0.8.1"
+    "@types/react-credit-cards": "^0.8.1",
+    "@types/react-currency-format": "^1.0.0"
   }
 }
