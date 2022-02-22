@@ -15,10 +15,12 @@ import { useEffect, useRef, useState } from "react";
 import { Button, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import CurrencyFormat from "react-currency-format";
 
 const ShoppingCart = () => {
   const navigate = useNavigate();
   const ref = useRef<number>(0);
+  const counterRef = useRef<number>(0);
   const { cart } = useSelector((state: IRootState) => ({
     cart: state.cart.cart,
   }));
@@ -40,6 +42,7 @@ const ShoppingCart = () => {
   };
 
   const handleClick = () => {
+    counterRef.current = 0;
     cart.forEach((prdct, index) => {
       if (prdct.amount > prdct.stock && prdct.stock !== 0) {
         dispatch(checkStock(index));
@@ -47,15 +50,15 @@ const ShoppingCart = () => {
         toast.warn(
           `${prdct.title} is already updated with new amount you can buy `
         );
-      }else if(prdct.stock === 0){
-        dispatch(deleteItemFromCart(index))
-        toast.warn(
-          `${prdct.title} is out of stock `
-        );
+      } else if (prdct.stock === 0) {
+        dispatch(deleteItemFromCart(index));
+        toast.warn(`${prdct.title} is out of stock `);
         setState(!state);
-
       } else {
-        navigate("/shoppingcart/payment", { state: ref.current });
+        counterRef.current = counterRef.current + 1;
+        if (counterRef.current === cart.length) {
+          navigate("/shoppingcart/payment", { state: ref.current });
+        }
       }
     });
   };
@@ -136,9 +139,21 @@ const ShoppingCart = () => {
                     alignSelf: "center",
                   }}
                 >
-                  <Typography component="div" variant="h5">
-                    ₺{crt.amount * +crt.cost}
-                  </Typography>
+                  <CurrencyFormat
+                    renderText={(value: any) => (
+                      <>
+                        <h2>
+                          {" "}
+                          <strong>{value}</strong>
+                        </h2>
+                      </>
+                    )}
+                    decimalScale={2}
+                    value={crt.amount * +crt.cost}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={"₺"}
+                  />
                 </Box>
               </Card>
             ))
@@ -148,7 +163,21 @@ const ShoppingCart = () => {
           <Card style={{ height: "87vh", maxWidth: "100vh", padding: "10px" }}>
             Total : <hr />
             <div style={{ display: "flex", justifyContent: "end" }}>
-              <Typography variant="h3">₺{ref.current}</Typography>
+              <CurrencyFormat
+                renderText={(value: any) => (
+                  <>
+                    <h1>
+                      {" "}
+                      <strong>{value}</strong>
+                    </h1>
+                  </>
+                )}
+                decimalScale={2}
+                value={ref.current}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={"₺"}
+              />
             </div>
             <div style={{ display: "flex", justifyContent: "end" }}>
               <Button

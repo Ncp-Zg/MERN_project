@@ -38,11 +38,11 @@ const addOrder = expressAsyncHandler(async (req, res) => {
           await SingleProduct.save();
           
           productseller.incomingOrders.push({
-            data:prdct,
+            product:prdct,
             amount:req.number[index],
             toWho:req.user,
             orderedAt:newOrder.createdAt,
-            orderId:newOrder.id,
+            orderId:newOrder,
             prepared:false,
             cargotracknumber:""
         })

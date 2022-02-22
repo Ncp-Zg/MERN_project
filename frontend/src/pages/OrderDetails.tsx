@@ -166,7 +166,7 @@ const OrderDetail = () => {
                       }}
                     >
                       <Typography component="div" variant="h4">
-                        ₺{crt.cost}
+                        ₺{crt.cost*data?.amount[index]}
                       </Typography>
                     </Box>
                   </div>

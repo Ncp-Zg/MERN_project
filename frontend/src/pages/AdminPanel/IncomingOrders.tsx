@@ -27,7 +27,7 @@ const IncomingOrders = () => {
           "http://localhost:5000/api/orders/myorders/changepreparing",
           {
             orderId: data[index].orderId,
-            productId: data[index].data._id,
+            productId: data[index].product._id,
             index: data.length - 1 - index,
           },
           {
@@ -51,7 +51,7 @@ const IncomingOrders = () => {
       await axios
         .post(
           "http://localhost:5000/api/orders/myorders/changesentbycargo",
-          { orderId: data[index].orderId, productId: data[index].data._id, trackNo:trackNumber, i: data.length - 1 - index },
+          { orderId: data[index].orderId, productId: data[index].product._id, trackNo:trackNumber, i: data.length - 1 - index },
           {
             headers: {
               "Content-Type": "application/json",
@@ -75,7 +75,7 @@ const IncomingOrders = () => {
             Authorization: `Bearer ${user?.token}`,
           },
         })
-        .then((res) => setData(res.data.incomingOrders.reverse()))
+        .then((res) => {setData(res.data.incomingOrders.reverse());console.log(res.data.incomingOrders)})
         .catch((err) => toast.warn(err.response.data.message));
     }
   };
@@ -112,7 +112,7 @@ const IncomingOrders = () => {
     <div>
       {data?.map((ordr, index) => (
         <Card
-          key={index}
+          key={ordr._id}
           sx={{
             marginBottom: "4px",
             padding: "0px 0px 5px 5px",
@@ -120,7 +120,7 @@ const IncomingOrders = () => {
           }}
         >
           <h3>
-            {ordr.data.title} : {ordr.amount} piece
+            {ordr.product.title} : {ordr.amount} piece
           </h3>
           <h4>Customer : {ordr.toWho.email}</h4>
           <p>{moment(ordr.orderedAt).format("LLL")}</p>

@@ -76,7 +76,8 @@ export interface formdata {
 }
 
 export interface incomingOrders {
-  data : Item;
+  _id:string;
+  product : Item;
   amount: number;
   orderedAt : string;
   toWho: {

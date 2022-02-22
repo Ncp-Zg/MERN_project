@@ -163,7 +163,7 @@ const getIncomingOrders = asyncHandler(async (req, res) => {
   if (!req.user.isAdmin) {
     throw new CustomError("You are not admin", 400);
   } else {
-    const user = await User.findById(req.user.id)
+    const user = await User.findById(req.user.id).populate("incomingOrders.product").populate("incomingOrders.toWho")
     
     res.status(200).json({
         incomingOrders : user.incomingOrders
