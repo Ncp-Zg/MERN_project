@@ -51,6 +51,9 @@ const userSchema = mongoose.Schema(
         },
         cargotracknumber:{
             type:String,
+        },
+        orderedAt:{
+            type:String
         }
       },
     ],

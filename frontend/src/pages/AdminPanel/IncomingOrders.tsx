@@ -7,9 +7,18 @@ import { toast } from "react-toastify";
 import { IRootState } from "../../redux/Reducers/rootReducer";
 import { incomingOrders } from "../../type";
 import { io, Socket } from "socket.io-client";
+import { ClimbingBoxLoader, ClipLoader } from "react-spinners";
+import Orders from "../../components/Orders";
+import Alert from 'react-popup-alert'
+import 'react-popup-alert/dist/index.css'
+import { useNavigate } from "react-router-dom";
 
 const IncomingOrders = () => {
   const [data, setData] = useState<incomingOrders[]>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const [loadingPrep, setLoadingPrep] = useState<number>(-1);
+  const [loadingCargo, setLoadingCargo] = useState<number>(-1);
   const [prep, setPrep] = useState<Array<boolean>>();
   const [sent, setSent] = useState<Array<boolean>>();
   const [orders, setOrders] = useState<number>(0);
@@ -17,10 +26,36 @@ const IncomingOrders = () => {
   const [indx, setIndex] = useState<number>(0);
   const socket = useRef<Socket>();
   const { user } = useSelector((state: IRootState) => state.auth);
+  const navigate = useNavigate();
+
+  const [alert, setAlert] = useState({
+    type: 'error',
+    text: 'This is a alert message',
+    show: false
+  })
+
+  function onCloseAlert() {
+    setAlert({
+      type: '',
+      text: '',
+      show: false
+    });
+    navigate("/login")
+  }
+
+  function onShowAlert(type:any) {
+    setAlert({
+      type: type,
+      text: 'You need to login. Your token is expired already.',
+      show: true
+    })
+  }
+
 
   const changePrep = async (index: number) => {
     if (data) {
-      setIndex(data.length - 1 - index)
+      setLoadingPrep(index);
+      setIndex(data.length - 1 - index);
       console.log(data[index]?.prepared, data[index]?.cargotracknumber);
       await axios
         .post(
@@ -37,21 +72,34 @@ const IncomingOrders = () => {
             },
           }
         )
-        .then((res) => setPrep(res.data.preparing))
-        .catch((err) => console.log(err.response.data.message));
+        .then((res) => {
+          setPrep(res.data.preparing);
+          setLoadingPrep(-1);
+        })
+        .catch((err) => {
+          console.log(err.response.data.message);
+          toast.warn(err.response.data.message);
+          setError(true);
+          setLoadingPrep(-1);
+        });
     }
   };
 
   const changeSentByCargo = async (index: number) => {
     if (data && !isNaN(trackNumber) && trackNumber !== 0) {
-
-        console.log(trackNumber)
-        setIndex(data.length - 1 - index)
+      setLoadingCargo(index);
+      console.log(trackNumber);
+      setIndex(data.length - 1 - index);
 
       await axios
         .post(
           "http://localhost:5000/api/orders/myorders/changesentbycargo",
-          { orderId: data[index].orderId, productId: data[index].product._id, trackNo:trackNumber, i: data.length - 1 - index },
+          {
+            orderId: data[index].orderId,
+            productId: data[index].product._id,
+            trackNo: trackNumber,
+            i: data.length - 1 - index,
+          },
           {
             headers: {
               "Content-Type": "application/json",
@@ -59,15 +107,26 @@ const IncomingOrders = () => {
             },
           }
         )
-        .then((res) => setSent(res.data.sentbycargo))
-        .catch((err) => console.log(err.response.data.message));
-    }else{
-        toast.warn("Please provide a valid track Number")
+        .then((res) => {
+          setSent(res.data.sentbycargo);
+          setLoadingCargo(-1);
+        })
+        .catch((err) => {
+          console.log(err.response.data.message);
+          toast.warn(err.response.data.message);
+          setError(true);
+          setLoadingCargo(-1);
+        });
+    } else {
+      toast.warn("Please provide a valid track Number");
     }
   };
 
   const getIncomingOrders = async () => {
     if (user.token !== "") {
+      if(!data){
+        setLoading(true);
+      }
       await axios
         .get("http://localhost:5000/api/users/admin/incomingorders", {
           headers: {
@@ -75,8 +134,16 @@ const IncomingOrders = () => {
             Authorization: `Bearer ${user?.token}`,
           },
         })
-        .then((res) => {setData(res.data.incomingOrders.reverse());console.log(res.data.incomingOrders)})
-        .catch((err) => toast.warn(err.response.data.message));
+        .then((res) => {
+          setData(res.data.incomingOrders.reverse());
+          console.log(res.data.incomingOrders);
+          setLoading(false);
+        })
+        .catch((err) => {
+          toast.warn(err.response.data.message);
+          setError(true);
+          setLoading(false);
+        });
     }
   };
 
@@ -95,12 +162,11 @@ const IncomingOrders = () => {
     }
   }, [user]);
 
-  useEffect(()=>{
-    if(socket.current){
-      socket.current.emit("changeState",{i:indx,userId:user.id})
-      
+  useEffect(() => {
+    if (socket.current) {
+      socket.current.emit("changeState", { i: indx, userId: user.id });
     }
-  },[prep,sent])
+  }, [prep, sent]);
 
   console.log(orders);
 
@@ -110,43 +176,50 @@ const IncomingOrders = () => {
 
   return (
     <div>
-      {data?.map((ordr, index) => (
-        <Card
+      {!loading && !error ? data?.map((ordr, index) => (
+        <Orders
           key={ordr._id}
-          sx={{
-            marginBottom: "4px",
-            padding: "0px 0px 5px 5px",
-            backgroundColor: "#E4CDA7",
-          }}
-        >
-          <h3>
-            {ordr.product.title} : {ordr.amount} piece
-          </h3>
-          <h4>Customer : {ordr.toWho.email}</h4>
-          <p>{moment(ordr.orderedAt).format("LLL")}</p>
-          <Button
-            disabled={data[index].prepared ? true : false}
-            onClick={() => changePrep(index)}
-          >
-            preparing...
-          </Button>
-          <Button
-            disabled={data[index].cargotracknumber === "" ? false : true}
-            onClick={() => changeSentByCargo(index)}
-          >
-            sent by cargo
-          </Button>
-          <TextField
-          defaultValue={data[index].cargotracknumber !== "" ? data[index].cargotracknumber : null}
-            onChange={(
-              e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-            ) => setTrackNumber(+e.target.value)}
-            disabled={data[index].cargotracknumber === "" ? false : true}
-            size="small"
-            inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
-          />
-        </Card>
-      ))}
+          ordr={ordr}
+          index={index}
+          data={data}
+          loadingCargo={loadingCargo}
+          loadingPrep={loadingPrep}
+          changePrep={changePrep}
+          changeSentByCargo={changeSentByCargo}
+          setTrackNumber={setTrackNumber}
+        />
+      )) : error ? (
+        <div>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 50 }}>
+          <Button onClick={() => onShowAlert('error')}>Something went wrong!!</Button>
+        </div>
+        <Alert
+          header={'Authorization'}
+          btnText={'Close'}
+          text={alert.text}
+          type={alert.type}
+          show={alert.show}
+          onClosePress={onCloseAlert}
+          pressCloseOnOutsideClick={true}
+          showBorderBottom={true}
+          alertStyles={{}}
+          headerStyles={{}}
+          textStyles={{}}
+          buttonStyles={{}}
+        />
+      </div>
+        ) : (
+        <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "80vh",
+                }}
+              >
+                <ClimbingBoxLoader size={30} color="#c67c03" />
+              </div>
+      )}
     </div>
   );
 };
