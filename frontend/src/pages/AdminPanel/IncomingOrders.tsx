@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { IRootState } from "../../redux/Reducers/rootReducer";
-import { incomingOrders } from "../../type";
+import { alert, incomingOrders } from "../../type";
 import { io, Socket } from "socket.io-client";
 import { ClimbingBoxLoader, ClipLoader } from "react-spinners";
 import Orders from "../../components/Orders";
@@ -28,16 +28,16 @@ const IncomingOrders = () => {
   const { user } = useSelector((state: IRootState) => state.auth);
   const navigate = useNavigate();
 
-  const [alert, setAlert] = useState({
+  const [alert, setAlert] = useState<alert>({
     type: 'error',
-    text: 'This is a alert message',
+    text: <p></p>,
     show: false
   })
 
   function onCloseAlert() {
     setAlert({
       type: '',
-      text: '',
+      text: <p></p>,
       show: false
     });
     navigate("/login")
@@ -46,7 +46,7 @@ const IncomingOrders = () => {
   function onShowAlert(type:any) {
     setAlert({
       type: type,
-      text: 'You need to login. Your token is expired already.',
+      text: <p>You need to login. Your token is expired already.</p>,
       show: true
     })
   }

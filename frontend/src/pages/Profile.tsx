@@ -7,6 +7,7 @@ import { ClimbingBoxLoader } from "react-spinners";
 import { IRootState } from "../redux/Reducers/rootReducer";
 import Alert from 'react-popup-alert'
 import 'react-popup-alert/dist/index.css'
+import { alert } from "../type";
 
 const Profile = () => {
   const navigate: any = useNavigate();
@@ -14,16 +15,16 @@ const Profile = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { user } = useSelector((state: IRootState) => state.auth);
 
-  const [alert, setAlert] = useState({
+  const [alert, setAlert] = useState<alert>({
     type: 'error',
-    text: 'This is a alert message',
+    text: <p></p>,
     show: false
   })
 
   function onCloseAlert() {
     setAlert({
       type: '',
-      text: '',
+      text: <p></p>,
       show: false
     });
     navigate("/login")
@@ -32,7 +33,7 @@ const Profile = () => {
   function onShowAlert(type:any) {
     setAlert({
       type: type,
-      text: 'You need to login. Your token is expired already.',
+      text: <p>'You need to login. Your token is expired already.</p>,
       show: true
     })
   }

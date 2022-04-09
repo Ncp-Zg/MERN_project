@@ -89,3 +89,9 @@ export interface incomingOrders {
   prepared:boolean;
   cargotracknumber:string;
 }
+
+export interface alert {
+  type:string,
+  text:JSX.Element,
+  show:boolean
+}

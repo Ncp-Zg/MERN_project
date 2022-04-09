@@ -11,6 +11,7 @@ import Step3 from "../../components/AddProduct/Step3";
 import { IRootState } from "../../redux/Reducers/rootReducer";
 import Alert from "react-popup-alert";
 import "react-popup-alert/dist/index.css";
+import { alert } from "../../type";
 
 const AddProduct = () => {
   const [auth, setAuth] = useState<boolean>(false);
@@ -18,16 +19,16 @@ const AddProduct = () => {
   const { user } = useSelector((state: IRootState) => state.auth);
   const navigate = useNavigate();
 
-  const [alert, setAlert] = useState({
+  const [alert, setAlert] = useState<alert>({
     type: "error",
-    text: "This is a alert message",
+    text: <p></p>,
     show: false,
   });
 
   function onCloseAlert() {
     setAlert({
       type: "",
-      text: "",
+      text: <p></p>,
       show: false,
     });
     navigate("/login");
@@ -36,7 +37,7 @@ const AddProduct = () => {
   function onShowAlert(type: any) {
     setAlert({
       type: type,
-      text: "You need to login. Your token is expired already.",
+      text: <p>You need to login. Your token is expired already.</p>,
       show: true,
     });
   }
