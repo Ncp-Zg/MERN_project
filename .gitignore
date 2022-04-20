@@ -11,10 +11,10 @@ node_modules/
 
 # production
 /build
+/frontend/build
 
 # misc
 .DS_Store
-/socket/.env
 /frontend/.env
 .env
 .env.local

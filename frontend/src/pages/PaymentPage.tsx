@@ -161,10 +161,11 @@ const PaymentPage = () => {
               {/* <h3>Credit Card Information</h3> */}
               <div style={{display:"flex",justifyContent:"center",flexDirection:"column"}}>
               <form onSubmit={handleSubmit} style={{marginTop:"20px"}}>
-                <CardElement onChange={handleChange}/>
+                {/* <CardElement onChange={handleChange}/>
                 <Button sx={{ width: 300 }} type="submit" disabled={processing || disabled}>
                 <span>{processing ? <p>Processing</p> : "Buy Now"}</span>
-                </Button>
+                </Button> */}
+                <p>StripeJS here!!</p>
                 {error && <div>{error}</div>}
               </form>
               </div>
