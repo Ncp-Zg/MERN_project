@@ -30,9 +30,7 @@ const Product: FunctionComponent<IItemProps> = (props) => {
 
   const handleClick = () => {
     if(cart.some(c=>c._id===item._id)){
-      console.log(cart.map((c,index)=>c._id===item._id ? ref2.current=index :null))
       ref.current = cart[ref2.current].amount
-      console.log(ref.current)
       dispatch(addToCart([{...item,amount:ref.current+1}]))
     }else{
     dispatch(addToCart([{...item,amount:1}]))

@@ -42,7 +42,7 @@ const EditMyProduct = () => {
         "Content-type":"application/json",
         Authorization:`Bearer ${user?.token}`
       }
-    }).then(res=>console.log(res.data)).catch((error)=>{
+    }).then(res=>(res.data)).catch((error)=>{
         toast.warn(error.response.data.message)
     })
   }

@@ -4,7 +4,7 @@ import moment from "moment"
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { ClimbingBoxLoader } from "react-spinners"
+import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader"
 import { setOrders } from "../redux/ActionCreators/OrdersActionCreators"
 import { IRootState } from "../redux/Reducers/rootReducer"
 import { Order } from "../type"
@@ -27,9 +27,6 @@ const Myorders = () => {
             Authorization:`Bearer ${user?.user.token}`,
         }}).then(res=>{setMyOrders(res.data.myorders);setLoading(false);dispatch(setOrders(res.data.myorders))}).catch(err=> err ? setError(true) : null)
     }
-
-    console.log(error);
-    
 
 
     useEffect(()=>{

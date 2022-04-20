@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ClimbingBoxLoader } from "react-spinners";
+import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 import { toast } from "react-toastify";
 import { io, Socket } from "socket.io-client";
 import { emptyBasket } from "../redux/ActionCreators/CartActionCreators";
@@ -28,7 +28,6 @@ const PaymentPage = () => {
     user: state.auth,
   }));
   const socket = useRef<Socket>();
-  console.log(cart);
 
   useEffect(() => {
     socket.current = io("ws://localhost:8900");
@@ -44,7 +43,6 @@ const PaymentPage = () => {
         },
       })
       .then((res) => {
-        console.log(res.data);
         toast.success("Payment is successfull");
       })
       .catch((err) => {
@@ -108,7 +106,6 @@ const PaymentPage = () => {
         },
       })
       .then((res) => {
-        console.log(res.data);
         toast.success("Payment is successfull");
       })
       .catch((err) => {
@@ -138,7 +135,6 @@ const PaymentPage = () => {
   };
 
   const handleChange = (e:any)=>{
-    console.log(e.empty)
       setDisabled(e.empty);
       setError(e.error ? e.error.massage : "");
   }

@@ -21,7 +21,6 @@ const Login = () => {
   const navigate = useNavigate();
 
   const {user}= useSelector((state:IRootState)=>state.auth)
-  console.log(user)
 
   const [values, setValues] = useState({
     email: `${user.email}`,

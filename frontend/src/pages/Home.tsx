@@ -8,7 +8,7 @@ import {
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
-import { ClimbingBoxLoader } from "react-spinners";
+import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 import Product from "../components/Product";
 import { setProducts } from "../redux/ActionCreators/ProductActionCreators";
 import { IRootState } from "../redux/Reducers/rootReducer";
@@ -33,7 +33,6 @@ const Home = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const RouterPage = searchParams.get("page");
-  // console.log(RouterPage);
 
   const forik = () => {
     let value = 0;
@@ -45,8 +44,6 @@ const Home = () => {
 
   useEffect(() => {
     setLoading(true);
-
-    console.log("render");
     axios
       .get("http://localhost:5000/api/products", {
         params: { page: `${RouterPage}`, limit: 3 },
@@ -76,8 +73,6 @@ const Home = () => {
     
   }, [search,data]);
 
-  console.log(filteredData,search);
-
   if (cart[0]?._id !== 0) {
     const sumAll = cart
       .map((c) => c.amount)
@@ -89,7 +84,6 @@ const Home = () => {
     event: React.ChangeEvent<unknown>,
     newPage: number
   ) => {
-    console.log(newPage);
     pageRef.current = newPage;
     setSearchParams(createSearchParams({ page: `${pageRef.current}` }));
   };
@@ -97,7 +91,6 @@ const Home = () => {
   const handleChange = (
     e: any
   ) => {
-    console.log(e.target.innerHTML.toString() === "")
     if(!e.target.innerHTML.startsWith("<path")){
       if(e.target.value === 0){
         setSearch(e.target.innerHTML)

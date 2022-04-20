@@ -24,7 +24,6 @@ export interface form {
 }
 
 const Step1: FunctionComponent<form> = (props) => {
-  console.log(process.env.REACT_APP_CLOUD_NAME);
 
   const { formdata, setFormData } = props;
 
@@ -38,8 +37,6 @@ const Step1: FunctionComponent<form> = (props) => {
     setFormData({ ...formdata, category: event.target.value });
   };
 
-  console.log(delete_token);
-  // console.log(JSON.parse(localStorage.getItem("previewData") || '{}'))
 
   const uploadPic = (pic: any) => {
     if (pic.type === "image/jpeg" || pic.type === "image/png") {
@@ -69,17 +66,14 @@ const Step1: FunctionComponent<form> = (props) => {
 
   const deleteCloud = async (i: number) => {
     setDelLoading(true);
-    console.log(delete_token, i);
     await axios
-      .post("https://api.cloudinary.com/v1_1/dl0na75ef/delete_by_token", {
+      .post(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/delete_by_token`, {
         token: `${delete_token[i]}`,
       })
       .then((res) => {
-        console.log(res);
         delete_token.splice(i, 1);
         formdata.img.splice(i, 1);
         setDelete_token(delete_token);
-        console.log(formdata.img);
         setFormData({ ...formdata, img: formdata.img });
 
         setDelLoading(false);
@@ -150,7 +144,6 @@ const Step1: FunctionComponent<form> = (props) => {
                   <img
                     className="hoverImg"
                     onClick={() => {
-                      console.log(index);
                       image.splice(index, 1);
                       setImage([...image]);
                       deleteCloud(index);

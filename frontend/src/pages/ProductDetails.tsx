@@ -1,9 +1,9 @@
-import { Favorite, FavoriteBorder, FavoriteOutlined } from "@mui/icons-material";
+import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { Button, CardMedia, Grid, Paper, styled, TextField } from "@mui/material";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Comment from "../components/Comment";
 import { setLikes } from "../redux/ActionCreators/AuthActionCreators";
@@ -31,7 +31,6 @@ const ProductDetails = () => {
   }));
 
   useEffect(() => {
-    console.log("render");
     axios
       .get("http://localhost:5000/api/products/getallproducts")
       .then((res) => {
@@ -39,7 +38,6 @@ const ProductDetails = () => {
       });
   }, [like]);
  const filteredState = product.filter((item) => item._id.toString() === id);
-  console.log(filteredState);
 
   
   const handleClick=()=>{
@@ -51,7 +49,7 @@ const ProductDetails = () => {
       await axios.get(`http://localhost:5000/api/users/${filteredState[0]._id}/addtofavorite`,{headers:{
         "Content-Type":"application/json",
         Authorization:`Bearer ${user.token}`
-    }}).then(res=>{console.log(res.data)
+    }}).then(res=>{
     setLike(!like)
     let favorites = JSON.parse(localStorage.getItem("user") || '{}');
     favorites.fav.push(filteredState[0]._id)
@@ -69,16 +67,14 @@ const ProductDetails = () => {
     axios.get(`http://localhost:5000/api/users/${filteredState[0]._id}/removefromfavorite`,{headers:{
         "Content-Type":"application/json",
         Authorization:`Bearer ${user.token}`
-    }}).then(res=>console.log(res.data))
+    }}).then(res=>(res.data))
     setLike(!like)
     let favorites = JSON.parse(localStorage.getItem("user") || '{}');
     let newFavs = favorites.fav.filter((fav:string)=> fav.toString() !== filteredState[0]._id.toString())
-    console.log(newFavs);
     favorites.fav = newFavs;
     localStorage.setItem("user",JSON.stringify(favorites));
     dispatch(setLikes(newFavs))
   }
-  console.log(like);
  
   return (
     <div>

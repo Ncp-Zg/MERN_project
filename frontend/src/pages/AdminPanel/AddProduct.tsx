@@ -3,15 +3,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { ClimbingBoxLoader } from "react-spinners";
+import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 import { toast } from "react-toastify";
 import Step1 from "../../components/AddProduct/Step1";
 import Step2 from "../../components/AddProduct/Step2";
 import Step3 from "../../components/AddProduct/Step3";
 import { IRootState } from "../../redux/Reducers/rootReducer";
-import Alert from "react-popup-alert";
-import "react-popup-alert/dist/index.css";
-import { alert } from "../../type";
+import PopupAlert from "../../components/common/PopupAlert";
 
 const AddProduct = () => {
   const [auth, setAuth] = useState<boolean>(false);
@@ -19,31 +17,12 @@ const AddProduct = () => {
   const { user } = useSelector((state: IRootState) => state.auth);
   const navigate = useNavigate();
 
-  const [alert, setAlert] = useState<alert>({
-    type: "error",
-    text: <p></p>,
-    show: false,
-  });
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
-  function onCloseAlert() {
-    setAlert({
-      type: "",
-      text: <p></p>,
-      show: false,
-    });
-    navigate("/login");
-  }
-
-  function onShowAlert(type: any) {
-    setAlert({
-      type: type,
-      text: <p>You need to login. Your token is expired already.</p>,
-      show: true,
-    });
-  }
 
   const getProfile = async () => {
-    console.log("user.token", user.token);
     if (user.token !== "") {
       setLoading(true);
 
@@ -94,8 +73,6 @@ const AddProduct = () => {
     }
   };
 
-  console.log(formData);
-
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       {auth ? (
@@ -129,35 +106,35 @@ const AddProduct = () => {
               color={page === FormTitles.length - 1 ? "success" : "primary"}
               onClick={async (e) => {
                 if (page === FormTitles.length - 1) {
-                  if(!isNaN(formData.stock) && !isNaN(+formData.cost)){
+                  if (!isNaN(formData.stock) && !isNaN(+formData.cost)) {
                     e.preventDefault();
-                  await axios
-                    .post(
-                      "http://localhost:5000/api/products/add",
-                      {
-                        category: formData.category,
-                        cost: formData.cost,
-                        desc: formData.description,
-                        stock: formData.stock,
-                        title: formData.title,
-                        img: formData.img,
-                      },
-                      {
-                        headers: {
-                          "Content-Type": "application/json",
-                          Authorization: `Bearer ${user?.token}`,
+                    await axios
+                      .post(
+                        "http://localhost:5000/api/products/add",
+                        {
+                          category: formData.category,
+                          cost: formData.cost,
+                          desc: formData.description,
+                          stock: formData.stock,
+                          title: formData.title,
+                          img: formData.img,
                         },
-                      }
-                    )
-                    .then((res) => {
-                      toast.success("Product added successfully");
-                      navigate("/home");
-                    });
-                  }else{
-                    console.log(typeof formData.stock,+formData.cost)
-                    toast.error("provide a valid stock or cost for the product")
+                        {
+                          headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${user?.token}`,
+                          },
+                        }
+                      )
+                      .then((res) => {
+                        toast.success("Product added successfully");
+                        navigate("/home");
+                      });
+                  } else {
+                    toast.error(
+                      "provide a valid stock or cost for the product"
+                    );
                   }
-                  
                 } else {
                   setPage((currPage) => currPage + 1);
                 }
@@ -180,27 +157,18 @@ const AddProduct = () => {
           <ClimbingBoxLoader size={30} color="#c67c03" />
         </div>
       ) : (
-        <div>
-          <div
-            style={{ display: "flex", justifyContent: "center", marginTop: 50 }}
-          >
-            <Button onClick={() => onShowAlert("error")}>
-              Something went wrong!!
-            </Button>
-          </div>
-          <Alert
-            header={"Authorization"}
-            btnText={"Close"}
-            text={alert.text}
-            type={alert.type}
-            show={alert.show}
-            onClosePress={onCloseAlert}
-            pressCloseOnOutsideClick={true}
-            showBorderBottom={true}
-            alertStyles={{}}
-            headerStyles={{}}
-            textStyles={{}}
-            buttonStyles={{}}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "70vh",
+          }}
+        >
+          <PopupAlert
+            open={open}
+            handleClose={handleClose}
+            handleOpen={handleOpen}
           />
         </div>
       )}

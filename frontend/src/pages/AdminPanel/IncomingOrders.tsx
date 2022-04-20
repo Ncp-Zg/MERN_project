@@ -1,17 +1,13 @@
-import { Button, Card, InputLabel, TextField } from "@mui/material";
 import axios from "axios";
-import moment from "moment";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { IRootState } from "../../redux/Reducers/rootReducer";
-import { alert, incomingOrders } from "../../type";
+import { incomingOrders } from "../../type";
 import { io, Socket } from "socket.io-client";
-import { ClimbingBoxLoader, ClipLoader } from "react-spinners";
+import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 import Orders from "../../components/Orders";
-import Alert from 'react-popup-alert'
-import 'react-popup-alert/dist/index.css'
-import { useNavigate } from "react-router-dom";
+import PopupAlert from "../../components/common/PopupAlert";
 
 const IncomingOrders = () => {
   const [data, setData] = useState<incomingOrders[]>();
@@ -26,37 +22,16 @@ const IncomingOrders = () => {
   const [indx, setIndex] = useState<number>(0);
   const socket = useRef<Socket>();
   const { user } = useSelector((state: IRootState) => state.auth);
-  const navigate = useNavigate();
 
-  const [alert, setAlert] = useState<alert>({
-    type: 'error',
-    text: <p></p>,
-    show: false
-  })
-
-  function onCloseAlert() {
-    setAlert({
-      type: '',
-      text: <p></p>,
-      show: false
-    });
-    navigate("/login")
-  }
-
-  function onShowAlert(type:any) {
-    setAlert({
-      type: type,
-      text: <p>You need to login. Your token is expired already.</p>,
-      show: true
-    })
-  }
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
 
   const changePrep = async (index: number) => {
     if (data) {
       setLoadingPrep(index);
       setIndex(data.length - 1 - index);
-      console.log(data[index]?.prepared, data[index]?.cargotracknumber);
       await axios
         .post(
           "http://localhost:5000/api/orders/myorders/changepreparing",
@@ -77,7 +52,6 @@ const IncomingOrders = () => {
           setLoadingPrep(-1);
         })
         .catch((err) => {
-          console.log(err.response.data.message);
           toast.warn(err.response.data.message);
           setError(true);
           setLoadingPrep(-1);
@@ -88,7 +62,6 @@ const IncomingOrders = () => {
   const changeSentByCargo = async (index: number) => {
     if (data && !isNaN(trackNumber) && trackNumber !== 0) {
       setLoadingCargo(index);
-      console.log(trackNumber);
       setIndex(data.length - 1 - index);
 
       await axios
@@ -112,7 +85,6 @@ const IncomingOrders = () => {
           setLoadingCargo(-1);
         })
         .catch((err) => {
-          console.log(err.response.data.message);
           toast.warn(err.response.data.message);
           setError(true);
           setLoadingCargo(-1);
@@ -124,7 +96,7 @@ const IncomingOrders = () => {
 
   const getIncomingOrders = async () => {
     if (user.token !== "") {
-      if(!data){
+      if (!data) {
         setLoading(true);
       }
       await axios
@@ -136,7 +108,6 @@ const IncomingOrders = () => {
         })
         .then((res) => {
           setData(res.data.incomingOrders.reverse());
-          console.log(res.data.incomingOrders);
           setLoading(false);
         })
         .catch((err) => {
@@ -154,7 +125,6 @@ const IncomingOrders = () => {
   useEffect(() => {
     if (socket.current && user.id !== "") {
       socket?.current.on("getUsers", (usr) => {
-        console.log(usr);
         if (usr.userId === user.id) {
           setOrders(usr.user.incomingOrders.length);
         }
@@ -168,57 +138,52 @@ const IncomingOrders = () => {
     }
   }, [prep, sent]);
 
-  console.log(orders);
-
   useEffect(() => {
     getIncomingOrders();
   }, [user.token, orders, prep, sent]);
 
   return (
     <div>
-      {!loading && !error ? data?.map((ordr, index) => (
-        <Orders
-          key={ordr._id}
-          ordr={ordr}
-          index={index}
-          data={data}
-          loadingCargo={loadingCargo}
-          loadingPrep={loadingPrep}
-          changePrep={changePrep}
-          changeSentByCargo={changeSentByCargo}
-          setTrackNumber={setTrackNumber}
-        />
-      )) : error ? (
-        <div>
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 50 }}>
-          <Button onClick={() => onShowAlert('error')}>Something went wrong!!</Button>
-        </div>
-        <Alert
-          header={'Authorization'}
-          btnText={'Close'}
-          text={alert.text}
-          type={alert.type}
-          show={alert.show}
-          onClosePress={onCloseAlert}
-          pressCloseOnOutsideClick={true}
-          showBorderBottom={true}
-          alertStyles={{}}
-          headerStyles={{}}
-          textStyles={{}}
-          buttonStyles={{}}
-        />
-      </div>
-        ) : (
+      {!loading && !error ? (
+        data?.map((ordr, index) => (
+          <Orders
+            key={ordr._id}
+            ordr={ordr}
+            index={index}
+            data={data}
+            loadingCargo={loadingCargo}
+            loadingPrep={loadingPrep}
+            changePrep={changePrep}
+            changeSentByCargo={changeSentByCargo}
+            setTrackNumber={setTrackNumber}
+          />
+        ))
+      ) : error ? (
         <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "80vh",
-                }}
-              >
-                <ClimbingBoxLoader size={30} color="#c67c03" />
-              </div>
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "70vh",
+          }}
+        >
+          <PopupAlert
+            open={open}
+            handleClose={handleClose}
+            handleOpen={handleOpen}
+          />
+        </div>
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "80vh",
+          }}
+        >
+          <ClimbingBoxLoader size={30} color="#c67c03" />
+        </div>
       )}
     </div>
   );

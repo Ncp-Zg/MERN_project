@@ -1,7 +1,6 @@
 import {
   ArrowRightAlt,
   AssignmentReturnedOutlined,
-  Check,
   CheckCircleOutline,
   LocalShipping,
 } from "@mui/icons-material";
@@ -22,7 +21,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { IRootState } from "../redux/Reducers/rootReducer";
 import { Order } from "../type";
 import { io, Socket } from "socket.io-client";
-import { SyncLoader } from "react-spinners";
+import SyncLoader from "react-spinners/SyncLoader";
 
 const OrderDetail = () => {
   const { user } = useSelector((state: IRootState) => ({ user: state.auth }));
@@ -31,15 +30,12 @@ const OrderDetail = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const state = location.state as Order;
-  console.log(state);
   const [deliver, setDeliver] = useState<Array<Boolean>>(state.delivered);
   const [data, setData] = useState<Order>();
   const [prep, setPrep] = useState<boolean>();
   const [loading, setLoading] = useState<boolean>(false);
   const [cargo, setCargo] = useState<string>();
   const socket = useRef<Socket>();
-
-  console.log(state.delivered);
 
   const getOrder = async () => {
     if (user.user.id !== "") {
@@ -56,19 +52,15 @@ const OrderDetail = () => {
           setLoading(false);
         })
         .catch((err) => {
-          console.log(err.response);
           setLoading(false);
         });
     }
   };
-
-  console.log(data);
   useEffect(() => {
     getOrder();
   }, [user.user.token, deliver, prep, cargo]);
 
   const handleClick = async (index: number) => {
-    console.log(index);
     await axios
       .post(
         "http://localhost:5000/api/orders/myorders/changeDelivered",

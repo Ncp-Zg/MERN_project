@@ -1,4 +1,4 @@
-import { Button, Card, Pagination, Stack, TextField, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { Button, Card, Pagination, Stack, TextField} from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
 import moment from "moment";
@@ -15,7 +15,6 @@ export interface Comment {
 
 const Comment: FunctionComponent<Comment> = (props) => {
   const { product } = props;
-  console.log(product);
   const { id } = useParams();
   const { user } = useSelector((state: IRootState) => ({
     user: state.auth.user,
@@ -71,7 +70,6 @@ const Comment: FunctionComponent<Comment> = (props) => {
       
   };
 
-  console.log(cmt);
 
   
   const handleAlignment = (

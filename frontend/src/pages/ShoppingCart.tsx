@@ -28,7 +28,6 @@ const ShoppingCart = () => {
   const [amount, setAmount] = useState<number>(0);
   const [id, setId] = useState<number>(0);
   const [state, setState] = useState<boolean>(false);
-  console.log(cart);
   const handleIncrease = (i: number) => {
     setAmount(cart[i].amount);
     setId(cart[i]._id);
@@ -62,10 +61,7 @@ const ShoppingCart = () => {
       }
     });
   };
-
-  console.log(amount, id, state);
   useEffect(() => {
-    console.log("render");
   }, [id, amount, state]);
 
   if (cart[0]?._id !== 0) {
