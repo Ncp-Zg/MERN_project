@@ -7,8 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon backend/server.js",
     "client": "npm start --prefix frontend",
-    "dev": "concurrently \"npm start\" \"npm run client\"",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend "
+    "dev": "concurrently \"npm start\" \"npm run client\""
   },
   "author": "",
   "license": "ISC",
@@ -22,7 +21,6 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.1.2",
     "nodemon": "^2.0.15",
-    "socket.io": "^4.4.1",
     "stripe": "^8.203.0"
   }
 }
