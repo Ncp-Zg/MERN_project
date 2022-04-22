@@ -94,6 +94,32 @@ const IncomingOrders = () => {
     }
   };
 
+
+  useEffect(() => {
+    socket.current = io("ws://localhost:8900");
+  }, []);
+
+  useEffect(() => {
+
+    if (socket.current && user.id !== "") {
+      socket?.current.on("getUsers", (usr) => {
+        if (usr.userId === user.id) {
+          setOrders(usr.user.incomingOrders.length);
+        }
+      });
+    }
+
+  }, [user]);
+
+  useEffect(() => {
+    if (socket.current) {
+      socket.current.emit("changeState", { i: indx, userId: user.id });
+    }
+  }, [prep, sent]);
+
+  useEffect(() => {
+    const abortCont = new AbortController();
+    
   const getIncomingOrders = async () => {
     if (user.token !== "") {
       if (!data) {
@@ -105,41 +131,30 @@ const IncomingOrders = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${user?.token}`,
           },
+          signal: abortCont.signal
+    
         })
         .then((res) => {
           setData(res.data.incomingOrders.reverse());
           setLoading(false);
         })
         .catch((err) => {
-          toast.warn(err.response.data.message);
-          setError(true);
-          setLoading(false);
+          if (err.name === "AbortError"){
+            console.log("axios aborted")
+          }else{
+            toast.warn(err.response.data.message);
+            setError(true);
+            setLoading(false);
+
+          }
         });
     }
   };
-
-  useEffect(() => {
-    socket.current = io("ws://localhost:8900");
-  }, []);
-
-  useEffect(() => {
-    if (socket.current && user.id !== "") {
-      socket?.current.on("getUsers", (usr) => {
-        if (usr.userId === user.id) {
-          setOrders(usr.user.incomingOrders.length);
-        }
-      });
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (socket.current) {
-      socket.current.emit("changeState", { i: indx, userId: user.id });
-    }
-  }, [prep, sent]);
-
-  useEffect(() => {
     getIncomingOrders();
+
+    
+    return () => abortCont.abort();
+
   }, [user.token, orders, prep, sent]);
 
   return (
