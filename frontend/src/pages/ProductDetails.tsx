@@ -46,10 +46,7 @@ const ProductDetails = () => {
 
   const addToFavorite = async ()=>{
     if (user.id!=="") {
-      await axios.get(`http://localhost:5000/api/users/${filteredState[0]._id}/addtofavorite`,{headers:{
-        "Content-Type":"application/json",
-        Authorization:`Bearer ${user.token}`
-    }}).then(res=>{
+      await axios.get(`http://localhost:5000/api/users/${filteredState[0]._id}/addtofavorite`,{withCredentials:true}).then(res=>{
     setLike(!like)
     let favorites = JSON.parse(localStorage.getItem("user") || '{}');
     favorites.fav.push(filteredState[0]._id)
@@ -64,10 +61,7 @@ const ProductDetails = () => {
   }
 
   const removeFromFavorite = ()=>{
-    axios.get(`http://localhost:5000/api/users/${filteredState[0]._id}/removefromfavorite`,{headers:{
-        "Content-Type":"application/json",
-        Authorization:`Bearer ${user.token}`
-    }}).then(res=>(res.data))
+    axios.get(`http://localhost:5000/api/users/${filteredState[0]._id}/removefromfavorite`,{withCredentials:true}).then(res=>(res.data))
     setLike(!like)
     let favorites = JSON.parse(localStorage.getItem("user") || '{}');
     let newFavs = favorites.fav.filter((fav:string)=> fav.toString() !== filteredState[0]._id.toString())

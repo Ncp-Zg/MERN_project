@@ -19,14 +19,11 @@ const Myfavorites = () => {
   }));
 
   const getFavs = async () => {
-    if (user.token) {
+    if (user.id) {
       setLoading(true);
       await axios
         .get("http://localhost:5000/api/users/profile/getfavorites", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
+          withCredentials:true
         })
         .then((res) => {
           setFavorites(res.data.favs);
@@ -37,7 +34,7 @@ const Myfavorites = () => {
 
   useEffect(() => {
     getFavs();
-  }, [user.token]);
+  }, [user.id]);
 
   return (
     <div

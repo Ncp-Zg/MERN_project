@@ -7,13 +7,11 @@ const paymentRoute = require("./Routes/paymentRoute");
 const connectDB = require("./Config/db");
 const cors = require("cors");
 const customErrorHandler = require("./Middlewares/errorMiddleware");
-const path = require("path");
-
 
 
 const app = express();
 
-app.use(cors({origin: "http://localhost:3000"}));
+app.use(cors({origin: "http://localhost:3000",credentials: true}));
 app.use(express.json())
 dotenv.config();
 connectDB();

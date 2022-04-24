@@ -37,10 +37,7 @@ const PaymentPage = () => {
     setLoading(true);
     await axios
       .post("http://localhost:5000/api/orders/addorders", cart, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user?.user.token}`,
-        },
+        withCredentials:true
       })
       .then((res) => {
         toast.success("Payment is successfull");
@@ -100,10 +97,7 @@ const PaymentPage = () => {
           setLoading(true);
         await axios
       .post("http://localhost:5000/api/orders/addorders", cart, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user?.user.token}`,
-        },
+        withCredentials:true
       })
       .then((res) => {
         toast.success("Payment is successfull");

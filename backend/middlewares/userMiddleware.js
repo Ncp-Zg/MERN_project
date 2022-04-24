@@ -5,13 +5,11 @@ const User = require("../Models/userModel");
 
 const protect = expressAsyncHandler(async (req, res, next) => {
     let token;
-  console.log(req.headers.authorization)
     if (
-      req.headers.authorization &&
-      req.headers.authorization.startsWith("Bearer")
+      req.headers.cookie
     ) {
       try {
-        token = req.headers.authorization.split(" ")[1];
+        token = req.headers.cookie.split("=")[1];
         console.log(token)
   
         //decodes token id

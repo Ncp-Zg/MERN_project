@@ -21,33 +21,38 @@ const AddProduct = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-
-  const getProfile = async () => {
-    if (user.token !== "") {
-      setLoading(true);
-
-      await axios
-        .get("http://localhost:5000/api/users/profile", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user?.token}`,
-          },
-        })
-        .then((res) => {
-          if (res.data.success) {
-            setAuth(true);
-            setLoading(false);
-          }
-        })
-        .catch((err) => {
-          setLoading(false);
-          setAuth(false);
-        });
-    }
-  };
-
   useEffect(() => {
+    const abortCont = new AbortController();
+
+    const getProfile = async () => {
+      if (user.id !== "") {
+        setLoading(true);
+
+        await axios
+          .get("http://localhost:5000/api/users/profile", {
+            withCredentials: true,
+            signal: abortCont.signal,
+          })
+          .then((res) => {
+            if (res.data.success) {
+              setAuth(true);
+              setLoading(false);
+            }
+          })
+          .catch((err) => {
+            if (err.message === "canceled") {
+              console.log("axios aborted");
+            } else {
+              setLoading(false);
+              setAuth(false);
+            }
+          });
+      }
+    };
+
     getProfile();
+
+    return () => abortCont.abort();
   }, [user]);
 
   const [page, setPage] = useState(0);
@@ -120,10 +125,7 @@ const AddProduct = () => {
                           img: formData.img,
                         },
                         {
-                          headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${user?.token}`,
-                          },
+                          withCredentials: true,
                         }
                       )
                       .then((res) => {

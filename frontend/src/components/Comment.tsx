@@ -51,7 +51,7 @@ const Comment: FunctionComponent<Comment> = (props) => {
 
   useEffect(() => {
     getComments();
-  }, [user.token,newComment,page]);
+  }, [user.id,newComment,page]);
 
   const handleClick = async (e: any) => {
     e.preventDefault()
@@ -60,10 +60,7 @@ const Comment: FunctionComponent<Comment> = (props) => {
         `http://localhost:5000/api/products/${product._id}/addcomment`,
         { comment: cmt, rating: +rating / 20 },
         {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user?.token}`,
-          },
+          withCredentials:true
         }
       )
       .then((res) => {setNewComment(res.data);setCmt("")});

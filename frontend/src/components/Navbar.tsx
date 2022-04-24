@@ -128,13 +128,8 @@ const handleClick = async()=>{
     //logout
 
     dispatch(logoutUser());
-    await axios.get("http://localhost:5000/api/users/logout",
-    {
-      headers:{
-        "Content-Type":"application/json",
-        Authorization:`Bearer ${user.token}`,
-      }
-    }).then(res=>toast.success("You logged out successfully!"))
+    await axios.get("http://localhost:5000/api/users/logout",{withCredentials:true}
+    ).then(res=>toast.info("logged out successfully"))
 }
 
 
@@ -142,7 +137,7 @@ const handleClick = async()=>{
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar variant="regular" sx={user.token? {display:"flex",justifyContent:"space-between",backgroundColor:"#D9534F",color:"#FFEEAD"} : {backgroundColor:"#F57B51",color:"#F6EEDF"}} >
+        <Toolbar variant="regular" sx={user.id ? {display:"flex",justifyContent:"space-between",backgroundColor:"#D9534F",color:"#FFEEAD"} : {backgroundColor:"#F57B51",color:"#F6EEDF"}} >
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -156,7 +151,7 @@ const handleClick = async()=>{
             {value}
           </Typography>
           {
-            user.token ? <Button variant="contained" color='error' size='small' sx={{justifySelf:"end"}} onClick={handleClick}>Logout</Button> : null
+            user.id ? <Button variant="contained" color='error' size='small' sx={{justifySelf:"end"}} onClick={handleClick}>Logout</Button> : null
           }
           
         </Toolbar>

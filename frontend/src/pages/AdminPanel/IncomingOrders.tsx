@@ -41,10 +41,7 @@ const IncomingOrders = () => {
             index: data.length - 1 - index,
           },
           {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${user?.token}`,
-            },
+            withCredentials:true
           }
         )
         .then((res) => {
@@ -74,10 +71,7 @@ const IncomingOrders = () => {
             i: data.length - 1 - index,
           },
           {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${user?.token}`,
-            },
+            withCredentials:true
           }
         )
         .then((res) => {
@@ -121,16 +115,13 @@ const IncomingOrders = () => {
     const abortCont = new AbortController();
     
   const getIncomingOrders = async () => {
-    if (user.token !== "") {
+    if (user.id !== "") {
       if (!data) {
         setLoading(true);
       }
       await axios
         .get("http://localhost:5000/api/users/admin/incomingorders", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user?.token}`,
-          },
+          withCredentials:true,
           signal: abortCont.signal
     
         })
@@ -139,7 +130,7 @@ const IncomingOrders = () => {
           setLoading(false);
         })
         .catch((err) => {
-          if (err.name === "AbortError"){
+          if (err.message === "canceled"){
             console.log("axios aborted")
           }else{
             toast.warn(err.response.data.message);
@@ -155,7 +146,7 @@ const IncomingOrders = () => {
     
     return () => abortCont.abort();
 
-  }, [user.token, orders, prep, sent]);
+  }, [user.id, orders, prep, sent]);
 
   return (
     <div>

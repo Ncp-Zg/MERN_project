@@ -16,30 +16,38 @@ const MyProducts = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+
+  useEffect(() => {
+const abortCont = new AbortController();
+    
   const getProfile = async () => {
-    if (user.token !== "") {
+    if (user.id !== "") {
       setLoading(true);
       await axios
         .get("http://localhost:5000/api/users/admin/getmyproducts", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user?.token}`,
-          },
+          withCredentials:true,
+          signal:abortCont.signal
         })
         .then((res) => {
           setMyProducts(res.data.myproduct);
           setLoading(true);
         })
         .catch((err) => {
-          setLoading(false);
+          if(err.message === "canceled"){
+            console.log("axios aborted")
+          }else{
+            setLoading(false);
           toast.warning(err.response.data.message);
+          }
+          
         });
     }
   };
 
-  useEffect(() => {
     getProfile();
-  }, [user.token]);
+
+    return ()=>abortCont.abort()
+  }, [user.id]);
   return (
     <div
       style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}

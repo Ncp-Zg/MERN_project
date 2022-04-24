@@ -42,10 +42,7 @@ const OrderDetail = () => {
       setLoading(true);
       await axios
         .get(`http://localhost:5000/api/orders/myorders/${state._id}`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user?.user.token}`,
-          },
+          withCredentials:true
         })
         .then((res) => {
           setData(res.data.data);
@@ -58,7 +55,7 @@ const OrderDetail = () => {
   };
   useEffect(() => {
     getOrder();
-  }, [user.user.token, deliver, prep, cargo]);
+  }, [user.user.id, deliver, prep, cargo]);
 
   const handleClick = async (index: number) => {
     await axios
@@ -66,10 +63,7 @@ const OrderDetail = () => {
         "http://localhost:5000/api/orders/myorders/changeDelivered",
         { orderId: state._id, index: index },
         {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user?.user.token}`,
-          },
+          withCredentials:true
         }
       )
       .then((res) => {

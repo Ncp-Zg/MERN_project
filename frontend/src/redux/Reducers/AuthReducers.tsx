@@ -6,7 +6,6 @@ const initialState = {
         email:"",
         name:"",
         isAdmin:false,
-        token:"",
         id:"",
         fav:[""]
     }

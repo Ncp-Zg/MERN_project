@@ -11,7 +11,6 @@ export interface auth {
   name: string;
   email: string;
   isAdmin: boolean;
-  token:string;
   id:string;
   fav:Array<string>;
 }
@@ -35,14 +34,13 @@ const Login = () => {
       .post("http://localhost:5000/api/users/login", {
         email: values.email,
         password: values.password,
-      })
+      },{ withCredentials: true })
       .then((res) => {
         dispatch(
           loginUser({
             name: res.data.name,
             email: res.data.email,
             isAdmin: res.data.isAdmin,
-            token:res.data.token,
             id:res.data._id,
             fav:res.data.fav
           })

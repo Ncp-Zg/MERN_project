@@ -8,7 +8,6 @@ interface set_User {
         email:string,
         name:string,
         isAdmin:boolean,
-        token:string,
         id:string,
         fav:Array<string>
     }

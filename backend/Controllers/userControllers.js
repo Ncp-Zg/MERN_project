@@ -1,3 +1,4 @@
+const { serialize } = require("cookie");
 const asyncHandler = require("express-async-handler");
 const CustomError = require("../Helpers/CustomError");
 const generateToken = require("../Helpers/generateToken");
@@ -21,13 +22,24 @@ const registerUser = asyncHandler(async (req, res) => {
     password,
   });
 
+  const token = generateToken(user._id)
+
+    const serialised = serialize("OursiteJWT", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== "development",
+      sameSite: "strict",
+      maxAge: 60 * 15,
+      path: "/",
+    });
+
+    res.setHeader("Set-Cookie", serialised);
+
   if (user) {
     res.status(201).json({
       _id: user._id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
-      token: generateToken(user._id),
       fav: [],
     });
   } else {
@@ -42,12 +54,24 @@ const authUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
+
+    const token = generateToken(user._id)
+
+    const serialised = serialize("OursiteJWT", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== "development",
+      sameSite: "strict",
+      maxAge: 60 * 15,
+      path: "/",
+    });
+
+    res.setHeader("Set-Cookie", serialised);
+
     res.json({
       _id: user._id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
-      token: generateToken(user._id),
       fav: user.fav,
     });
   } else {
@@ -67,17 +91,18 @@ const getUser = asyncHandler(async (req, res) => {
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
-  return res
-    .status(200)
-    .cookie({
-      httpOnly: true,
-      expires: new Date(Date.now()),
-      secure: false,
-    })
-    .json({
-      success: true,
-      message: "Logout successful",
-    });
+
+  const serialised = serialize("OursiteJWT", null, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV !== "development",
+    sameSite: "strict",
+    maxAge: -1,
+    path: "/",
+  });
+
+  res.setHeader("Set-Cookie", serialised);
+
+  res.status(200).json({ message: "Successfuly logged out!" });
 });
 
 const addToFavorite = asyncHandler(async (req, res) => {

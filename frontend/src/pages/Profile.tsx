@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import ClimbingBoxLoader from 'react-spinners/ClimbingBoxLoader';
+import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 import PopupAlert from "../components/common/PopupAlert";
 import { IRootState } from "../redux/Reducers/rootReducer";
 
@@ -16,31 +16,33 @@ const Profile = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const getProfile = async () => {
-    if (user.token !== "") {
-      setLoading(true);
-      await axios
-        .get("http://localhost:5000/api/users/profile", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user?.token}`,
-          },
-        })
-        .then((res) => {
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.log(err.response.data);
-          if (err) {
-            setLoading(false);
-            setError(true);
-          }
-        });
-    }
-  };
-
   useEffect(() => {
+    const abortCont = new AbortController();
+
+    const getProfile = async () => {
+      if (user.id !== "") {
+        setLoading(true);
+        await axios
+          .get("http://localhost:5000/api/users/profile", {
+            withCredentials: true,
+            signal: abortCont.signal,
+          })
+          .then((res) => {
+            setLoading(false);
+          })
+          .catch((err) => {
+            if (err.message === "canceled") {
+              console.log("axios aborted");
+            } else {
+              setLoading(false);
+              setError(true);
+            }
+          });
+      }
+    };
     getProfile();
+
+    return () => abortCont.abort();
   }, [user]);
 
   return (
@@ -85,8 +87,19 @@ const Profile = () => {
           <ClimbingBoxLoader size={30} color="#c67c03" />
         </div>
       ) : (
-        <div style={{display:"flex",alignItems:"center",justifyContent:"center",height:"70vh"}}>
-          <PopupAlert open={open} handleClose={handleClose} handleOpen={handleOpen}/>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "70vh",
+          }}
+        >
+          <PopupAlert
+            open={open}
+            handleClose={handleClose}
+            handleOpen={handleOpen}
+          />
         </div>
       )}
     </div>

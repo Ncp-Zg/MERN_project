@@ -22,19 +22,16 @@ const Myorders = () => {
     const getMyOrders = async () => {
         setLoading(true)
         await axios.get("http://localhost:5000/api/orders/myorders",
-        {headers:{
-            "Content-Type":"application/json",
-            Authorization:`Bearer ${user?.user.token}`,
-        }}).then(res=>{setMyOrders(res.data.myorders);setLoading(false);dispatch(setOrders(res.data.myorders))}).catch(err=> err ? setError(true) : null)
+        {withCredentials:true}).then(res=>{setMyOrders(res.data.myorders);setLoading(false);dispatch(setOrders(res.data.myorders))}).catch(err=> err ? setError(true) : null)
     }
 
 
     useEffect(()=>{
-        if(user.user.token){
+        if(user.user.id){
             getMyOrders();
         }
         
-    },[user?.user.token])
+    },[user?.user.id])
 
 
     return (

@@ -43,17 +43,20 @@ const Home = () => {
   };
 
   useEffect(() => {
+    const abortConst = new AbortController();
     setLoading(true);
     axios
       .get("http://localhost:5000/api/products", {
-        params: { page: `${RouterPage}`, limit: 3 },
+        params: { page: `${RouterPage}`, limit: 3 },signal:abortConst.signal
       })
       .then((res) => {
         setLoading(false);
         setData(res.data.data);
         setTotal(res.data.total);
         dispatch(setProducts(res.data.data));
-      });
+      }).catch(err=>{if(err.message==="canceled"){console.log("axios aborted")}else{console.log(err)}});
+
+      return ()=> abortConst.abort();
   }, [RouterPage]);
 
   useEffect(() => {

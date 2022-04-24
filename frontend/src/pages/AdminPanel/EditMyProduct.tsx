@@ -38,10 +38,7 @@ const EditMyProduct = () => {
 
   const handleClick = async () => {
     await axios.put(`http://localhost:5000/api/users/admin/${id}/edit`,{...formData,stock:+(formData.stock)},{
-      headers:{
-        "Content-type":"application/json",
-        Authorization:`Bearer ${user?.token}`
-      }
+      withCredentials:true
     }).then(res=>(res.data)).catch((error)=>{
         toast.warn(error.response.data.message)
     })
