@@ -1,1 +1,1 @@
-https://web-shop-mern-app.netlify.app/
+https://web-shop-mern-app.herokuapp.com/
