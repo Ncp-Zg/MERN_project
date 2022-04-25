@@ -9,8 +9,15 @@ const protect = expressAsyncHandler(async (req, res, next) => {
       req.headers.cookie
     ) {
       try {
-        token = req.headers.cookie.split("=")[1];
-        console.log(token)
+        if (!req.headers.cookie.includes(";")) {
+          token = req.headers.cookie.split("=")[1];
+        } else {
+          token = req.headers.cookie
+            .split(";")
+            .filter((x) => x.includes("OursiteJWT"))[0]
+            .split("=")[1];
+        }
+        console.log(token);
   
         //decodes token id
         const decoded = jsonwebtoken.verify(token, process.env.JWT_SECRET);

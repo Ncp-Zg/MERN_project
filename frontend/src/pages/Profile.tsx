@@ -34,6 +34,7 @@ const Profile = () => {
             if (err.message === "canceled") {
               console.log("axios aborted");
             } else {
+              console.log(err.response.data)
               setLoading(false);
               setError(true);
             }
