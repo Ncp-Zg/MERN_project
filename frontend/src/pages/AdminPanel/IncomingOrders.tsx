@@ -1,13 +1,16 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { IRootState } from "../../redux/Reducers/rootReducer";
 import { incomingOrders } from "../../type";
 import { io, Socket } from "socket.io-client";
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
-import Orders from "../../components/Orders";
-import PopupAlert from "../../components/common/PopupAlert";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallback from "../../components/common/ErrorBoundary";
+// import PopupAlert from "../../components/common/PopupAlert";
+const PopupAlert = lazy(() => import("../../components/common/PopupAlert"));
+const Orders = lazy(() => import("../../components/Orders"));
 
 const IncomingOrders = () => {
   const [data, setData] = useState<incomingOrders[]>();
@@ -27,7 +30,6 @@ const IncomingOrders = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-
   const changePrep = async (index: number) => {
     if (data) {
       setLoadingPrep(index);
@@ -41,7 +43,7 @@ const IncomingOrders = () => {
             index: data.length - 1 - index,
           },
           {
-            withCredentials:true
+            withCredentials: true,
           }
         )
         .then((res) => {
@@ -71,7 +73,7 @@ const IncomingOrders = () => {
             i: data.length - 1 - index,
           },
           {
-            withCredentials:true
+            withCredentials: true,
           }
         )
         .then((res) => {
@@ -88,13 +90,11 @@ const IncomingOrders = () => {
     }
   };
 
-
   useEffect(() => {
     socket.current = io("ws://localhost:8900");
   }, []);
 
   useEffect(() => {
-
     if (socket.current && user.id !== "") {
       socket?.current.on("getUsers", (usr) => {
         if (usr.userId === user.id) {
@@ -102,7 +102,6 @@ const IncomingOrders = () => {
         }
       });
     }
-
   }, [user]);
 
   useEffect(() => {
@@ -113,84 +112,86 @@ const IncomingOrders = () => {
 
   useEffect(() => {
     const abortCont = new AbortController();
-    
-  const getIncomingOrders = async () => {
-    if (user.id !== "") {
-      if (!data) {
-        setLoading(true);
-      }
-      await axios
-        .get("http://localhost:5000/api/users/admin/incomingorders", {
-          withCredentials:true,
-          signal: abortCont.signal
-    
-        })
-        .then((res) => {
-          setData(res.data.incomingOrders.reverse());
-          setLoading(false);
-        })
-        .catch((err) => {
-          if (err.message === "canceled"){
-            console.log("axios aborted")
-          }else{
-            toast.warn(err.response.data.message);
-            setError(true);
-            setLoading(false);
 
-          }
-        });
-    }
-  };
+    const getIncomingOrders = async () => {
+      if (user.id !== "") {
+        if (!data) {
+          setLoading(true);
+        }
+        await axios
+          .get("http://localhost:5000/api/users/admin/incomingorders", {
+            withCredentials: true,
+            signal: abortCont.signal,
+          })
+          .then((res) => {
+            setData(res.data.incomingOrders.reverse());
+            setLoading(false);
+          })
+          .catch((err) => {
+            if (err.message === "canceled") {
+              console.log("axios aborted");
+            } else {
+              toast.warn(err.response.data.message);
+              setError(true);
+              setLoading(false);
+            }
+          });
+      }
+    };
     getIncomingOrders();
 
-    
     return () => abortCont.abort();
-
   }, [user.id, orders, prep, sent]);
 
   return (
     <div>
-      {!loading && !error ? (
-        data?.map((ordr, index) => (
-          <Orders
-            key={ordr._id}
-            ordr={ordr}
-            index={index}
-            data={data}
-            loadingCargo={loadingCargo}
-            loadingPrep={loadingPrep}
-            changePrep={changePrep}
-            changeSentByCargo={changeSentByCargo}
-            setTrackNumber={setTrackNumber}
-          />
-        ))
-      ) : error ? (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            height: "70vh",
-          }}
-        >
-          <PopupAlert
-            open={open}
-            handleClose={handleClose}
-            handleOpen={handleOpen}
-          />
-        </div>
-      ) : (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "80vh",
-          }}
-        >
-          <ClimbingBoxLoader size={30} color="#c67c03" />
-        </div>
-      )}
+      <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => {}}>
+        <Suspense fallback={<div>Loading..</div>}>
+          {!loading && !error ? (
+            data?.map((ordr, index) => (
+              <Orders
+                key={ordr._id}
+                ordr={ordr}
+                index={index}
+                data={data}
+                loadingCargo={loadingCargo}
+                loadingPrep={loadingPrep}
+                changePrep={changePrep}
+                changeSentByCargo={changeSentByCargo}
+                setTrackNumber={setTrackNumber}
+              />
+            ))
+          ) : error ? (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "70vh",
+              }}
+            >
+              <Suspense fallback={<div>Loading..</div>}>
+                <PopupAlert
+                  open={open}
+                  handleClose={handleClose}
+                  handleOpen={handleOpen}
+                />
+              </Suspense>
+            </div>
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "80vh",
+              }}
+            >
+              <ClimbingBoxLoader size={30} color="#c67c03" />
+            </div>
+          )}
+        </Suspense>
+      </ErrorBoundary>
     </div>
   );
 };
