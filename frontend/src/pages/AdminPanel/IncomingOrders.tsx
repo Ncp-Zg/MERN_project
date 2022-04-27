@@ -8,6 +8,7 @@ import { io, Socket } from "socket.io-client";
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "../../components/common/ErrorBoundary";
+import "./IncomingOrders.css";
 // import PopupAlert from "../../components/common/PopupAlert";
 const PopupAlert = lazy(() => import("../../components/common/PopupAlert"));
 const Orders = lazy(() => import("../../components/Orders"));
@@ -143,23 +144,42 @@ const IncomingOrders = () => {
     return () => abortCont.abort();
   }, [user.id, orders, prep, sent]);
 
+  const cards = document.querySelectorAll(".card");
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        entry.target.classList.toggle("show", entry.isIntersecting);
+        if (entry.isIntersecting) observer.unobserve(entry.target);
+      });
+    },
+    {
+      threshold: 0.2,
+    }
+  );
+
+  cards.forEach((card) => {
+    observer.observe(card);
+  });
+
   return (
     <div>
       <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => {}}>
         <Suspense fallback={<div>Loading..</div>}>
           {!loading && !error ? (
             data?.map((ordr, index) => (
-              <Orders
-                key={ordr._id}
-                ordr={ordr}
-                index={index}
-                data={data}
-                loadingCargo={loadingCargo}
-                loadingPrep={loadingPrep}
-                changePrep={changePrep}
-                changeSentByCargo={changeSentByCargo}
-                setTrackNumber={setTrackNumber}
-              />
+              <div className="card">
+                <Orders
+                  key={ordr._id}
+                  ordr={ordr}
+                  index={index}
+                  data={data}
+                  loadingCargo={loadingCargo}
+                  loadingPrep={loadingPrep}
+                  changePrep={changePrep}
+                  changeSentByCargo={changeSentByCargo}
+                  setTrackNumber={setTrackNumber}
+                />
+              </div>
             ))
           ) : error ? (
             <div

@@ -1,0 +1,7 @@
+.card {
+    opacity: 0;
+}
+
+.card.show {
+    opacity: 1;
+}
