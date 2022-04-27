@@ -1,5 +1,12 @@
 import axios from "axios";
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import {
+  CSSProperties,
+  lazy,
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { IRootState } from "../../redux/Reducers/rootReducer";
@@ -9,12 +16,13 @@ import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "../../components/common/ErrorBoundary";
 import "./IncomingOrders.css";
+import { FixedSizeList } from "react-window";
 // import PopupAlert from "../../components/common/PopupAlert";
 const PopupAlert = lazy(() => import("../../components/common/PopupAlert"));
 const Orders = lazy(() => import("../../components/Orders"));
 
 const IncomingOrders = () => {
-  const [data, setData] = useState<incomingOrders[]>();
+  const [data, setData] = useState<incomingOrders[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [loadingPrep, setLoadingPrep] = useState<number>(-1);
@@ -144,44 +152,68 @@ const IncomingOrders = () => {
     return () => abortCont.abort();
   }, [user.id, orders, prep, sent]);
 
-  const cards = document.querySelectorAll(".card");
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        entry.target.classList.toggle("show", entry.isIntersecting);
-        if (entry.isIntersecting) observer.unobserve(entry.target);
-      });
-    },
-    {
-      threshold: 0.2,
-    }
-  );
+  // const cards = document.querySelectorAll(".card");
+  // const observer = new IntersectionObserver(
+  //   (entries) => {
+  //     entries.forEach((entry) => {
+  //       entry.target.classList.toggle("show", entry.isIntersecting);
+  //       if (entry.isIntersecting) observer.unobserve(entry.target);
+  //     });
+  //   },
+  //   {
+  //     threshold: 0.2,
+  //   }
+  // );
 
-  cards.forEach((card) => {
-    observer.observe(card);
-  });
+  // cards.forEach((card) => {
+  //   observer.observe(card);
+  // });
+
+  const Row = ({ index, style }: { index: number; style: CSSProperties }) => {
+    return (
+      <div style={style}>
+        <Orders
+          ordr={data[index]}
+          index={index}
+          data={data}
+          loadingCargo={loadingCargo}
+          loadingPrep={loadingPrep}
+          changePrep={changePrep}
+          changeSentByCargo={changeSentByCargo}
+          setTrackNumber={setTrackNumber}
+        />
+      </div>
+    );
+  };
 
   return (
     <div>
       <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => {}}>
         <Suspense fallback={<div>Loading..</div>}>
           {!loading && !error ? (
-            data?.map((ordr, index) => (
-              <div className="card">
-                <Orders
-                  key={ordr._id}
-                  ordr={ordr}
-                  index={index}
-                  data={data}
-                  loadingCargo={loadingCargo}
-                  loadingPrep={loadingPrep}
-                  changePrep={changePrep}
-                  changeSentByCargo={changeSentByCargo}
-                  setTrackNumber={setTrackNumber}
-                />
-              </div>
-            ))
-          ) : error ? (
+            <FixedSizeList
+              height={550}
+              width={1000}
+              itemSize={205}
+              itemCount={data.length}
+            >
+              {Row}
+            </FixedSizeList>
+          ) : // data?.map((ordr, index) => (
+          //   <div className="card" key={ordr._id}>
+          //     <Orders
+          //       ordr={ordr}
+          //       index={index}
+          //       data={data}
+          //       loadingCargo={loadingCargo}
+          //       loadingPrep={loadingPrep}
+          //       changePrep={changePrep}
+          //       changeSentByCargo={changeSentByCargo}
+          //       setTrackNumber={setTrackNumber}
+          //     />
+          //   </div>
+          // ))
+          error ? (
             <div
               style={{
                 display: "flex",

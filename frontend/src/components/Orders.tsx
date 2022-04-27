@@ -1,7 +1,6 @@
 import { Button, Card, TextField } from '@mui/material';
-import React, { FunctionComponent, SetStateAction } from 'react'
+import React, { FunctionComponent } from 'react'
 import { ClipLoader } from 'react-spinners';
-import { Dispatch } from 'redux';
 import { incomingOrders } from '../type'
 
 interface IItemProps {
