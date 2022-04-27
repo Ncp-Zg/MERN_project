@@ -3,6 +3,7 @@ import {
   CSSProperties,
   lazy,
   Suspense,
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -30,7 +31,6 @@ const IncomingOrders = () => {
   const [prep, setPrep] = useState<Array<boolean>>();
   const [sent, setSent] = useState<Array<boolean>>();
   const [orders, setOrders] = useState<number>(0);
-  const [trackNumber, setTrackNumber] = useState<number>(0);
   const [indx, setIndex] = useState<number>(0);
   const socket = useRef<Socket>();
   const { user } = useSelector((state: IRootState) => state.auth);
@@ -38,6 +38,8 @@ const IncomingOrders = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const TrackRef = useRef(0);
 
   const changePrep = async (index: number) => {
     if (data) {
@@ -68,7 +70,7 @@ const IncomingOrders = () => {
   };
 
   const changeSentByCargo = async (index: number) => {
-    if (data && !isNaN(trackNumber) && trackNumber !== 0) {
+    if (data && !isNaN(TrackRef.current) && TrackRef.current !== 0) {
       setLoadingCargo(index);
       setIndex(data.length - 1 - index);
 
@@ -78,7 +80,7 @@ const IncomingOrders = () => {
           {
             orderId: data[index].orderId,
             productId: data[index].product._id,
-            trackNo: trackNumber,
+            trackNo: TrackRef.current,
             i: data.length - 1 - index,
           },
           {
@@ -168,8 +170,7 @@ const IncomingOrders = () => {
   // cards.forEach((card) => {
   //   observer.observe(card);
   // });
-
-  const Row = ({ index, style }: { index: number; style: CSSProperties }) => {
+  const Row = useCallback(({ index, style }: { index: number; style: CSSProperties }) => {
     return (
       <div style={style}>
         <Orders
@@ -180,11 +181,11 @@ const IncomingOrders = () => {
           loadingPrep={loadingPrep}
           changePrep={changePrep}
           changeSentByCargo={changeSentByCargo}
-          setTrackNumber={setTrackNumber}
+          TrackRef={TrackRef}
         />
       </div>
     );
-  };
+  },[data]);
 
   return (
     <div>
