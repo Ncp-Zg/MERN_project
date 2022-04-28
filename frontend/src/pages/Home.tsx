@@ -184,7 +184,16 @@ const Home = () => {
             </div>
           )}
           <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => {}}>
-            <Suspense fallback={<div>Loading..</div>}>
+            <Suspense fallback={<div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "80vh",
+              }}
+            >
+              <ClimbingBoxLoader size={30} color="#c67c03" />
+            </div>}>
               <div
                 style={{
                   flexWrap: "wrap",

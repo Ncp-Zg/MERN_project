@@ -126,7 +126,7 @@ const IncomingOrders = () => {
 
     const getIncomingOrders = async () => {
       if (user.id !== "") {
-        if (!data) {
+        if (data.length === 0) {
           setLoading(true);
         }
         await axios
@@ -190,16 +190,25 @@ const IncomingOrders = () => {
   return (
     <div>
       <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => {}}>
-        <Suspense fallback={<div>Loading..</div>}>
+        <Suspense fallback={<div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "80vh",
+              }}
+            >
+              <ClimbingBoxLoader size={30} color="#c67c03" />
+            </div>}>
           {!loading && !error ? (
-            <FixedSizeList
+            (<FixedSizeList
               height={550}
               width={1000}
               itemSize={205}
               itemCount={data.length}
             >
               {Row}
-            </FixedSizeList>
+            </FixedSizeList>)
           ) : // data?.map((ordr, index) => (
           //   <div className="card" key={ordr._id}>
           //     <Orders
@@ -223,7 +232,16 @@ const IncomingOrders = () => {
                 height: "70vh",
               }}
             >
-              <Suspense fallback={<div>Loading..</div>}>
+              <Suspense fallback={<div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "80vh",
+              }}
+            >
+              <ClimbingBoxLoader size={30} color="#c67c03" />
+            </div>}>
                 <PopupAlert
                   open={open}
                   handleClose={handleClose}

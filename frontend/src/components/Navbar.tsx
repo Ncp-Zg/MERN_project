@@ -36,6 +36,7 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 
 const Home = React.lazy(() => import("../pages/Home"));
 const Login = React.lazy(() => import("../pages/Login"));
@@ -282,7 +283,16 @@ export default function PersistentDrawerLeft() {
         <DrawerHeader />
         <ToastContainer />
 
-        <React.Suspense fallback={<div>Loading..</div>}>
+        <React.Suspense fallback={<div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "80vh",
+              }}
+            >
+              <ClimbingBoxLoader size={30} color="#c67c03" />
+            </div>}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
