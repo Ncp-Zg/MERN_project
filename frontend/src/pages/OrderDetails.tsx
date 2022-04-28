@@ -17,7 +17,7 @@ import axios from "axios";
 import moment from "moment";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { IRootState } from "../redux/Reducers/rootReducer";
 import { Order } from "../type";
 import { io, Socket } from "socket.io-client";
@@ -27,10 +27,8 @@ const OrderDetail = () => {
   const { user } = useSelector((state: IRootState) => ({ user: state.auth }));
 
   const { id } = useParams();
-  const location = useLocation();
   const navigate = useNavigate();
-  const state = location.state as Order;
-  const [deliver, setDeliver] = useState<Array<Boolean>>(state.delivered);
+  const [deliver, setDeliver] = useState<Array<Boolean>>([]);
   const [data, setData] = useState<Order>();
   const [prep, setPrep] = useState<boolean>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -41,8 +39,8 @@ const OrderDetail = () => {
     if (user.user.id !== "") {
       setLoading(true);
       await axios
-        .get(`http://localhost:5000/api/orders/myorders/${state._id}`, {
-          withCredentials:true
+        .get(`http://localhost:5000/api/orders/myorders/${id}`, {
+          withCredentials: true,
         })
         .then((res) => {
           setData(res.data.data);
@@ -61,9 +59,9 @@ const OrderDetail = () => {
     await axios
       .post(
         "http://localhost:5000/api/orders/myorders/changeDelivered",
-        { orderId: state._id, index: index },
+        { orderId: id, index: index },
         {
-          withCredentials:true
+          withCredentials: true,
         }
       )
       .then((res) => {
@@ -78,7 +76,7 @@ const OrderDetail = () => {
   useEffect(() => {
     if (socket.current && user.user.id !== "") {
       socket?.current.on("changes", (data) => {
-        if (state._id === data.orderId) {
+        if (id === data.orderId) {
           setPrep(data.prepared);
           setCargo(data.cargotracknumber);
         }
@@ -152,7 +150,7 @@ const OrderDetail = () => {
                       }}
                     >
                       <Typography component="div" variant="h4">
-                        ₺{crt.cost*data?.amount[index]}
+                        ₺{crt.cost * data?.amount[index]}
                       </Typography>
                     </Box>
                   </div>
@@ -333,8 +331,8 @@ const OrderDetail = () => {
                       </Button>
                       <Button
                         color="warning"
-                        style={data.delivered[index] ? {} :{ display: "none" }}
-                        onClick={()=>navigate(`/details/${crt._id}`)}
+                        style={data.delivered[index] ? {} : { display: "none" }}
+                        onClick={() => navigate(`/details/${crt._id}`)}
                       >
                         Leave me a comment
                       </Button>

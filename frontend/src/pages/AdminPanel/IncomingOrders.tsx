@@ -231,23 +231,12 @@ const IncomingOrders = () => {
                 justifyContent: "center",
                 height: "70vh",
               }}
-            >
-              <Suspense fallback={<div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "80vh",
-              }}
-            >
-              <ClimbingBoxLoader size={30} color="#c67c03" />
-            </div>}>
+            >        
                 <PopupAlert
                   open={open}
                   handleClose={handleClose}
                   handleOpen={handleOpen}
                 />
-              </Suspense>
             </div>
           ) : (
             <div
