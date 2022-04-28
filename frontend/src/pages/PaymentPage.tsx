@@ -34,6 +34,10 @@ const PaymentPage = () => {
   }, []);
 
   const handleClick = async () => {
+    if(cart[0]._id===0){
+      toast.error("Your cart is empty")
+      navigate("/home")
+    }else{
     setLoading(true);
     await axios
       .post("http://localhost:5000/api/orders/addorders", cart, {
@@ -58,7 +62,7 @@ const PaymentPage = () => {
     });
 
     dispatch(emptyBasket());
-    navigate("/home");
+    navigate("/home");}
   };
 
   // useEffect(() => {
